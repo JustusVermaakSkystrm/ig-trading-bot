@@ -1,0 +1,26 @@
+# --- Credentials (NEVER commit these) ---
+credentials.json
+
+# --- Virtual environment ---
+venv/
+.venv/
+env/
+
+# --- Trained model & data (large files, regenerated on deploy) ---
+data/xgb_model.pkl
+data/eurusd_15min.csv
+data/trading_log.txt
+
+# --- Python cache ---
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# --- macOS ---
+.DS_Store
+
+# --- Editor ---
+.vscode/
+.idea/
+*.swp
