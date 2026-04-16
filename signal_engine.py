@@ -28,9 +28,11 @@ logger = logging.getLogger(__name__)
 # Minimum model confidence before we act on a signal
 MIN_CONFIDENCE = 0.55   # 55% — tune this after backtesting
 
-# How many recent bars to use for feature computation
-# (needs to be long enough for all SG windows + warmup)
-LOOKBACK_BARS = 200
+# How many recent bars to use for feature computation.
+# Must be large enough for all indicators + warmup:
+#   SMA-200 needs 200 bars; Ichimoku Senkou-B + 26-bar shift needs 78 bars.
+#   compute_features() drops the first 214 warmup bars, so we need 214 + margin.
+LOOKBACK_BARS = 450
 
 # EUR/USD spread bet epic
 EPIC = "CS.D.EURUSD.TODAY.IP"

@@ -7,3 +7,4 @@ joblib==1.5.3
 requests==2.33.1
 yfinance==1.2.1
 matplotlib
+optuna>=3.0
