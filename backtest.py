@@ -40,6 +40,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -118,16 +119,36 @@ class Backtester:
         -------
         BacktestResults with trades list, equity curve, and metrics dict.
         """
-        # Merge on datetime so bars align correctly
-        df = pd.merge(
-            price_df[["datetime", "open", "high", "low", "close", "atr"]],
-            signals_df[["datetime", "signal", "confidence"]],
-            on="datetime", how="inner"
-        ).sort_values("datetime").reset_index(drop=True)
+        # Merge on datetime so bars align correctly.
+        # ATR can come from either price_df (if it has the column) or signals_df.
+        price_cols = ["datetime", "open", "high", "low", "close"]
+        if "atr" in price_df.columns:
+            price_cols.append("atr")
+        sig_cols = ["datetime", "signal", "confidence"]
+        if "atr" in signals_df.columns and "atr" not in price_cols:
+            sig_cols.append("atr")
+
+        # Normalise both datetime columns to tz-naive UTC to avoid merge errors
+        # when one side is tz-aware and the other is tz-naive.
+        def _to_utc_naive(df_in: pd.DataFrame) -> pd.DataFrame:
+            df_out = df_in.copy()
+            col    = df_out["datetime"]
+            if hasattr(col.dt, "tz") and col.dt.tz is not None:
+                df_out["datetime"] = col.dt.tz_convert("UTC").dt.tz_localize(None)
+            else:
+                df_out["datetime"] = pd.to_datetime(col)
+            return df_out
+
+        left  = _to_utc_naive(price_df[price_cols])
+        right = _to_utc_naive(signals_df[sig_cols])
+
+        df = pd.merge(left, right, on="datetime", how="inner") \
+               .sort_values("datetime").reset_index(drop=True)
 
         if df.empty:
             logger.error("No overlapping bars between price_df and signals_df.")
-            return BacktestResults(trades=[], equity_curve=pd.DataFrame(), metrics={})
+            return BacktestResults(trades=[], equity_curve=pd.DataFrame(),
+                                   metrics={"error": "No overlapping bars between price and signal data."})
 
         n               = len(df)
         capital         = self.initial_capital
@@ -467,21 +488,23 @@ def walk_forward_backtest(
     df["label"] = create_labels(df)
     df = df.dropna(subset=["label"] + FEATURE_COLUMNS)
 
-    n         = len(df)
-    fold_size = n // n_splits
+    n = len(df)
+
+    # Expanding-window walk-forward:
+    # Reserve the first `train_pct` fraction as the minimum training set.
+    # Split the remaining data into n_splits equal test windows.
+    min_train_n  = int(n * train_pct)
+    test_n       = n - min_train_n
+    fold_size    = test_n // n_splits
 
     all_results = []
     for fold in range(n_splits):
-        train_end = int((fold + 1) * fold_size * train_pct) + fold * fold_size
-        test_start = train_end
-        test_end   = (fold + 1) * fold_size
-
+        test_start = min_train_n + fold * fold_size
+        test_end   = test_start + fold_size
         if test_end > n:
             test_end = n
-        if train_end >= test_end:
-            continue
 
-        train_df = df.iloc[:train_end]
+        train_df = df.iloc[:test_start]
         test_df  = df.iloc[test_start:test_end]
 
         if len(train_df) < 200 or len(test_df) < 10:
@@ -494,25 +517,63 @@ def walk_forward_backtest(
                     test_df["datetime"].iloc[0].strftime("%Y-%m-%d"),
                     test_df["datetime"].iloc[-1].strftime("%Y-%m-%d"))
 
-        # Train
+        # Train on train_df, using its last 15% for early stopping validation
         params = model_params or {}
         model  = TradingModel(params=params if params else None)
 
-        # Temporarily override the split to use all train_df as training
-        # and test_df as the test set inside model.train()
-        # We do this by concatenating and relying on the last n_test rows as test
-        n_test  = len(test_df)
-        combined = pd.concat([train_df, test_df]).reset_index(drop=True)
-        model.train(combined)
+        n_val        = int(len(train_df) * 0.15)
+        inner_train  = train_df.iloc[:-n_val] if n_val > 0 else train_df
+        inner_val    = train_df.iloc[-n_val:] if n_val > 0 else train_df.iloc[:0]
 
-        # Generate signals on the test portion
-        signals = model.generate_test_signals(combined)
+        # Fit directly (bypassing walk_forward_split so we control the split)
+        enc = LabelEncoder()
+        all_y = np.concatenate([
+            inner_train["label"].astype(int).values,
+            inner_val["label"].astype(int).values,
+            test_df["label"].astype(int).values,
+        ])
+        enc.fit(all_y)
+        model.encoder = enc
+
+        X_tr = inner_train[FEATURE_COLUMNS].values
+        y_tr = enc.transform(inner_train["label"].astype(int).values)
+        X_vl = inner_val[FEATURE_COLUMNS].values
+        y_vl = enc.transform(inner_val["label"].astype(int).values)
+
+        if len(X_vl) >= 50:
+            model.clf.set_params(early_stopping_rounds=20)
+            model.clf.fit(X_tr, y_tr, eval_set=[(X_vl, y_vl)], verbose=False)
+        else:
+            model.clf.fit(X_tr, y_tr, verbose=False)
+        model.trained = True
+
+        # Generate signals on test_df
+        X_te   = test_df[FEATURE_COLUMNS].values
+        probs  = model.clf.predict_proba(X_te)
+        cls    = np.argmax(probs, axis=1)
+        sigs   = enc.inverse_transform(cls).astype(int)
+        confs  = probs[np.arange(len(probs)), cls]
+
+        signals = pd.DataFrame({
+            "datetime":   test_df["datetime"].values,
+            "close":      test_df["close"].values,
+            "atr":        test_df["atr"].values,
+            "signal":     sigs,
+            "confidence": confs,
+        })
         if signals.empty:
             continue
 
-        # Align price data with test window dates
-        test_dates = set(test_df["datetime"].values)
-        price_test = price_df[price_df["datetime"].isin(test_dates)].copy()
+        # Align price data with test window dates — normalise to tz-naive for comparison
+        def _tz_naive_series(s: pd.Series) -> pd.Series:
+            if hasattr(s.dt, "tz") and s.dt.tz is not None:
+                return s.dt.tz_convert("UTC").dt.tz_localize(None)
+            return pd.to_datetime(s)
+
+        test_dt_naive   = _tz_naive_series(test_df["datetime"])
+        price_dt_naive  = _tz_naive_series(price_df["datetime"])
+        test_dates      = set(test_dt_naive)
+        price_test      = price_df[price_dt_naive.isin(test_dates)].copy()
 
         result = backtester.run(price_test, signals)
         m      = result.metrics.copy()
