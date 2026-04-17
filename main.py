@@ -41,6 +41,7 @@ from features import compute_features
 from model import TradingModel, MODEL_PATH
 from signal_engine import SignalEngine
 from execution import ExecutionEngine, STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE
+from notifier import Notifier
 
 # ------------------------------------------------------------------
 # Logging — console + file
@@ -211,8 +212,14 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
     sig_engine  = SignalEngine(client)
     sig_engine.model = model
     exec_engine = ExecutionEngine(client)
+    notifier    = Notifier()
     # Fixed-size override (e.g. --min-size for testing with 0.01 £/point)
     _fixed_size = fixed_size
+
+    notifier.bot_started(
+        mode       = "DRY RUN" if dry_run else "LIVE TRADING",
+        account_id = client.account_id,
+    )
 
     # ── 4. State ─────────────────────────────────────────────────────
     bars_since_trade = 99          # start high so first signal can fire
@@ -282,11 +289,25 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
             # ── Check if our open position has been closed by IG ──────
             if open_deal_id:
                 try:
-                    open_ids = {p["position"]["dealId"]
-                                for p in client.get_open_positions().get("positions", [])}
+                    open_positions = client.get_open_positions().get("positions", [])
+                    open_ids = {p["position"]["dealId"] for p in open_positions}
                     if open_deal_id not in open_ids:
                         logger.info("Position %s closed by IG (SL or TP hit).",
                                     open_deal_id)
+                        # Try to get P&L from confirms endpoint
+                        try:
+                            closed_info = client.get(f"/confirms/{open_deal_id}")
+                            profit   = closed_info.get("profit") or 0.0
+                            currency = closed_info.get("profitCurrency", "GBP")
+                            close_level = closed_info.get("level", 0.0)
+                        except Exception:
+                            profit, currency, close_level = 0.0, "GBP", 0.0
+                        notifier.trade_closed(
+                            deal_id     = open_deal_id,
+                            close_level = close_level,
+                            profit      = profit,
+                            currency    = currency,
+                        )
                         open_deal_id = None
                         bars_since_trade = 0
                 except Exception as exc:
@@ -336,6 +357,16 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                     stop_price, tp_price,
                     sig["atr"], sig["confidence"] * 100,
                 )
+                notifier.trade_opened(
+                    direction  = sig["label"],
+                    size       = _fixed_size or 0.01,
+                    fill_level = sig["latest_price"],
+                    stop_level = stop_price,
+                    tp_level   = tp_price,
+                    confidence = sig["confidence"],
+                    atr        = sig["atr"],
+                    deal_id    = "DRY-RUN",
+                )
                 trade_record["status"] = "DRY_RUN"
                 session_history.append(trade_record)
                 bars_since_trade = 0
@@ -363,12 +394,30 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                     })
 
                     if deal_status == "ACCEPTED":
+                        stop_dist = sig["atr"] * STOP_ATR_MULTIPLE
+                        tp_dist   = sig["atr"] * TP_ATR_MULTIPLE
+                        stop_lvl  = (fill_level - stop_dist if sig["signal"] == 1
+                                     else fill_level + stop_dist)
+                        tp_lvl    = (fill_level + tp_dist   if sig["signal"] == 1
+                                     else fill_level - tp_dist)
+                        notifier.trade_opened(
+                            direction  = sig["label"],
+                            size       = confirm.get("size", _fixed_size or 0.01),
+                            fill_level = fill_level,
+                            stop_level = stop_lvl,
+                            tp_level   = tp_lvl,
+                            confidence = sig["confidence"],
+                            atr        = sig["atr"],
+                            deal_id    = deal_id,
+                        )
                         open_deal_id     = deal_id
                         bars_since_trade = 0
                         session_history.append(trade_record)
                         _save_trade(trade_record)
                     else:
-                        logger.warning("Trade rejected: %s", confirm.get("reason", ""))
+                        reason = confirm.get("reason", "")
+                        logger.warning("Trade rejected: %s", reason)
+                        notifier.trade_rejected(sig["label"], reason)
 
                 except Exception as exc:
                     logger.error("Trade execution failed: %s", exc)
