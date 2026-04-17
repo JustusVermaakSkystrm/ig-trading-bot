@@ -78,27 +78,47 @@ class Backtester:
     ----------
     initial_capital   : Starting account balance (arbitrary currency units)
     risk_pct          : Fraction of capital risked per trade (e.g. 0.01 = 1%)
-    stop_atr_mult     : Stop-loss distance as multiple of ATR
+    stop_atr_mult     : Initial stop-loss distance as multiple of ATR
     tp_atr_mult       : Take-profit distance as multiple of ATR
     spread_pips       : Fixed spread cost in price units (e.g. 0.0001 for 1 pip)
     min_confidence    : Only trade if model confidence ≥ this threshold
+    exit_method       : One of:
+        "fixed"           — hard SL + TP set at entry (default)
+        "trailing"        — Chandelier trailing stop; SL ratchets with price,
+                            no fixed TP (tp_atr_mult ignored)
+        "breakeven_trail" — move SL to entry (breakeven) once price reaches
+                            +1R; then switch to Chandelier trailing stop
+    trail_atr_mult    : ATR multiple for the trailing stop distance
+                        (used for "trailing" and "breakeven_trail" modes)
     """
+
+    EXIT_FIXED          = "fixed"
+    EXIT_TRAILING       = "trailing"
+    EXIT_BREAKEVEN_TRAIL = "breakeven_trail"
 
     def __init__(
         self,
-        initial_capital: float = 10_000.0,
-        risk_pct:         float = 0.01,
-        stop_atr_mult:    float = 2.0,
-        tp_atr_mult:      float = 3.0,
-        spread_pips:      float = 0.0001,
-        min_confidence:   float = 0.55,
+        initial_capital:  float = 10_000.0,
+        risk_pct:          float = 0.01,
+        stop_atr_mult:     float = 2.0,
+        tp_atr_mult:       float = 3.0,
+        spread_pips:       float = 0.0001,
+        min_confidence:    float = 0.55,
+        exit_method:       str   = "fixed",
+        trail_atr_mult:    float = 1.5,
     ):
-        self.initial_capital = initial_capital
-        self.risk_pct        = risk_pct
-        self.stop_atr_mult   = stop_atr_mult
-        self.tp_atr_mult     = tp_atr_mult
-        self.spread_pips     = spread_pips
-        self.min_confidence  = min_confidence
+        self.initial_capital  = initial_capital
+        self.risk_pct         = risk_pct
+        self.stop_atr_mult    = stop_atr_mult
+        self.tp_atr_mult      = tp_atr_mult
+        self.spread_pips      = spread_pips
+        self.min_confidence   = min_confidence
+        self.exit_method      = exit_method
+        self.trail_atr_mult   = trail_atr_mult
+        if exit_method not in (self.EXIT_FIXED, self.EXIT_TRAILING,
+                               self.EXIT_BREAKEVEN_TRAIL):
+            raise ValueError(f"exit_method must be one of: fixed, trailing, "
+                             f"breakeven_trail.  Got: {exit_method!r}")
 
     # ------------------------------------------------------------------
     # Main simulation
@@ -155,9 +175,12 @@ class Backtester:
         position        = 0          # +1 long, -1 short, 0 flat
         entry_bar       = -1
         entry_price     = 0.0
-        stop_price      = 0.0
-        tp_price        = 0.0
-        position_size   = 0.0        # units of currency per price-unit move
+        stop_price      = 0.0        # current active SL (may move for trailing)
+        tp_price        = 0.0        # current active TP (inf for trailing modes)
+        initial_sl      = 0.0        # SL at entry (used for breakeven trigger)
+        trail_extreme   = 0.0        # highest high (long) / lowest low (short) since entry
+        at_breakeven    = False       # has SL been moved to entry?
+        position_size   = 0.0
 
         trades:       List[Trade]  = []
         equity_curve: List[dict]   = []
@@ -171,7 +194,47 @@ class Backtester:
             bar_atr = float(row["atr"]) if float(row["atr"]) > 0 else 1e-6
 
             # ----------------------------------------------------------
-            # 1. Check if existing position is stopped or hits TP
+            # 1a. Update trailing / breakeven stop BEFORE checking exit
+            #     (uses the current bar's high/low to ratchet the SL)
+            # ----------------------------------------------------------
+            if position != 0 and self.exit_method != self.EXIT_FIXED:
+                stop_dist_orig = abs(entry_price - initial_sl)
+
+                if position == 1:   # long: trail from highest high
+                    trail_extreme = max(trail_extreme, bar_h)
+                    new_trail_sl  = trail_extreme - bar_atr * self.trail_atr_mult
+
+                    if self.exit_method == self.EXIT_TRAILING:
+                        # Pure trailing: SL can only move up (ratchet)
+                        stop_price = max(stop_price, new_trail_sl)
+
+                    elif self.exit_method == self.EXIT_BREAKEVEN_TRAIL:
+                        if not at_breakeven:
+                            # Activate breakeven once price reaches +1R
+                            if bar_h >= entry_price + stop_dist_orig:
+                                stop_price   = entry_price   # move to breakeven
+                                at_breakeven = True
+                        else:
+                            # Already at breakeven: apply Chandelier trail
+                            stop_price = max(stop_price, new_trail_sl)
+
+                elif position == -1:  # short: trail from lowest low
+                    trail_extreme = min(trail_extreme, bar_l)
+                    new_trail_sl  = trail_extreme + bar_atr * self.trail_atr_mult
+
+                    if self.exit_method == self.EXIT_TRAILING:
+                        stop_price = min(stop_price, new_trail_sl)
+
+                    elif self.exit_method == self.EXIT_BREAKEVEN_TRAIL:
+                        if not at_breakeven:
+                            if bar_l <= entry_price - stop_dist_orig:
+                                stop_price   = entry_price
+                                at_breakeven = True
+                        else:
+                            stop_price = min(stop_price, new_trail_sl)
+
+            # ----------------------------------------------------------
+            # 1b. Check if existing position exits via SL or TP
             # ----------------------------------------------------------
             if position != 0:
                 exit_price  = None
@@ -179,15 +242,13 @@ class Backtester:
 
                 if position == 1:   # long
                     sl_hit = bar_l <= stop_price
-                    tp_hit = bar_h >= tp_price
+                    tp_hit = (tp_price < 1e18) and (bar_h >= tp_price)
                     if sl_hit and tp_hit:
-                        # Both hit on same bar: whichever is closer to open wins
                         sl_dist = abs(bar_o - stop_price)
                         tp_dist = abs(bar_o - tp_price)
-                        if sl_dist <= tp_dist:
-                            exit_price, exit_reason = stop_price, "SL"
-                        else:
-                            exit_price, exit_reason = tp_price, "TP"
+                        exit_price, exit_reason = (
+                            (stop_price, "SL") if sl_dist <= tp_dist else (tp_price, "TP")
+                        )
                     elif sl_hit:
                         exit_price, exit_reason = stop_price, "SL"
                     elif tp_hit:
@@ -195,14 +256,13 @@ class Backtester:
 
                 elif position == -1:  # short
                     sl_hit = bar_h >= stop_price
-                    tp_hit = bar_l <= tp_price
+                    tp_hit = (tp_price > -1e18) and (bar_l <= tp_price)
                     if sl_hit and tp_hit:
                         sl_dist = abs(bar_o - stop_price)
                         tp_dist = abs(bar_o - tp_price)
-                        if sl_dist <= tp_dist:
-                            exit_price, exit_reason = stop_price, "SL"
-                        else:
-                            exit_price, exit_reason = tp_price, "TP"
+                        exit_price, exit_reason = (
+                            (stop_price, "SL") if sl_dist <= tp_dist else (tp_price, "TP")
+                        )
                     elif sl_hit:
                         exit_price, exit_reason = stop_price, "SL"
                     elif tp_hit:
@@ -225,39 +285,46 @@ class Backtester:
                         pnl_pct     = pnl_pct,
                         pnl_abs     = pnl_abs,
                     ))
-                    position = 0
+                    position     = 0
+                    at_breakeven = False
 
             # ----------------------------------------------------------
-            # 2. Enter new position if flat and signal is actionable
-            #    Signal from bar T-1 is acted on at bar T open
+            # 2. Enter new position if flat and signal is actionable.
+            #    Signal from bar T-1 is acted on at bar T open.
             # ----------------------------------------------------------
             if position == 0 and i > 0:
-                prev = df.iloc[i - 1]
+                prev  = df.iloc[i - 1]
                 sig   = int(prev["signal"])
                 conf  = float(prev["confidence"])
                 p_atr = float(prev["atr"]) if float(prev["atr"]) > 0 else 1e-6
 
                 if sig != 0 and conf >= self.min_confidence:
-                    # Entry at current bar's open (spread applied on buy, subtracted on sell)
-                    raw_entry = bar_o
-                    entry_price = raw_entry + sig * self.spread_pips
-
-                    stop_dist = p_atr * self.stop_atr_mult
-                    tp_dist   = p_atr * self.tp_atr_mult
+                    entry_price = bar_o + sig * self.spread_pips
+                    stop_dist   = p_atr * self.stop_atr_mult
+                    tp_dist     = p_atr * self.tp_atr_mult
 
                     if sig == 1:    # long
-                        stop_price = entry_price - stop_dist
-                        tp_price   = entry_price + tp_dist
+                        initial_sl    = entry_price - stop_dist
+                        stop_price    = initial_sl
+                        trail_extreme = bar_o          # start trailing from entry bar
+                        if self.exit_method == self.EXIT_FIXED:
+                            tp_price = entry_price + tp_dist
+                        else:
+                            tp_price = float("inf")    # no hard TP for trailing modes
                     else:           # short
-                        stop_price = entry_price + stop_dist
-                        tp_price   = entry_price - tp_dist
+                        initial_sl    = entry_price + stop_dist
+                        stop_price    = initial_sl
+                        trail_extreme = bar_o
+                        if self.exit_method == self.EXIT_FIXED:
+                            tp_price = entry_price - tp_dist
+                        else:
+                            tp_price = float("-inf")
 
-                    # Size: risk_amount / stop_distance = units
                     risk_amount   = capital * self.risk_pct
                     position_size = risk_amount / stop_dist if stop_dist > 0 else 0.0
-
-                    position  = sig
-                    entry_bar = i
+                    position      = sig
+                    entry_bar     = i
+                    at_breakeven  = False
 
             # ----------------------------------------------------------
             # 3. Mark-to-market equity
