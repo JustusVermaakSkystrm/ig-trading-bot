@@ -181,12 +181,14 @@ def _print_session_stats(history: list) -> None:
 # Main trading loop
 # ------------------------------------------------------------------
 
-def run(dry_run: bool = False, retrain: bool = False) -> None:
+def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) -> None:
     logger.info("=" * 60)
     logger.info("  IG EURUSD Automated Spread Betting System")
     logger.info("  Mode: %s", "DRY RUN (no real orders)" if dry_run else "LIVE TRADING")
     logger.info("  Stop=%.1f×ATR  TP=%.1f×ATR  Confidence≥%.0f%%",
                 STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE * 100)
+    if fixed_size:
+        logger.info("  Fixed size: £%.2f/point (override)", fixed_size)
     logger.info("=" * 60)
 
     # ── 1. Connect to IG ──────────────────────────────────────────────
@@ -209,6 +211,8 @@ def run(dry_run: bool = False, retrain: bool = False) -> None:
     sig_engine  = SignalEngine(client)
     sig_engine.model = model
     exec_engine = ExecutionEngine(client)
+    # Fixed-size override (e.g. --min-size for testing with 0.01 £/point)
+    _fixed_size = fixed_size
 
     # ── 4. State ─────────────────────────────────────────────────────
     bars_since_trade = 99          # start high so first signal can fire
@@ -343,6 +347,7 @@ def run(dry_run: bool = False, retrain: bool = False) -> None:
                         signal        = sig["signal"],
                         atr           = sig["atr"],
                         current_price = sig["latest_price"],
+                        size          = _fixed_size,   # None = auto-size from balance
                     )
                     deal_status = confirm.get("dealStatus", "UNKNOWN")
                     deal_id     = confirm.get("dealId", "")
@@ -392,6 +397,9 @@ if __name__ == "__main__":
                         help="Log signals but do NOT place real trades")
     parser.add_argument("--retrain",  action="store_true",
                         help="Force model retrain before starting the loop")
+    parser.add_argument("--min-size", action="store_true",
+                        help="Force minimum position size (0.01 £/point) — useful for testing")
     args = parser.parse_args()
 
-    run(dry_run=args.dry_run, retrain=args.retrain)
+    fixed_size = 0.01 if args.min_size else None
+    run(dry_run=args.dry_run, retrain=args.retrain, fixed_size=fixed_size)
