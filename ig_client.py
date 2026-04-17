@@ -220,7 +220,7 @@ class IGClient:
 
     def get_open_positions(self) -> dict:
         """Return all currently open positions."""
-        return self.get("/positions/otc", version="2")
+        return self.get("/positions", version="2")
 
     def get_working_orders(self) -> dict:
         """Return all working (pending) orders."""

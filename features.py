@@ -41,7 +41,9 @@ logger = logging.getLogger(__name__)
 # DXY cache — fetched once per process, aligned by UTC timestamp
 # ------------------------------------------------------------------
 
-_DXY_CACHE: pd.Series | None = None   # indexed by datetime, value = 15-min log return
+_DXY_CACHE: pd.Series | None = None          # indexed by datetime, value = log return
+_DXY_CACHE_TS: pd.Timestamp | None  = None  # when the cache was last populated
+_DXY_CACHE_TTL_HOURS: float = 1.0           # refresh hourly in live trading
 
 
 def _fetch_dxy_returns(start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
@@ -53,8 +55,10 @@ def _fetch_dxy_returns(start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
     We use hourly because Yahoo Finance only provides 15-min for the last 60 days,
     but hourly data is available for much longer periods.
     """
-    global _DXY_CACHE
-    if _DXY_CACHE is not None:
+    global _DXY_CACHE, _DXY_CACHE_TS
+    now = pd.Timestamp.utcnow()
+    if (_DXY_CACHE is not None and _DXY_CACHE_TS is not None
+            and (now - _DXY_CACHE_TS).total_seconds() < _DXY_CACHE_TTL_HOURS * 3600):
         return _DXY_CACHE
 
     try:
@@ -85,14 +89,16 @@ def _fetch_dxy_returns(start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
         dxy_ret = np.log(raw_15 / raw_15.shift(1)).fillna(0)
         dxy_ret.index.name = "datetime"
         dxy_ret.name = "dxy_ret"
-        _DXY_CACHE = dxy_ret
+        _DXY_CACHE    = dxy_ret
+        _DXY_CACHE_TS = now
         logger.info("DXY data fetched (%s, resampled to 15m): %d bars (%s → %s)",
                     interval, len(dxy_ret), dxy_ret.index[0], dxy_ret.index[-1])
         return dxy_ret
 
     except Exception as exc:
         logger.warning("DXY fetch failed (%s) — dxy features will be zero", exc)
-        _DXY_CACHE = pd.Series(dtype=float, name="dxy_ret")
+        _DXY_CACHE    = pd.Series(dtype=float, name="dxy_ret")
+        _DXY_CACHE_TS = now
         return _DXY_CACHE
 
 

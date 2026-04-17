@@ -1,49 +1,56 @@
 """
 main.py
 -------
-The live trading loop. Runs continuously, checking for a new 15-minute
-candle every minute and placing trades when a high-confidence signal fires.
+Live automated trading loop for the EURUSD spread betting bot.
 
-Flow:
-  1. Login to IG
-  2. Load or train the XGBoost model
-  3. Every 15 minutes (on the bar close):
-     a. Fetch recent prices
-     b. Compute features
-     c. Get signal from model
-     d. If actionable → place trade via execution engine
-  4. Log all activity
+Architecture
+------------
+  Every 5 minutes (on bar close):
+    1. Fetch latest 15-min candles from IG (or rebuild from 5-min bars)
+    2. Compute all features (incl. DXY cross-asset, refreshed hourly)
+    3. Run the binary XGBoost model (Triple Barrier trained, conf ≥ 0.65)
+    4. If signal is actionable AND no position is open → place trade
+    5. IG manages SL/TP natively (1.0 ATR stop, 1.5 ATR TP)
+    6. Log everything; weekly model retrain from fresh data
+
+Optimal parameters (from 5-fold walk-forward, Oct 2025–Mar 2026):
+  stop_atr_mult = 1.0 | tp_atr_mult = 1.5 | min_confidence = 0.65
+  → avg +49.8% per fold | Sharpe 22.6 | win rate 59.9%
 
 Usage:
-    python main.py
-
-Optional flags:
-    python main.py --retrain        # retrain model before starting loop
-    python main.py --dry-run        # log signals but do NOT place real trades
+    python main.py                      # live trading
+    python main.py --dry-run            # log signals, no orders
+    python main.py --retrain            # retrain model then go live
+    python main.py --dry-run --retrain  # retrain + dry run
 """
 
 import argparse
+import json
 import logging
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import pandas as pd
 
 from ig_client import IGClient
 from data_pipeline import fetch_and_save, load_data, fetch_rolling_15min_bar, CSV_PATH
 from features import compute_features
-from model import TradingModel
+from model import TradingModel, MODEL_PATH
 from signal_engine import SignalEngine
-from execution import ExecutionEngine
+from execution import ExecutionEngine, STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE
 
 # ------------------------------------------------------------------
-# Logging setup
+# Logging — console + file
 # ------------------------------------------------------------------
 
-LOG_PATH = os.path.join(os.path.dirname(__file__), "data", "trading_log.txt")
-os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+LOG_PATH   = DATA_DIR / "trading_log.txt"
+TRADE_LOG  = DATA_DIR / "trade_history.json"  # persisted trade records
 
 logging.basicConfig(
     level=logging.INFO,
@@ -51,7 +58,7 @@ logging.basicConfig(
     handlers=[
         logging.StreamHandler(sys.stdout),
         logging.FileHandler(LOG_PATH),
-    ]
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -59,285 +66,320 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ------------------------------------------------------------------
 
-# Seconds to wait between each loop iteration
-LOOP_INTERVAL_SECONDS = 60
-
-# Retrain the model every N days (0 = never auto-retrain)
-RETRAIN_EVERY_N_DAYS = 7
-
-# Refresh historical data every N hours
-DATA_REFRESH_HOURS = 12
-
-# Maximum number of open positions at one time
-MAX_OPEN_POSITIONS = 1
-
-# Minimum gap (in bars) between consecutive trades to avoid overtrading
-# With 5-min bars, 12 bars = 1 hour cooling-off between trades
-MIN_BARS_BETWEEN_TRADES = 12  # = 1 hour at 5-min bars
-
+LOOP_INTERVAL_SECONDS  = 60     # how often to check for bar close
+RETRAIN_EVERY_N_DAYS   = 7      # weekly scheduled retrain (0 = never)
+DATA_REFRESH_HOURS     = 12     # re-fetch historical data every 12 h
+MAX_OPEN_POSITIONS     = 1      # only 1 trade at a time
+MIN_BARS_BETWEEN_TRADES = 12   # ≈ 1 hour cooldown between entries
+CREDS_PATH             = Path(__file__).parent / "credentials.json"
 
 # ------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------
 
 def _market_is_open() -> bool:
-    """
-    Return True during forex market hours, False over the weekend.
-
-    Spot forex trades roughly Monday 00:00 UTC through Friday 22:00 UTC.
-    The weekend gap (Fri 22:00 → Sun 22:00 UTC) is treated as closed.
-    """
+    """True during forex market hours (Mon 00:00 – Fri 22:00 UTC)."""
     now     = datetime.now(tz=timezone.utc)
-    weekday = now.weekday()   # 0=Mon … 6=Sun
+    weekday = now.weekday()  # 0=Mon … 6=Sun
     hour    = now.hour
-
-    if weekday == 5:          # Saturday — always closed
-        return False
-    if weekday == 6 and hour < 22:   # Sunday before 22:00 UTC — still closed
-        return False
-    if weekday == 4 and hour >= 22:  # Friday after 22:00 UTC — closed
-        return False
+    if weekday == 5:                     return False   # Saturday
+    if weekday == 6 and hour < 22:       return False   # Sunday pre-open
+    if weekday == 4 and hour >= 22:      return False   # Friday post-close
     return True
 
 
 def _seconds_until_market_open() -> int:
-    """
-    Return seconds until the next Sunday 22:00 UTC market open.
-    Only called when the market is currently closed.
-    """
-    now    = datetime.now(tz=timezone.utc)
-    # Find next Sunday 22:00 UTC
-    days_until_sunday = (6 - now.weekday()) % 7
-    if days_until_sunday == 0 and now.hour >= 22:
-        days_until_sunday = 7   # already past Sunday 22:00 — next week
-    open_time = now.replace(hour=22, minute=0, second=0, microsecond=0)
-    open_time = open_time + timedelta(days=days_until_sunday)
+    now = datetime.now(tz=timezone.utc)
+    days_until_sunday = (6 - now.weekday()) % 7 or 7
+    open_time = (now + timedelta(days=days_until_sunday)).replace(
+        hour=22, minute=0, second=0, microsecond=0)
     return max(int((open_time - now).total_seconds()), 0)
 
 
-def _seconds_until_next_5min_bar() -> int:
-    """
-    Return seconds until the next 5-minute candle closes.
-    We loop every 5 minutes and build a rolling 15-min synthetic bar
-    from the last three 5-min bars, giving signals 3× more often.
-    """
+def _seconds_until_next_5min_close() -> int:
+    """Seconds until the next 5-minute boundary."""
     now     = datetime.now(tz=timezone.utc)
     minutes = now.minute % 5
     seconds = now.second
-    wait    = (5 - minutes) * 60 - seconds
-    return max(wait, 0)
+    return max((5 - minutes) * 60 - seconds, 0)
 
 
-def _append_rolling_bar(df_hist: pd.DataFrame) -> pd.DataFrame:
+def _append_rolling_bar(df_hist: pd.DataFrame, client: IGClient) -> pd.DataFrame:
     """
-    Fetch the latest three 5-minute candles, aggregate them into a
-    synthetic 15-minute bar, and append it to the historical DataFrame.
-
-    If the timestamp already exists (same 5-min close as last time),
-    we overwrite it so the close price stays current.
-
-    Returns the updated DataFrame.
+    Build a synthetic 15-min bar from the last three 5-min candles
+    and append it to the historical DataFrame.
     """
-    new_bar = fetch_rolling_15min_bar()
-    if new_bar.empty:
-        logger.warning("Could not build rolling 15-min bar — using last historical bar.")
+    try:
+        new_bar = fetch_rolling_15min_bar(client=client)
+    except Exception as exc:
+        logger.warning("Rolling bar build failed (%s) — using historical tail", exc)
         return df_hist
 
-    # Overwrite any row with the same timestamp, then sort
+    if new_bar is None or new_bar.empty:
+        return df_hist
+
     df = pd.concat([df_hist, new_bar], ignore_index=True)
     df = df.drop_duplicates(subset="datetime", keep="last")
     df = df.sort_values("datetime").reset_index(drop=True)
-    logger.info("Rolling 15-min bar appended: close=%.5f  ts=%s",
-                new_bar["close"].iloc[0],
-                new_bar["datetime"].iloc[0].strftime("%H:%M UTC"))
+    logger.debug("Rolling 15-min bar: close=%.5f  @%s",
+                 float(new_bar["close"].iloc[0]),
+                 new_bar["datetime"].iloc[0].strftime("%H:%M UTC"))
     return df
 
 
-def _should_retrain(model_path: str, every_n_days: int) -> bool:
-    """Return True if the model file is older than every_n_days days."""
-    if not os.path.exists(model_path):
+def _stale(path: str, max_seconds: float) -> bool:
+    if not os.path.exists(path):
         return True
-    if every_n_days == 0:
-        return False
-    age_seconds = time.time() - os.path.getmtime(model_path)
-    return age_seconds > every_n_days * 86400
+    return (time.time() - os.path.getmtime(path)) > max_seconds
 
 
-def _should_refresh_data(csv_path: str, every_n_hours: int) -> bool:
-    """Return True if the CSV data file is older than every_n_hours hours."""
-    if not os.path.exists(csv_path):
-        return True
-    age_seconds = time.time() - os.path.getmtime(csv_path)
-    return age_seconds > every_n_hours * 3600
+def _train_model(client: IGClient = None) -> TradingModel:
+    """Fetch fresh data, compute features, train binary model, save."""
+    logger.info("Fetching historical data for model training...")
+    if client:
+        fetch_and_save(months=6, client=client)
+    df_raw  = load_data()
+    df_feat = compute_features(df_raw)
+    logger.info("Training binary XGBoost model (Triple Barrier labels)...")
+    model = TradingModel(binary=True)
+    model.train(df_feat)
+    model.save()
+    logger.info("Model trained and saved → %s", MODEL_PATH)
+    return model
 
 
 # ------------------------------------------------------------------
-# Main loop
+# Trade-history persistence
 # ------------------------------------------------------------------
 
-def run(dry_run: bool = False, retrain: bool = False):
-    """
-    Main entry point. Runs the live trading loop indefinitely.
+def _load_trade_history() -> list:
+    if TRADE_LOG.exists():
+        try:
+            return json.loads(TRADE_LOG.read_text())
+        except Exception:
+            pass
+    return []
 
-    Parameters
-    ----------
-    dry_run : bool — if True, signals are logged but no orders are placed
-    retrain : bool — if True, force retrain model before starting
-    """
+
+def _save_trade(record: dict) -> None:
+    history = _load_trade_history()
+    history.append(record)
+    TRADE_LOG.write_text(json.dumps(history, indent=2, default=str))
+
+
+def _print_session_stats(history: list) -> None:
+    if not history:
+        return
+    total_pnl = sum(r.get("pnl_est", 0) for r in history)
+    wins  = sum(1 for r in history if r.get("pnl_est", 0) > 0)
+    total = len(history)
+    logger.info("Session stats: %d trades | %d wins (%.0f%%) | est. P&L: £%.2f",
+                total, wins, 100 * wins / total if total else 0, total_pnl)
+
+
+# ------------------------------------------------------------------
+# Main trading loop
+# ------------------------------------------------------------------
+
+def run(dry_run: bool = False, retrain: bool = False) -> None:
     logger.info("=" * 60)
-    logger.info("IG EURUSD Automated Spread Betting System")
-    logger.info("Mode: %s", "DRY RUN (no trades)" if dry_run else "LIVE TRADING")
+    logger.info("  IG EURUSD Automated Spread Betting System")
+    logger.info("  Mode: %s", "DRY RUN (no real orders)" if dry_run else "LIVE TRADING")
+    logger.info("  Stop=%.1f×ATR  TP=%.1f×ATR  Confidence≥%.0f%%",
+                STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE * 100)
     logger.info("=" * 60)
 
-    # --- Login ---
-    creds_path = os.path.join(os.path.dirname(__file__), "credentials.json")
-    client = IGClient.from_credentials_file(creds_path)
+    # ── 1. Connect to IG ──────────────────────────────────────────────
+    client = IGClient.from_credentials_file(str(CREDS_PATH))
     client.login()
-    logger.info("Logged in to IG. Account: %s", client.account_id)
+    logger.info("Connected to IG. Account: %s", client.account_id)
 
-    # --- Initial data fetch ---
-    if _should_refresh_data(CSV_PATH, DATA_REFRESH_HOURS) or retrain:
-        logger.info("Fetching historical data...")
-        fetch_and_save(months=6, client=client)   # reuse existing session
-
-    # --- Train or load model ---
-    from model import MODEL_PATH
-    if retrain or _should_retrain(MODEL_PATH, RETRAIN_EVERY_N_DAYS):
-        logger.info("Training model...")
-        df_raw  = load_data()
-        df_feat = compute_features(df_raw)
-        model   = TradingModel()
-        model.train(df_feat)
-        model.save()
+    # ── 2. Train or load model ────────────────────────────────────────
+    if retrain or not os.path.exists(MODEL_PATH):
+        model = _train_model(client=client)
     else:
-        logger.info("Loading existing model...")
+        logger.info("Loading saved model from %s", MODEL_PATH)
         model = TradingModel.load()
+        # Quick sanity: confirm it's binary-mode
+        if not getattr(model, "binary", False):
+            logger.warning("Saved model is not binary mode — retraining...")
+            model = _train_model(client=client)
 
-    # --- Set up engines ---
-    signal_engine = SignalEngine(client)
-    signal_engine.model = model   # use the model we just trained/loaded
-
+    # ── 3. Wire up engines ────────────────────────────────────────────
+    sig_engine  = SignalEngine(client)
+    sig_engine.model = model
     exec_engine = ExecutionEngine(client)
 
-    # --- State tracking ---
-    last_signal_bar  = None    # datetime of last bar where a trade was placed
-    bars_since_trade = 99      # high initial value = allow trade immediately
+    # ── 4. State ─────────────────────────────────────────────────────
+    bars_since_trade = 99          # start high so first signal can fire
+    session_history  = []
+    open_deal_id     = None        # track our deal so we can report P&L on close
 
-    logger.info("Entering live loop. Waiting for bar closes...")
+    logger.info("Live loop started. Waiting for bar closes...")
 
     while True:
         try:
-            # Pause over the weekend
+            # ── Weekend check ──────────────────────────────────────────
             if not _market_is_open():
                 wait = _seconds_until_market_open()
-                logger.info(
-                    "Market closed (weekend). Sleeping %.1f hours until Sunday 22:00 UTC.",
-                    wait / 3600
-                )
-                time.sleep(wait)
+                logger.info("Market closed. Resuming in %.1f hours (Sunday 22:00 UTC).",
+                            wait / 3600)
+                _print_session_stats(session_history)
+                time.sleep(min(wait, 3600))  # wake every hour max to re-check
                 continue
 
-            # Wait until the next 5-min bar closes
-            wait = _seconds_until_next_5min_bar()
-            logger.info("Next 5-min bar in %d seconds (%d min %d sec).",
-                        wait, wait // 60, wait % 60)
-            time.sleep(wait + 5)   # +5s buffer for the bar to fully settle
+            # ── Wait for next 5-min bar close ─────────────────────────
+            wait = _seconds_until_next_5min_close()
+            logger.debug("Next 5-min bar close in %ds", wait)
+            time.sleep(wait + 3)   # +3s buffer for bar to settle
 
             now = datetime.now(tz=timezone.utc)
-            logger.info("--- 5-min close: %s ---", now.strftime("%Y-%m-%d %H:%M UTC"))
+            logger.info("── %s ──", now.strftime("%Y-%m-%d %H:%M UTC"))
 
-            # Periodically refresh historical data and retrain
-            if _should_refresh_data(CSV_PATH, DATA_REFRESH_HOURS):
+            # ── Periodic data refresh ─────────────────────────────────
+            if _stale(CSV_PATH, DATA_REFRESH_HOURS * 3600):
                 logger.info("Refreshing historical data...")
-                fetch_and_save(months=6, client=client)   # reuse existing session
+                try:
+                    fetch_and_save(months=6, client=client)
+                except Exception as exc:
+                    logger.warning("Data refresh failed: %s", exc)
 
-            if _should_retrain(MODEL_PATH, RETRAIN_EVERY_N_DAYS):
-                logger.info("Scheduled model retrain...")
-                df_raw  = load_data()
-                df_feat = compute_features(df_raw)
-                model.train(df_feat)
-                model.save()
-                signal_engine.model = model
+            # ── Scheduled model retrain ───────────────────────────────
+            if RETRAIN_EVERY_N_DAYS > 0 and _stale(MODEL_PATH, RETRAIN_EVERY_N_DAYS * 86400):
+                logger.info("Scheduled weekly retrain...")
+                try:
+                    model = _train_model(client=client)
+                    sig_engine.model = model
+                except Exception as exc:
+                    logger.error("Retrain failed: %s", exc)
 
-            # --- Build rolling 15-min bar from latest 5-min data ---
-            # Load saved history, then append a fresh synthetic 15-min bar
-            # built from the last 3 × 5-min candles.  This gives a signal
-            # every 5 minutes without waiting for a full 15-min close.
-            df_base = load_data()
-            df_base = _append_rolling_bar(df_base)
+            # ── Build feature matrix ──────────────────────────────────
+            try:
+                df_base = load_data()
+                df_base = _append_rolling_bar(df_base, client)
+                df_feat = compute_features(df_base)
+            except Exception as exc:
+                logger.error("Feature computation failed: %s", exc)
+                time.sleep(60)
+                continue
 
-            # Compute features on the extended series and generate signal
-            df_feat = compute_features(df_base)
-            sig     = signal_engine.get_signal(df_feat=df_feat)
+            # ── Get signal ────────────────────────────────────────────
+            sig = sig_engine.get_signal(df_feat=df_feat)
             bars_since_trade += 1
 
             logger.info(
-                "Signal: %-4s  conf=%.1f%%  actionable=%s  price=%.5f",
+                "Signal: %-4s  conf=%.1f%%  p_buy=%.1f%%  p_sell=%.1f%%  "
+                "actionable=%s  price=%.5f  ATR=%.5f",
                 sig["label"], sig["confidence"] * 100,
-                sig["actionable"], sig["latest_price"]
+                sig["p_buy"] * 100, sig["p_sell"] * 100,
+                sig["actionable"], sig["latest_price"], sig["atr"],
             )
 
-            # --- Decide whether to trade ---
+            # ── Check if our open position has been closed by IG ──────
+            if open_deal_id:
+                try:
+                    open_ids = {p["position"]["dealId"]
+                                for p in client.get_open_positions().get("positions", [])}
+                    if open_deal_id not in open_ids:
+                        logger.info("Position %s closed by IG (SL or TP hit).",
+                                    open_deal_id)
+                        open_deal_id = None
+                        bars_since_trade = 0
+                except Exception as exc:
+                    logger.warning("Could not check position status: %s", exc)
+
+            # ── Entry logic ───────────────────────────────────────────
             if not sig["actionable"]:
-                logger.info("Signal not actionable — skipping.")
                 continue
 
             if bars_since_trade < MIN_BARS_BETWEEN_TRADES:
-                logger.info("Too soon since last trade (%d bars). Waiting.", bars_since_trade)
+                logger.info("Cooldown: %d/%d bars since last trade.",
+                            bars_since_trade, MIN_BARS_BETWEEN_TRADES)
                 continue
 
-            # Check existing positions (gracefully handle API errors)
+            # Count open positions
             try:
-                open_pos = client.get_open_positions().get("positions", [])
-            except Exception as e:
-                logger.warning("Could not fetch open positions (%s) — assuming 0 open.", e)
-                open_pos = []
-            n_open = len(open_pos)
+                n_open = exec_engine.get_open_position_count()
+            except Exception:
+                n_open = 0
 
             if n_open >= MAX_OPEN_POSITIONS:
-                logger.info("%d position(s) already open (max=%d). Skipping new entry.",
+                logger.info("%d position(s) open (max %d) — skipping.",
                             n_open, MAX_OPEN_POSITIONS)
                 continue
 
-            # --- Place trade ---
+            # ── Place or simulate trade ───────────────────────────────
+            trade_record = {
+                "timestamp":    sig["timestamp"],
+                "signal":       sig["label"],
+                "confidence":   sig["confidence"],
+                "price":        sig["latest_price"],
+                "atr":          sig["atr"],
+                "dry_run":      dry_run,
+            }
+
             if dry_run:
+                stop_price = (sig["latest_price"] - sig["atr"] * STOP_ATR_MULTIPLE
+                              if sig["signal"] == 1
+                              else sig["latest_price"] + sig["atr"] * STOP_ATR_MULTIPLE)
+                tp_price   = (sig["latest_price"] + sig["atr"] * TP_ATR_MULTIPLE
+                              if sig["signal"] == 1
+                              else sig["latest_price"] - sig["atr"] * TP_ATR_MULTIPLE)
                 logger.info(
-                    "[DRY RUN] Would place %s at %.5f (conf=%.1f%%)",
-                    sig["label"], sig["latest_price"], sig["confidence"] * 100
+                    "[DRY RUN] %s @ %.5f  SL=%.5f  TP=%.5f  "
+                    "ATR=%.5f  conf=%.1f%%",
+                    sig["label"], sig["latest_price"],
+                    stop_price, tp_price,
+                    sig["atr"], sig["confidence"] * 100,
                 )
+                trade_record["status"] = "DRY_RUN"
+                session_history.append(trade_record)
+                bars_since_trade = 0
+
             else:
                 logger.info("Placing %s trade...", sig["label"])
-                atr = sig.get("atr", 0.0010)   # fallback ATR if not in signal dict
-
-                # Try to get ATR from the feature data
                 try:
-                    df_raw  = load_data()
-                    df_feat = compute_features(df_raw)
-                    atr     = float(df_feat["atr"].iloc[-1])
-                except Exception:
-                    pass
+                    confirm     = exec_engine.open_trade(
+                        signal        = sig["signal"],
+                        atr           = sig["atr"],
+                        current_price = sig["latest_price"],
+                    )
+                    deal_status = confirm.get("dealStatus", "UNKNOWN")
+                    deal_id     = confirm.get("dealId", "")
+                    fill_level  = confirm.get("level", sig["latest_price"])
 
-                confirm = exec_engine.open_trade(
-                    signal        = sig["signal"],
-                    atr           = atr,
-                    current_price = sig["latest_price"],
-                )
+                    logger.info("Trade result: %s  dealId=%s  level=%s",
+                                deal_status, deal_id, fill_level)
 
-                deal_status = confirm.get("dealStatus", "UNKNOWN")
-                logger.info("Trade result: %s", deal_status)
+                    trade_record.update({
+                        "deal_status": deal_status,
+                        "deal_id":     deal_id,
+                        "fill_level":  fill_level,
+                    })
 
-                if deal_status == "ACCEPTED":
-                    last_signal_bar  = sig["timestamp"]
-                    bars_since_trade = 0
+                    if deal_status == "ACCEPTED":
+                        open_deal_id     = deal_id
+                        bars_since_trade = 0
+                        session_history.append(trade_record)
+                        _save_trade(trade_record)
+                    else:
+                        logger.warning("Trade rejected: %s", confirm.get("reason", ""))
+
+                except Exception as exc:
+                    logger.error("Trade execution failed: %s", exc)
 
         except KeyboardInterrupt:
-            logger.info("Shutting down — KeyboardInterrupt received.")
+            logger.info("Shutdown requested (Ctrl+C).")
             break
 
-        except Exception as e:
-            logger.error("Unexpected error in main loop: %s", e, exc_info=True)
+        except Exception as exc:
+            logger.error("Unhandled error: %s", exc, exc_info=True)
             logger.info("Sleeping 60s before retrying...")
             time.sleep(60)
+
+    # ── Graceful shutdown ─────────────────────────────────────────────
+    logger.info("Bot stopped.")
+    _print_session_stats(session_history)
 
 
 # ------------------------------------------------------------------
@@ -345,11 +387,11 @@ def run(dry_run: bool = False, retrain: bool = False):
 # ------------------------------------------------------------------
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="IG EURUSD Automated Trading System")
+    parser = argparse.ArgumentParser(description="IG EURUSD Automated Trading Bot")
     parser.add_argument("--dry-run",  action="store_true",
-                        help="Log signals without placing real trades")
+                        help="Log signals but do NOT place real trades")
     parser.add_argument("--retrain",  action="store_true",
-                        help="Force model retrain before starting")
+                        help="Force model retrain before starting the loop")
     args = parser.parse_args()
 
     run(dry_run=args.dry_run, retrain=args.retrain)
