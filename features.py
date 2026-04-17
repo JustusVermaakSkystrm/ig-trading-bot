@@ -38,6 +38,65 @@ logger = logging.getLogger(__name__)
 
 
 # ------------------------------------------------------------------
+# DXY cache — fetched once per process, aligned by UTC timestamp
+# ------------------------------------------------------------------
+
+_DXY_CACHE: pd.Series | None = None   # indexed by datetime, value = 15-min log return
+
+
+def _fetch_dxy_returns(start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
+    """
+    Download DXY hourly data from Yahoo Finance, resample to 15-min via forward-fill,
+    and return log-returns indexed by UTC-naive datetime.
+    Falls back to zero series on failure (DXY is a bonus feature, not critical).
+
+    We use hourly because Yahoo Finance only provides 15-min for the last 60 days,
+    but hourly data is available for much longer periods.
+    """
+    global _DXY_CACHE
+    if _DXY_CACHE is not None:
+        return _DXY_CACHE
+
+    try:
+        import yfinance as yf
+        # Try hourly first (available for longer history)
+        for interval in ("1h", "60m"):
+            raw = yf.download(
+                "DX-Y.NYB", start=start, end=end,
+                interval=interval, progress=False, auto_adjust=True,
+            )
+            if not raw.empty:
+                break
+
+        if raw.empty:
+            raise ValueError("Empty DXY download")
+
+        # Flatten MultiIndex columns if present
+        if isinstance(raw.columns, pd.MultiIndex):
+            raw.columns = raw.columns.get_level_values(0)
+
+        raw.index = pd.to_datetime(raw.index)
+        if raw.index.tz is not None:
+            raw.index = raw.index.tz_convert("UTC").tz_localize(None)
+
+        # Resample hourly → 15-min by forward-filling (causal: no future info)
+        raw_15 = raw["Close"].resample("15min").ffill()
+
+        dxy_ret = np.log(raw_15 / raw_15.shift(1)).fillna(0)
+        dxy_ret.index.name = "datetime"
+        dxy_ret.name = "dxy_ret"
+        _DXY_CACHE = dxy_ret
+        logger.info("DXY data fetched (%s, resampled to 15m): %d bars (%s → %s)",
+                    interval, len(dxy_ret), dxy_ret.index[0], dxy_ret.index[-1])
+        return dxy_ret
+
+    except Exception as exc:
+        logger.warning("DXY fetch failed (%s) — dxy features will be zero", exc)
+        _DXY_CACHE = pd.Series(dtype=float, name="dxy_ret")
+        return _DXY_CACHE
+
+
+# ------------------------------------------------------------------
 # Savitzky-Golay features
 # ------------------------------------------------------------------
 
@@ -336,20 +395,31 @@ def _technical_indicators(df: pd.DataFrame) -> dict:
     feats["cci"] = (tp - sma_tp) / (0.015 * mad.replace(0, np.nan))
 
     # ---- 9. OBV (z-scored over rolling 50 bars) ------------------------
+    # When volume is all zero (e.g. Yahoo Finance forex data), use price
+    # direction as a proxy for order flow (tick-count OBV).
     direction = np.sign(close.diff())
     direction.iloc[0] = 0.0
-    obv       = (direction * volume).cumsum()
-    obv_mean  = obv.rolling(50).mean()
-    obv_std   = obv.rolling(50).std().replace(0, np.nan)
+    vol_weight = volume.where(volume > 0, 1.0)   # fallback: equal weight
+    obv        = (direction * vol_weight).cumsum()
+    obv_mean   = obv.rolling(50).mean()
+    obv_std    = obv.rolling(50).std().replace(0, np.nan)
     feats["obv_zscore"] = (obv - obv_mean) / obv_std
 
     # ---- 10. VWAP (daily reset) ----------------------------------------
+    # When volume is all zero, fall back to cumulative mean of typical price
+    # per day (equivalent to equal-weighted VWAP = running TP average).
     tp_vwap  = (high + low + close) / 3
-    tpv      = tp_vwap * volume
     dates    = df["datetime"].dt.normalize()   # group key = midnight timestamp
-    cum_tpv  = tpv.groupby(dates).transform("cumsum")
-    cum_vol  = volume.groupby(dates).transform("cumsum")
-    vwap     = cum_tpv / cum_vol.replace(0, np.nan)
+    vol_pos  = volume.where(volume > 0, None)   # None where volume = 0
+    has_vol  = vol_pos.notna().any()
+    if has_vol:
+        tpv     = tp_vwap * volume
+        cum_tpv = tpv.groupby(dates).transform("cumsum")
+        cum_vol = volume.groupby(dates).transform("cumsum")
+        vwap    = cum_tpv / cum_vol.replace(0, np.nan)
+    else:
+        # Uniform-weight VWAP = cumulative mean of TP per day
+        vwap = tp_vwap.groupby(dates).transform(lambda x: x.expanding().mean())
     feats["vwap_dist"] = (close - vwap) / atr
 
     # ---- 11. Parabolic SAR ---------------------------------------------
@@ -360,13 +430,15 @@ def _technical_indicators(df: pd.DataFrame) -> dict:
     feats["roc_10"] = 100 * (close - close.shift(10)) / close.shift(10).replace(0, np.nan)
 
     # ---- 13. Money Flow Index (14) -------------------------------------
-    tp_mfi  = (high + low + close) / 3
-    mf      = tp_mfi * volume
-    pos_mf  = mf.where(tp_mfi > tp_mfi.shift(), 0.0)
-    neg_mf  = mf.where(tp_mfi < tp_mfi.shift(), 0.0)
-    pos_sum = pos_mf.rolling(14).sum()
-    neg_sum = neg_mf.rolling(14).sum()
-    mfr     = pos_sum / neg_sum.replace(0, np.nan)
+    tp_mfi   = (high + low + close) / 3
+    # Fall back to RSI-style calculation (price-weighted) when volume is zero
+    vol_mfi  = volume.where(volume > 0, 1.0)
+    mf       = tp_mfi * vol_mfi
+    pos_mf   = mf.where(tp_mfi > tp_mfi.shift(), 0.0)
+    neg_mf   = mf.where(tp_mfi < tp_mfi.shift(), 0.0)
+    pos_sum  = pos_mf.rolling(14).sum()
+    neg_sum  = neg_mf.rolling(14).sum()
+    mfr      = pos_sum / neg_sum.replace(0, np.nan)
     feats["mfi"] = 100 - (100 / (1 + mfr))
 
     # ---- 14. Donchian Channels (20) ------------------------------------
@@ -389,8 +461,9 @@ def _technical_indicators(df: pd.DataFrame) -> dict:
     # ---- 16. Chaikin Money Flow (20) -----------------------------------
     hl      = (high - low).replace(0, np.nan)
     mfm     = ((close - low) - (high - close)) / hl
-    mfv     = mfm * volume
-    feats["cmf"] = mfv.rolling(20).sum() / volume.rolling(20).sum().replace(0, np.nan)
+    vol_cmf = volume.where(volume > 0, 1.0)   # equal weight when volume absent
+    mfv     = mfm * vol_cmf
+    feats["cmf"] = mfv.rolling(20).sum() / vol_cmf.rolling(20).sum().replace(0, np.nan)
 
     # ---- 17. TRIX (14) -------------------------------------------------
     ema1 = close.ewm(span=14, adjust=False).mean()
@@ -438,12 +511,37 @@ def _technical_indicators(df: pd.DataFrame) -> dict:
     feats["rsi_5roc"]       = rsi_series.diff(5)
     feats["price_rsi_div"]  = close.pct_change(5) * 100 - rsi_series.diff(5)
 
+    # ---- 21. Realized volatility term structure (RV ratio) -------------
+    # RV(15) / RV(240): > 1 = short-term vol elevated (choppy/volatile)
+    #                   < 1 = short-term vol compressed (potential breakout)
+    pct_ret = close.pct_change()
+    rv15    = pct_ret.rolling(15).std().replace(0, np.nan)
+    rv240   = pct_ret.rolling(240).std().replace(0, np.nan)
+    feats["rv_ratio"]   = rv15 / rv240           # regime signal
+    feats["rv_15"]      = rv15 * 100             # raw short-term RV (scaled)
+    feats["rv_240"]     = rv240 * 100            # raw long-term RV (scaled)
+
+    # ---- 22. Bid-ask spread proxy (intrabar range / close) -------------
+    # Proxy for microstructure liquidity; spikes during illiquid periods
+    feats["spread_proxy"] = (high - low) / close.replace(0, np.nan)
+
+    # ---- 23. ADX-based regime flag (trending = ADX > 25) ---------------
+    # Rule-based regime: no training required, stable out-of-sample.
+    # adx is already in feats from indicator 6.
+    feats["adx_regime"] = (adx > 25).astype(float)   # 1=trending, 0=ranging
+
     return feats
 
 
 # ------------------------------------------------------------------
 # Master feature builder
 # ------------------------------------------------------------------
+
+def reset_dxy_cache() -> None:
+    """Force re-fetch of DXY data on the next compute_features call."""
+    global _DXY_CACHE
+    _DXY_CACHE = None
+
 
 def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -508,16 +606,41 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     df["residuals_norm"] = df["residuals"] / df["atr"].replace(0, np.nan)
     df["sg_cross_norm"]  = df["sg_cross"]  / df["atr"].replace(0, np.nan)
 
-    # ---- 7. 20 popular technical indicators ---------------------------
-    logger.info("Computing 20 technical indicators...")
+    # ---- 7. 20 popular technical indicators + RV + spread proxy --------
+    logger.info("Computing 20 technical indicators + cross-asset features...")
     ti_feats = _technical_indicators(df)
     for col, values in ti_feats.items():
         df[col] = values
 
-    # ---- 8. Drop warm-up rows ----------------------------------------
-    # SMA-200 needs 200 bars; Ichimoku Senkou-B + shift needs 52+26=78.
-    # Use whichever is largest.
-    warmup = max(max(SG_WINDOWS.values()), 200) + 14
+    # ---- 8. DXY cross-asset feature ------------------------------------
+    # Fetch DXY 15-min log-returns aligned to our bar timestamps.
+    logger.info("Adding DXY cross-asset feature...")
+    ts_start = df["datetime"].iloc[0]  - pd.Timedelta(days=1)
+    ts_end   = df["datetime"].iloc[-1] + pd.Timedelta(days=1)
+    dxy_ret  = _fetch_dxy_returns(ts_start, ts_end)
+
+    if not dxy_ret.empty:
+        dxy_df = dxy_ret.reset_index()
+        dxy_df.columns = ["datetime", "dxy_ret"]
+        # Normalize both sides to UTC-naive before merge
+        if dxy_df["datetime"].dt.tz is not None:
+            dxy_df["datetime"] = dxy_df["datetime"].dt.tz_convert("UTC").dt.tz_localize(None)
+        dxy_df["datetime"] = pd.to_datetime(dxy_df["datetime"]).dt.tz_localize(None)
+        # Also ensure main df datetime is tz-naive
+        df["datetime"] = pd.to_datetime(df["datetime"])
+        if df["datetime"].dt.tz is not None:
+            df["datetime"] = df["datetime"].dt.tz_convert("UTC").dt.tz_localize(None)
+        df = df.merge(dxy_df, on="datetime", how="left")
+        df["dxy_ret"] = df["dxy_ret"].fillna(0.0)
+    else:
+        df["dxy_ret"] = 0.0
+
+    # DXY rolling 5-bar return (smoother signal)
+    df["dxy_ret5"] = df["dxy_ret"].rolling(5).sum().fillna(0.0)
+
+    # ---- 9. Drop warm-up rows ----------------------------------------
+    # SMA-200 needs 200 bars; RV-240 needs 240 bars; use whichever is largest.
+    warmup = max(max(SG_WINDOWS.values()), 240) + 14
     df = df.iloc[warmup:].reset_index(drop=True)
 
     logger.info("Feature matrix shape: %s", df.shape)
@@ -572,4 +695,11 @@ FEATURE_COLUMNS = [
     "ichi_tk_cross", "chikou_mom",
     # ---- RSI divergence -----------------------------------------------
     "rsi_5roc", "price_rsi_div",
+    # ---- Realized volatility term structure ---------------------------
+    "rv_ratio", "rv_15", "rv_240",
+    # ---- Microstructure + regime --------------------------------------
+    "spread_proxy",
+    "adx_regime",
+    # ---- Cross-asset --------------------------------------------------
+    "dxy_ret", "dxy_ret5",
 ]

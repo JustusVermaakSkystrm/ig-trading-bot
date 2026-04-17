@@ -467,6 +467,9 @@ def walk_forward_backtest(
     train_pct:      float = 0.70,
     backtester:     Backtester = None,
     model_params:   dict  = None,
+    binary:         bool  = True,
+    embargo:        int   = 12,
+    use_regime:     bool  = False,
 ) -> list:
     """
     Roll a train/test window across the dataset and backtest each fold.
@@ -479,23 +482,31 @@ def walk_forward_backtest(
 
     Returns a list of dicts, one per fold.
     """
-    from model import TradingModel, create_labels, FEATURE_COLUMNS  # local import
+    from model import (TradingModel, create_labels, triple_barrier_labels,
+                       FEATURE_COLUMNS)  # local import
 
     if backtester is None:
         backtester = Backtester()
 
     df = df_features.copy()
-    df["label"] = create_labels(df)
+    if binary:
+        df["label"] = triple_barrier_labels(df)
+    else:
+        df["label"] = create_labels(df)
     df = df.dropna(subset=["label"] + FEATURE_COLUMNS)
 
     n = len(df)
 
-    # Expanding-window walk-forward:
+    # Expanding-window walk-forward with embargo.
     # Reserve the first `train_pct` fraction as the minimum training set.
     # Split the remaining data into n_splits equal test windows.
     min_train_n  = int(n * train_pct)
     test_n       = n - min_train_n
     fold_size    = test_n // n_splits
+
+    logger.info("Label distribution:\n  BUY (+1): %d\n  SELL (-1): %d%s",
+                (df["label"] == 1).sum(), (df["label"] == -1).sum(),
+                "" if binary else f"\n  HOLD (0): {(df['label'] == 0).sum()}")
 
     all_results = []
     for fold in range(n_splits):
@@ -504,7 +515,8 @@ def walk_forward_backtest(
         if test_end > n:
             test_end = n
 
-        train_df = df.iloc[:test_start]
+        # Embargo: skip `embargo` bars before the test window
+        train_df = df.iloc[:max(0, test_start - embargo)]
         test_df  = df.iloc[test_start:test_end]
 
         if len(train_df) < 200 or len(test_df) < 10:
@@ -519,26 +531,31 @@ def walk_forward_backtest(
 
         # Train on train_df, using its last 15% for early stopping validation
         params = model_params or {}
-        model  = TradingModel(params=params if params else None)
+        model  = TradingModel(params=params if params else None,
+                              binary=binary, embargo=0)
 
-        n_val        = int(len(train_df) * 0.15)
-        inner_train  = train_df.iloc[:-n_val] if n_val > 0 else train_df
-        inner_val    = train_df.iloc[-n_val:] if n_val > 0 else train_df.iloc[:0]
+        n_val        = max(int(len(train_df) * 0.15), 50)
+        inner_train  = train_df.iloc[:-n_val] if n_val < len(train_df) else train_df
+        inner_val    = train_df.iloc[-n_val:] if n_val < len(train_df) else train_df.iloc[:0]
 
-        # Fit directly (bypassing walk_forward_split so we control the split)
         enc = LabelEncoder()
-        all_y = np.concatenate([
+        enc.fit(np.concatenate([
             inner_train["label"].astype(int).values,
             inner_val["label"].astype(int).values,
             test_df["label"].astype(int).values,
-        ])
-        enc.fit(all_y)
+        ]))
         model.encoder = enc
 
         X_tr = inner_train[FEATURE_COLUMNS].values
-        y_tr = enc.transform(inner_train["label"].astype(int).values)
         X_vl = inner_val[FEATURE_COLUMNS].values
-        y_vl = enc.transform(inner_val["label"].astype(int).values)
+        X_te = test_df[FEATURE_COLUMNS].values
+
+        if binary:
+            y_tr = ((inner_train["label"].astype(int).values + 1) // 2)
+            y_vl = ((inner_val["label"].astype(int).values   + 1) // 2)
+        else:
+            y_tr = enc.transform(inner_train["label"].astype(int).values)
+            y_vl = enc.transform(inner_val["label"].astype(int).values)
 
         if len(X_vl) >= 50:
             model.clf.set_params(early_stopping_rounds=20)
@@ -548,11 +565,16 @@ def walk_forward_backtest(
         model.trained = True
 
         # Generate signals on test_df
-        X_te   = test_df[FEATURE_COLUMNS].values
         probs  = model.clf.predict_proba(X_te)
-        cls    = np.argmax(probs, axis=1)
-        sigs   = enc.inverse_transform(cls).astype(int)
-        confs  = probs[np.arange(len(probs)), cls]
+        if binary:
+            p_buy  = probs[:, 1]
+            p_sell = probs[:, 0]
+            sigs   = np.where(p_buy >= p_sell, 1, -1).astype(int)
+            confs  = np.where(sigs == 1, p_buy, p_sell)
+        else:
+            cls   = np.argmax(probs, axis=1)
+            sigs  = enc.inverse_transform(cls).astype(int)
+            confs = probs[np.arange(len(probs)), cls]
 
         signals = pd.DataFrame({
             "datetime":   test_df["datetime"].values,
@@ -564,18 +586,33 @@ def walk_forward_backtest(
         if signals.empty:
             continue
 
-        # Align price data with test window dates — normalise to tz-naive for comparison
+        # HMM regime gating
+        if use_regime:
+            try:
+                from regime import RegimeDetector
+                detector = RegimeDetector()
+                detector.fit(train_df)
+                is_trending = detector.is_trending(test_df)
+                is_trending.index = signals.index
+                suppressed = (~is_trending).sum()
+                signals.loc[~is_trending.values, "signal"] = 0
+                logger.info("Regime gating fold %d: suppressed %d/%d signals",
+                            fold + 1, suppressed, len(signals))
+            except Exception as exc:
+                logger.warning("Regime gating failed: %s", exc)
+
+        # Align price data with test window dates — normalise to tz-naive
         def _tz_naive_series(s: pd.Series) -> pd.Series:
             if hasattr(s.dt, "tz") and s.dt.tz is not None:
                 return s.dt.tz_convert("UTC").dt.tz_localize(None)
             return pd.to_datetime(s)
 
-        test_dt_naive   = _tz_naive_series(test_df["datetime"])
-        price_dt_naive  = _tz_naive_series(price_df["datetime"])
-        test_dates      = set(test_dt_naive)
-        price_test      = price_df[price_dt_naive.isin(test_dates)].copy()
+        test_dt_naive  = _tz_naive_series(test_df["datetime"])
+        price_dt_naive = _tz_naive_series(price_df["datetime"])
+        test_dates     = set(test_dt_naive)
+        price_test     = price_df[price_dt_naive.isin(test_dates)].copy()
 
-        result = backtester.run(price_test, signals)
+        result = backtester.run(price_test if not price_test.empty else test_df, signals)
         m      = result.metrics.copy()
         m["fold"]       = fold + 1
         m["train_bars"] = len(train_df)
@@ -587,16 +624,20 @@ def walk_forward_backtest(
         backtester.print_report(result)
 
     if all_results:
+        valid = [r for r in all_results if "error" not in r and r.get("n_trades", 0) > 0]
         print("\n" + "=" * 60)
         print("  WALK-FORWARD SUMMARY")
         print("=" * 60)
-        metrics_to_avg = ["total_return_pct", "sharpe", "win_rate_pct",
-                          "profit_factor", "max_drawdown_pct", "calmar"]
-        for k in metrics_to_avg:
-            vals = [r[k] for r in all_results if k in r]
-            if vals:
-                print(f"  {k:<22s}:  avg={np.mean(vals):>7.3f}  "
-                      f"min={np.min(vals):>7.3f}  max={np.max(vals):>7.3f}")
+        if valid:
+            metrics_to_avg = ["total_return_pct", "sharpe", "win_rate_pct",
+                              "profit_factor", "max_drawdown_pct", "calmar"]
+            for k in metrics_to_avg:
+                vals = [r[k] for r in valid if k in r]
+                if vals:
+                    print(f"  {k:<22s}:  avg={np.mean(vals):>7.3f}  "
+                          f"min={np.min(vals):>7.3f}  max={np.max(vals):>7.3f}")
+        else:
+            print("  No folds produced trades — try lowering --confidence")
         print("=" * 60 + "\n")
 
     return all_results

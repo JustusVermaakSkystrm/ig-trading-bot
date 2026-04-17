@@ -86,7 +86,8 @@ class IGClient:
         Must be called before any other method.
         """
         url     = f"{self.base_url}/session"
-        payload = {"identifier": self.username, "password": self.password}
+        payload = {"identifier": self.username, "password": self.password,
+                   "encryptedPassword": False}
         headers = self._build_headers(version="2")
 
         resp = self._session.post(url, json=payload, headers=headers)
