@@ -377,45 +377,59 @@ def _fetch_ig_since(client: IGClient, epic: str, since: datetime) -> pd.DataFram
     return combined
 
 
-def fetch_rolling_15min_bar() -> pd.DataFrame:
+def fetch_rolling_15min_bar(client: "IGClient" = None,
+                            epic: str = DEFAULT_EPIC) -> pd.DataFrame:
     """
-    Build a synthetic 15-minute bar from the last three 5-minute candles.
+    Fetch the latest completed 15-min bar with zero delay.
 
-    Called every 5 minutes in the live loop to get a fresh "15-min equivalent"
-    bar without consuming IG price-history quota.
+    Strategy (in order):
+      1. IG /prices endpoint — real-time, no delay. Requests only the last
+         3 bars (45 min) so quota usage is negligible and no 403 risk.
+      2. Yahoo Finance fallback — builds a synthetic 15-min bar from the
+         last three 5-min candles (~15 min delayed). Used only if IG fails.
 
-    Returns a one-row DataFrame with columns: datetime, open, high, low, close, volume.
-    Returns an empty DataFrame if yfinance returns insufficient data.
+    Returns a one-row DataFrame: datetime, open, high, low, close, volume.
     """
+    # ── 1. Try IG directly (real-time) ───────────────────────────────
+    if client is not None:
+        try:
+            end   = datetime.now(tz=timezone.utc)
+            start = end - timedelta(minutes=60)   # last 60 min → max 4 bars, tiny request
+            df_ig = _fetch_chunk(client, epic, start, end)
+            if not df_ig.empty:
+                df_ig = df_ig.dropna().sort_values("datetime").reset_index(drop=True)
+                latest = df_ig.tail(1)
+                logger.info("Live bar from IG: close=%.5f  @%s",
+                            float(latest["close"].iloc[0]),
+                            latest["datetime"].iloc[0].strftime("%H:%M UTC"))
+                return latest
+        except Exception as exc:
+            logger.warning("IG real-time bar failed (%s) — falling back to Yahoo", exc)
+
+    # ── 2. Yahoo fallback (synthetic from 3 × 5-min bars) ────────────
+    logger.info("fetch_rolling_15min_bar: using Yahoo Finance fallback (~15 min delay)")
     import yfinance as yf
 
     ticker  = yf.Ticker("EURUSD=X")
     df_5min = ticker.history(period="1d", interval="5m")
 
     if df_5min.empty or len(df_5min) < 3:
-        logger.warning("fetch_rolling_15min_bar: not enough 5-min bars (got %d).", len(df_5min))
+        logger.warning("fetch_rolling_15min_bar: Yahoo returned %d bars — skipping", len(df_5min))
         return pd.DataFrame()
 
-    # Take the last 3 completed 5-min bars (= 15 min of price action)
     last3 = df_5min.tail(3).reset_index()
-
-    # Normalise column names (yfinance uses capitalised names)
-    col_map = {
-        "Datetime": "datetime", "Date": "datetime",
-        "Open": "open", "High": "high", "Low": "low",
-        "Close": "close", "Volume": "volume",
-    }
+    col_map = {"Datetime": "datetime", "Date": "datetime",
+               "Open": "open", "High": "high", "Low": "low",
+               "Close": "close", "Volume": "volume"}
     last3 = last3.rename(columns={k: v for k, v in col_map.items() if k in last3.columns})
 
-    # Ensure UTC-aware timestamps
     if "datetime" in last3.columns:
         if last3["datetime"].dt.tz is None:
             last3["datetime"] = last3["datetime"].dt.tz_localize("UTC")
         else:
             last3["datetime"] = last3["datetime"].dt.tz_convert("UTC")
 
-    # Aggregate: open of first bar, high/low extremes, close of last bar
-    synthetic = pd.DataFrame([{
+    return pd.DataFrame([{
         "datetime": last3["datetime"].iloc[-1],
         "open":     float(last3["open"].iloc[0]),
         "high":     float(last3["high"].max()),
@@ -423,8 +437,6 @@ def fetch_rolling_15min_bar() -> pd.DataFrame:
         "close":    float(last3["close"].iloc[-1]),
         "volume":   float(last3["volume"].sum()),
     }])
-
-    return synthetic
 
 
 def fetch_and_save(months: int = DEFAULT_MONTHS, epic: str = DEFAULT_EPIC,

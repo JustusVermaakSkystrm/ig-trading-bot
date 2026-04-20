@@ -58,59 +58,47 @@ class SignalEngine:
 
     def _fetch_recent_bars(self, n_bars: int = LOOKBACK_BARS) -> pd.DataFrame:
         """
-        Fetch the last n_bars × 15-min candles from IG.
-        Falls back to the cached CSV if the API call fails.
+        Return the last n_bars of 15-min candles with the most recent bar
+        always sourced directly from IG (zero delay).
+
+        Strategy:
+          1. Load bulk history from the cached CSV (Yahoo-sourced, fine for
+             computing indicators on older bars).
+          2. Top up the tail with the last 60 min of bars from IG directly,
+             so the most recent 1-4 candles are always real-time.
+          3. Fall back to CSV-only if IG fails.
         """
-        end   = datetime.now(tz=timezone.utc)
-        start = end - timedelta(minutes=15 * n_bars)
+        from data_pipeline import load_data, CSV_PATH, _fetch_chunk, DEFAULT_EPIC
 
-        from_str = start.strftime("%Y-%m-%dT%H:%M:%S")
-        to_str   = end.strftime("%Y-%m-%dT%H:%M:%S")
-
+        # Step 1 — bulk history from CSV
         try:
-            data = self.client.get(
-                f"/prices/{self.epic}",
-                params={"resolution": "MINUTE_15", "from": from_str,
-                        "to": to_str, "max": n_bars},
-                version="3",
-            )
+            df = load_data(CSV_PATH).tail(n_bars).copy()
         except Exception as exc:
-            logger.error("Live price fetch failed: %s — using cached CSV", exc)
-            return load_data(CSV_PATH).tail(n_bars)
+            logger.error("Could not load CSV: %s", exc)
+            df = pd.DataFrame()
 
-        candles = data.get("prices", [])
-        rows = []
-        for c in candles:
-            def mid(p):
-                if not p:
-                    return None
-                b, a = p.get("bid"), p.get("ask")
-                return (b + a) / 2 if (b is not None and a is not None) else None
+        # Step 2 — top up with live IG bars (last 60 min = max 4 bars)
+        try:
+            end   = datetime.now(tz=timezone.utc)
+            start = end - timedelta(minutes=60)
+            df_live = _fetch_chunk(self.client, EPIC, start, end)
+            if not df_live.empty:
+                df_live = df_live.dropna()
+                if not df.empty:
+                    df = pd.concat([df, df_live], ignore_index=True)
+                    df = df.drop_duplicates(subset="datetime", keep="last")
+                    df = df.sort_values("datetime").reset_index(drop=True)
+                else:
+                    df = df_live
+                logger.info("Signal engine: %d bars loaded (%d live from IG, latest: %s)",
+                            len(df), len(df_live),
+                            df["datetime"].iloc[-1].strftime("%Y-%m-%d %H:%M UTC"))
+        except Exception as exc:
+            logger.warning("IG live top-up failed (%s) — using CSV only", exc)
+            if df.empty:
+                logger.error("No data available at all.")
 
-            raw_time = c.get("snapshotTime", "")
-            try:
-                dt = datetime.strptime(raw_time[:19], "%Y/%m/%d %H:%M:%S")
-                dt = dt.replace(tzinfo=timezone.utc)
-            except ValueError:
-                continue
-
-            rows.append({
-                "datetime": dt,
-                "open":     mid(c.get("openPrice")),
-                "high":     mid(c.get("highPrice")),
-                "low":      mid(c.get("lowPrice")),
-                "close":    mid(c.get("closePrice")),
-                "volume":   c.get("lastTradedVolume", 0),
-            })
-
-        if not rows:
-            logger.warning("Empty price response from IG — using cached CSV")
-            return load_data(CSV_PATH).tail(n_bars)
-
-        df = pd.DataFrame(rows).dropna().sort_values("datetime").reset_index(drop=True)
-        logger.info("Fetched %d live 15-min bars from IG (latest: %s)",
-                    len(df), df["datetime"].iloc[-1].strftime("%Y-%m-%d %H:%M UTC"))
-        return df
+        return df.tail(n_bars) if not df.empty else df
 
     # ------------------------------------------------------------------
     # Signal generation
