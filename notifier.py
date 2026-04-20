@@ -103,3 +103,15 @@ class Notifier:
 
     def bot_error(self, error: str) -> None:
         self.send(f"🚨 <b>Bot error</b>\n<code>{error[:300]}</code>")
+
+    def heartbeat(self, label: str, confidence: float, price: float,
+                  bars_since_trade: int, open_deal_id: str = None) -> None:
+        position_str = f"OPEN ({open_deal_id[:12]}...)" if open_deal_id else "None"
+        msg = (
+            f"🫀 <b>Bot heartbeat</b>\n"
+            f"Last signal: <b>{label}</b> ({confidence*100:.1f}% conf)\n"
+            f"Price:       {price:.5f}\n"
+            f"Position:    {position_str}\n"
+            f"Bars since trade: {bars_since_trade}"
+        )
+        self.send(msg)

@@ -72,6 +72,7 @@ RETRAIN_EVERY_N_DAYS   = 7      # weekly scheduled retrain (0 = never)
 DATA_REFRESH_HOURS     = 12     # re-fetch historical data every 12 h
 MAX_OPEN_POSITIONS     = 1      # only 1 trade at a time
 MIN_BARS_BETWEEN_TRADES = 12   # ≈ 1 hour cooldown between entries
+HEARTBEAT_HOURS        = 4      # send Telegram status every N hours
 CREDS_PATH             = Path(__file__).parent / "credentials.json"
 
 # ------------------------------------------------------------------
@@ -225,6 +226,8 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
     bars_since_trade = 99          # start high so first signal can fire
     session_history  = []
     open_deal_id     = None        # track our deal so we can report P&L on close
+    last_heartbeat   = datetime.now(tz=timezone.utc)
+    last_sig         = {"label": "—", "confidence": 0.0, "latest_price": 0.0}
 
     logger.info("Live loop started. Waiting for bar closes...")
 
@@ -277,6 +280,7 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
             # ── Get signal ────────────────────────────────────────────
             sig = sig_engine.get_signal(df_feat=df_feat)
             bars_since_trade += 1
+            last_sig = sig
 
             logger.info(
                 "Signal: %-4s  conf=%.1f%%  p_buy=%.1f%%  p_sell=%.1f%%  "
@@ -285,6 +289,17 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                 sig["p_buy"] * 100, sig["p_sell"] * 100,
                 sig["actionable"], sig["latest_price"], sig["atr"],
             )
+
+            # ── Periodic heartbeat ────────────────────────────────────
+            if (datetime.now(tz=timezone.utc) - last_heartbeat).total_seconds() >= HEARTBEAT_HOURS * 3600:
+                notifier.heartbeat(
+                    label            = last_sig["label"],
+                    confidence       = last_sig["confidence"],
+                    price            = last_sig["latest_price"],
+                    bars_since_trade = bars_since_trade,
+                    open_deal_id     = open_deal_id,
+                )
+                last_heartbeat = datetime.now(tz=timezone.utc)
 
             # ── Check if our open position has been closed by IG ──────
             if open_deal_id:
