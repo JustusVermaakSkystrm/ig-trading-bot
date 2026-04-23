@@ -105,13 +105,26 @@ class Notifier:
         self.send(f"🚨 <b>Bot error</b>\n<code>{error[:300]}</code>")
 
     def heartbeat(self, label: str, confidence: float, price: float,
-                  bars_since_trade: int, open_deal_id: str = None) -> None:
-        position_str = f"OPEN ({open_deal_id[:12]}...)" if open_deal_id else "None"
+                  bars_since_trade: int, open_deal_id: str = None,
+                  open_direction: str = None) -> None:
+        if open_deal_id:
+            position_str = f"📌 {open_direction} open — waiting for SL/TP"
+            # Was the latest signal in the same or opposite direction?
+            signal_note = ""
+            if open_direction and label not in ("HOLD", "—"):
+                if label != open_direction:
+                    signal_note = f"\n⚠️ Model now prefers {label} but position held — SL/TP manages exit"
+                else:
+                    signal_note = f"\n✅ Model agrees: stay {open_direction}"
+        else:
+            position_str = "No open position"
+            signal_note  = ""
+
         msg = (
             f"🫀 <b>Bot heartbeat</b>\n"
-            f"Last signal: <b>{label}</b> ({confidence*100:.1f}% conf)\n"
-            f"Price:       {price:.5f}\n"
             f"Position:    {position_str}\n"
-            f"Bars since trade: {bars_since_trade}"
+            f"Last signal: <b>{label}</b> ({confidence*100:.1f}% conf)\n"
+            f"Price:       {price:.5f}"
+            f"{signal_note}"
         )
         self.send(msg)

@@ -225,9 +225,10 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
     # ── 4. State ─────────────────────────────────────────────────────
     bars_since_trade = 99          # start high so first signal can fire
     session_history  = []
-    open_deal_id     = None        # track our deal so we can report P&L on close
-    last_heartbeat   = datetime.now(tz=timezone.utc)
-    last_sig         = {"label": "—", "confidence": 0.0, "latest_price": 0.0}
+    open_deal_id        = None        # track our deal so we can report P&L on close
+    open_deal_direction = None        # "BUY" or "SELL"
+    last_heartbeat      = datetime.now(tz=timezone.utc)
+    last_sig            = {"label": "—", "confidence": 0.0, "latest_price": 0.0}
 
     logger.info("Live loop started. Waiting for bar closes...")
 
@@ -298,6 +299,7 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                     price            = last_sig["latest_price"],
                     bars_since_trade = bars_since_trade,
                     open_deal_id     = open_deal_id,
+                    open_direction   = open_deal_direction,
                 )
                 last_heartbeat = datetime.now(tz=timezone.utc)
 
@@ -323,8 +325,9 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                             profit      = profit,
                             currency    = currency,
                         )
-                        open_deal_id = None
-                        bars_since_trade = 0
+                        open_deal_id        = None
+                        open_deal_direction = None
+                        bars_since_trade    = 0
                 except Exception as exc:
                     logger.warning("Could not check position status: %s", exc)
 
@@ -425,8 +428,9 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                             atr        = sig["atr"],
                             deal_id    = deal_id,
                         )
-                        open_deal_id     = deal_id
-                        bars_since_trade = 0
+                        open_deal_id        = deal_id
+                        open_deal_direction = sig["label"]   # "BUY" or "SELL"
+                        bars_since_trade    = 0
                         session_history.append(trade_record)
                         _save_trade(trade_record)
                     else:
