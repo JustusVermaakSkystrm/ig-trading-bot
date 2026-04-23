@@ -14,6 +14,7 @@ The notifier silently no-ops if the env vars are not set, so the bot
 continues trading even if Telegram is not configured.
 """
 
+import html as _html
 import logging
 import os
 import requests
@@ -36,19 +37,43 @@ class Notifier:
     # ------------------------------------------------------------------
 
     def send(self, message: str) -> bool:
-        """Send a plain-text Telegram message. Returns True on success."""
+        """Send a Telegram message with HTML formatting. Returns True on success.
+
+        If Telegram rejects the HTML (400), automatically retries as plain text
+        so the notification always arrives even if formatting is broken.
+        """
         if not self.enabled:
             return False
+        url = TELEGRAM_API.format(token=self.token)
         try:
             resp = requests.post(
-                TELEGRAM_API.format(token=self.token),
+                url,
                 json={"chat_id": self.chat_id, "text": message, "parse_mode": "HTML"},
                 timeout=10,
             )
-            if not resp.ok:
-                logger.warning("Telegram send failed: %s %s", resp.status_code, resp.text[:200])
-                return False
-            return True
+            if resp.ok:
+                return True
+            # HTML parse error → strip tags and retry as plain text
+            if resp.status_code == 400:
+                logger.warning(
+                    "Telegram HTML parse error — retrying as plain text. "
+                    "Detail: %s", resp.text[:200],
+                )
+                import re
+                plain = re.sub(r"<[^>]+>", "", message)
+                resp2 = requests.post(
+                    url,
+                    json={"chat_id": self.chat_id, "text": plain},
+                    timeout=10,
+                )
+                if resp2.ok:
+                    return True
+                logger.warning("Telegram plain-text retry also failed: %s %s",
+                               resp2.status_code, resp2.text[:200])
+            else:
+                logger.warning("Telegram send failed: %s %s",
+                               resp.status_code, resp.text[:200])
+            return False
         except Exception as exc:
             logger.warning("Telegram notification error: %s", exc)
             return False
@@ -87,7 +112,7 @@ class Notifier:
     def trade_rejected(self, direction: str, reason: str) -> None:
         msg = (
             f"⚠️ <b>TRADE REJECTED — {direction}</b>\n"
-            f"Reason: {reason}"
+            f"Reason: {_html.escape(str(reason))}"
         )
         self.send(msg)
 
@@ -101,7 +126,7 @@ class Notifier:
         self.send(msg)
 
     def bot_error(self, error: str) -> None:
-        self.send(f"🚨 <b>Bot error</b>\n<code>{error[:300]}</code>")
+        self.send(f"🚨 <b>Bot error</b>\n<code>{_html.escape(str(error)[:300])}</code>")
 
     def heartbeat(self, label: str, confidence: float, price: float,
                   bars_since_trade: int, open_deal_id: str = None,
