@@ -285,10 +285,11 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
 
             logger.info(
                 "Signal: %-4s  conf=%.1f%%  p_buy=%.1f%%  p_sell=%.1f%%  "
-                "actionable=%s  price=%.5f  ATR=%.5f",
+                "regime=%-7s  actionable=%s  price=%.5f  ATR=%.5f",
                 sig["label"], sig["confidence"] * 100,
                 sig["p_buy"] * 100, sig["p_sell"] * 100,
-                sig["actionable"], sig["latest_price"], sig["atr"],
+                sig.get("regime", "?"), sig["actionable"],
+                sig["latest_price"], sig["atr"],
             )
 
             # ── Periodic heartbeat ────────────────────────────────────
@@ -300,6 +301,7 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                     bars_since_trade = bars_since_trade,
                     open_deal_id     = open_deal_id,
                     open_direction   = open_deal_direction,
+                    regime           = last_sig.get("regime", "NEUTRAL"),
                 )
                 last_heartbeat = datetime.now(tz=timezone.utc)
 
@@ -333,6 +335,19 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
 
             # ── Entry logic ───────────────────────────────────────────
             if not sig["actionable"]:
+                # Log why specifically if a confident signal was regime-blocked
+                if (sig["signal"] != 0
+                        and sig["confidence"] >= MIN_CONFIDENCE
+                        and not sig.get("regime_ok", True)):
+                    logger.info(
+                        "Regime filter blocked %s (conf=%.0f%%) — SG regime is %s",
+                        sig["label"], sig["confidence"] * 100, sig.get("regime", "?"),
+                    )
+                    notifier.trade_rejected(
+                        sig["label"],
+                        f"SG regime filter: model says {sig['label']} but "
+                        f"SG(11/61) regime is {sig.get('regime', '?')}",
+                    )
                 continue
 
             if bars_since_trade < MIN_BARS_BETWEEN_TRADES:

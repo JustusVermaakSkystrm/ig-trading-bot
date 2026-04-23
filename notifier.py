@@ -105,24 +105,26 @@ class Notifier:
 
     def heartbeat(self, label: str, confidence: float, price: float,
                   bars_since_trade: int, open_deal_id: str = None,
-                  open_direction: str = None) -> None:
+                  open_direction: str = None, regime: str = "NEUTRAL") -> None:
         if open_deal_id:
-            position_str = f"📌 {open_direction} open — waiting for SL/TP"
-            # Was the latest signal in the same or opposite direction?
+            position_str = f"📌 {open_direction} open — trailing stop active"
             signal_note = ""
             if open_direction and label not in ("HOLD", "—"):
                 if label != open_direction:
-                    signal_note = f"\n⚠️ Model now prefers {label} but position held — SL/TP manages exit"
+                    signal_note = f"\n⚠️ Model now prefers {label} but position held — trailing stop manages exit"
                 else:
                     signal_note = f"\n✅ Model agrees: stay {open_direction}"
         else:
             position_str = "No open position"
             signal_note  = ""
 
+        regime_emoji = {"BULL": "📈", "BEAR": "📉", "NEUTRAL": "➡️"}.get(regime, "➡️")
+
         msg = (
             f"🫀 <b>Bot heartbeat</b>\n"
             f"Position:    {position_str}\n"
             f"Last signal: <b>{label}</b> ({confidence*100:.1f}% conf)\n"
+            f"SG regime:   {regime_emoji} {regime}\n"
             f"Price:       {price:.5f}"
             f"{signal_note}"
         )
