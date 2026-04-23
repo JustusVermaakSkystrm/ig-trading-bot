@@ -169,7 +169,7 @@ class ExecutionEngine:
             "guaranteedStop": False,
             "trailingStop":   False,
             "stopDistance":   str(stop_distance_pips),
-            "profitDistance": str(tp_distance_pips),
+            "limitDistance":  str(tp_distance_pips),
             "forceOpen":      True,
             "currencyCode":   "GBP",
         }
