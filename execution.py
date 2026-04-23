@@ -29,10 +29,10 @@ logger = logging.getLogger(__name__)
 # Risk management — optimised from backtesting
 # ------------------------------------------------------------------
 
-RISK_PER_TRADE_PCT = 1.0    # % of account balance risked per trade
-STOP_ATR_MULTIPLE  = 1.0    # stop-loss  = ATR × this  (was 2.0)
-TP_ATR_MULTIPLE    = 1.5    # take-profit = ATR × this  (was 3.0)
-MIN_CONFIDENCE     = 0.65   # minimum model confidence to trade (was 0.55)
+RISK_PER_TRADE_PCT   = 1.0    # % of account balance risked per trade
+STOP_ATR_MULTIPLE    = 1.5    # initial trailing stop distance = ATR × this
+MIN_CONFIDENCE       = 0.65   # minimum model confidence to trade
+TRAIL_INCREMENT_PIPS = 1.0    # IG trailing stop step size in points (minimum allowed)
 
 MIN_SIZE = 0.01             # minimum £/point position size (IG allows 0.01 for EURUSD)
 MAX_SIZE = 5.0              # safety cap
@@ -46,12 +46,14 @@ class ExecutionEngine:
     """
     Places and manages spread bet positions through the IG API.
 
+    Uses IG's native trailing stop — the SL follows price automatically
+    on IG's side, so it keeps working even if the bot restarts.
+
     Parameters
     ----------
     client          : Authenticated IGClient instance
     epic            : IG instrument epic (default: EURUSD spread bet)
-    stop_atr_mult   : Stop-loss distance as ATR multiple (default: 1.0)
-    tp_atr_mult     : Take-profit distance as ATR multiple (default: 1.5)
+    stop_atr_mult   : Initial trailing stop distance as ATR multiple (default: 1.5)
     risk_pct        : Fraction of balance to risk per trade (default: 1.0%)
     """
 
@@ -60,13 +62,11 @@ class ExecutionEngine:
         client:        IGClient,
         epic:          str   = EPIC,
         stop_atr_mult: float = STOP_ATR_MULTIPLE,
-        tp_atr_mult:   float = TP_ATR_MULTIPLE,
         risk_pct:      float = RISK_PER_TRADE_PCT,
     ):
         self.client        = client
         self.epic          = epic
         self.stop_atr_mult = stop_atr_mult
-        self.tp_atr_mult   = tp_atr_mult
         self.risk_pct      = risk_pct
 
     # ------------------------------------------------------------------
@@ -131,12 +131,17 @@ class ExecutionEngine:
         size:          float = None,
     ) -> dict:
         """
-        Open a market spread bet position.
+        Open a market spread bet position with a native IG trailing stop.
+
+        The trailing stop is managed server-side by IG — it follows price
+        automatically and keeps working even if the bot restarts.  There is
+        no fixed take-profit; the trade runs until the trailing stop is hit
+        or the user closes manually.
 
         Parameters
         ----------
         signal        : +1 = BUY, -1 = SELL
-        atr           : current ATR (sets stop / TP distances)
+        atr           : current ATR (sets initial trailing stop distance)
         current_price : indicative mid price (for logging only — IG fills at market)
         size          : override £/pip size (calculated automatically if None)
 
@@ -152,34 +157,33 @@ class ExecutionEngine:
         if size is None:
             size = self.calculate_size(atr)
 
-        stop_distance_pips = round((atr * self.stop_atr_mult) / PIP_SIZE, 1)
-        tp_distance_pips   = round((atr * self.tp_atr_mult)   / PIP_SIZE, 1)
-
-        # IG minimum stop distance — fetch from market details if possible
-        stop_distance_pips = max(stop_distance_pips, 2.0)
-        tp_distance_pips   = max(tp_distance_pips,   2.0)
+        # Initial trailing stop distance: ATR × multiplier, converted to points.
+        # IG enforces a minimum stop distance for each instrument; 2.0 pts is safe
+        # for EURUSD spread bets (real minimum is typically 1–2 pts).
+        trail_distance_pips = round((atr * self.stop_atr_mult) / PIP_SIZE, 1)
+        trail_distance_pips = max(trail_distance_pips, 2.0)
 
         payload = {
-            "epic":           self.epic,
-            "expiry":         "DFB",
-            "direction":      direction,
-            "size":           str(size),
-            "orderType":      "MARKET",
-            "timeInForce":    "FILL_OR_KILL",
-            "guaranteedStop": False,
-            "trailingStop":   False,
-            "stopDistance":   str(stop_distance_pips),
-            "limitDistance":  str(tp_distance_pips),
-            "forceOpen":      True,
-            "currencyCode":   "GBP",
+            "epic":                  self.epic,
+            "expiry":                "DFB",
+            "direction":             direction,
+            "size":                  str(size),
+            "orderType":             "MARKET",
+            "timeInForce":           "FILL_OR_KILL",
+            "guaranteedStop":        False,
+            "trailingStop":          True,
+            "trailingStopDistance":  str(trail_distance_pips),
+            "trailingStopIncrement": str(TRAIL_INCREMENT_PIPS),
+            "forceOpen":             True,
+            "currencyCode":          "GBP",
         }
 
         logger.info(
-            "→ Opening %s  size=£%.2f/point  SL=%.1f pts (%.5f ATR)  "
-            "TP=%.1f pts  price≈%.5f",
+            "→ Opening %s  size=£%.2f/point  "
+            "trailing_stop=%.1f pts (%.5f ATR)  increment=%.1f pts  price≈%.5f",
             direction, size,
-            stop_distance_pips, atr * self.stop_atr_mult,
-            tp_distance_pips, current_price,
+            trail_distance_pips, atr * self.stop_atr_mult,
+            TRAIL_INCREMENT_PIPS, current_price,
         )
 
         try:

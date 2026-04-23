@@ -10,11 +10,11 @@ Architecture
     2. Compute all features (incl. DXY cross-asset, refreshed hourly)
     3. Run the binary XGBoost model (Triple Barrier trained, conf ≥ 0.65)
     4. If signal is actionable AND no position is open → place trade
-    5. IG manages SL/TP natively (1.0 ATR stop, 1.5 ATR TP)
+    5. IG manages exit via native trailing stop (1.5 ATR initial distance)
     6. Log everything; weekly model retrain from fresh data
 
 Optimal parameters (from 5-fold walk-forward, Oct 2025–Mar 2026):
-  stop_atr_mult = 1.0 | tp_atr_mult = 1.5 | min_confidence = 0.65
+  trailing_stop_atr_mult = 1.5 | min_confidence = 0.65
   → avg +49.8% per fold | Sharpe 22.6 | win rate 59.9%
 
 Usage:
@@ -40,7 +40,7 @@ from data_pipeline import fetch_and_save, load_data, fetch_rolling_15min_bar, CS
 from features import compute_features
 from model import TradingModel, MODEL_PATH
 from signal_engine import SignalEngine
-from execution import ExecutionEngine, STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE
+from execution import ExecutionEngine, STOP_ATR_MULTIPLE, TRAIL_INCREMENT_PIPS, MIN_CONFIDENCE
 from notifier import Notifier
 
 # ------------------------------------------------------------------
@@ -187,8 +187,8 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
     logger.info("=" * 60)
     logger.info("  IG EURUSD Automated Spread Betting System")
     logger.info("  Mode: %s", "DRY RUN (no real orders)" if dry_run else "LIVE TRADING")
-    logger.info("  Stop=%.1f×ATR  TP=%.1f×ATR  Confidence≥%.0f%%",
-                STOP_ATR_MULTIPLE, TP_ATR_MULTIPLE, MIN_CONFIDENCE * 100)
+    logger.info("  TrailingStop=%.1f×ATR  Increment=%.1f pts  Confidence≥%.0f%%",
+                STOP_ATR_MULTIPLE, TRAIL_INCREMENT_PIPS, MIN_CONFIDENCE * 100)
     if fixed_size:
         logger.info("  Fixed size: £%.2f/point (override)", fixed_size)
     logger.info("=" * 60)
@@ -362,28 +362,22 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
             }
 
             if dry_run:
-                stop_price = (sig["latest_price"] - sig["atr"] * STOP_ATR_MULTIPLE
-                              if sig["signal"] == 1
-                              else sig["latest_price"] + sig["atr"] * STOP_ATR_MULTIPLE)
-                tp_price   = (sig["latest_price"] + sig["atr"] * TP_ATR_MULTIPLE
-                              if sig["signal"] == 1
-                              else sig["latest_price"] - sig["atr"] * TP_ATR_MULTIPLE)
+                trail_pips = round((sig["atr"] * STOP_ATR_MULTIPLE) / 0.0001, 1)
                 logger.info(
-                    "[DRY RUN] %s @ %.5f  SL=%.5f  TP=%.5f  "
+                    "[DRY RUN] %s @ %.5f  trailing_stop=%.1f pts  "
                     "ATR=%.5f  conf=%.1f%%",
                     sig["label"], sig["latest_price"],
-                    stop_price, tp_price,
+                    trail_pips,
                     sig["atr"], sig["confidence"] * 100,
                 )
                 notifier.trade_opened(
-                    direction  = sig["label"],
-                    size       = _fixed_size or 0.01,
-                    fill_level = sig["latest_price"],
-                    stop_level = stop_price,
-                    tp_level   = tp_price,
-                    confidence = sig["confidence"],
-                    atr        = sig["atr"],
-                    deal_id    = "DRY-RUN",
+                    direction      = sig["label"],
+                    size           = _fixed_size or 0.01,
+                    fill_level     = sig["latest_price"],
+                    trail_distance = trail_pips,
+                    confidence     = sig["confidence"],
+                    atr            = sig["atr"],
+                    deal_id        = "DRY-RUN",
                 )
                 trade_record["status"] = "DRY_RUN"
                 session_history.append(trade_record)
@@ -412,21 +406,15 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                     })
 
                     if deal_status == "ACCEPTED":
-                        stop_dist = sig["atr"] * STOP_ATR_MULTIPLE
-                        tp_dist   = sig["atr"] * TP_ATR_MULTIPLE
-                        stop_lvl  = (fill_level - stop_dist if sig["signal"] == 1
-                                     else fill_level + stop_dist)
-                        tp_lvl    = (fill_level + tp_dist   if sig["signal"] == 1
-                                     else fill_level - tp_dist)
+                        trail_pips = round((sig["atr"] * STOP_ATR_MULTIPLE) / 0.0001, 1)
                         notifier.trade_opened(
-                            direction  = sig["label"],
-                            size       = confirm.get("size", _fixed_size or 0.01),
-                            fill_level = fill_level,
-                            stop_level = stop_lvl,
-                            tp_level   = tp_lvl,
-                            confidence = sig["confidence"],
-                            atr        = sig["atr"],
-                            deal_id    = deal_id,
+                            direction      = sig["label"],
+                            size           = confirm.get("size", _fixed_size or 0.01),
+                            fill_level     = fill_level,
+                            trail_distance = trail_pips,
+                            confidence     = sig["confidence"],
+                            atr            = sig["atr"],
+                            deal_id        = deal_id,
                         )
                         open_deal_id        = deal_id
                         open_deal_direction = sig["label"]   # "BUY" or "SELL"

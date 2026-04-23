@@ -58,18 +58,17 @@ class Notifier:
     # ------------------------------------------------------------------
 
     def trade_opened(self, direction: str, size: float, fill_level: float,
-                     stop_level: float, tp_level: float,
+                     trail_distance: float,
                      confidence: float, atr: float, deal_id: str) -> None:
         emoji = "🟢" if direction == "BUY" else "🔴"
         msg = (
             f"{emoji} <b>TRADE OPENED — {direction}</b>\n"
-            f"Fill:       <b>{fill_level:.5f}</b>\n"
-            f"Size:       £{size:.2f}/point\n"
-            f"Stop:       {stop_level:.5f}\n"
-            f"TP:         {tp_level:.5f}\n"
-            f"Confidence: {confidence*100:.1f}%\n"
-            f"ATR:        {atr:.5f}\n"
-            f"Deal ID:    <code>{deal_id}</code>"
+            f"Fill:           <b>{fill_level:.5f}</b>\n"
+            f"Size:           £{size:.2f}/point\n"
+            f"Trailing stop:  {trail_distance:.1f} pts (moves with price)\n"
+            f"Confidence:     {confidence*100:.1f}%\n"
+            f"ATR:            {atr:.5f}\n"
+            f"Deal ID:        <code>{deal_id}</code>"
         )
         self.send(msg)
 
