@@ -229,6 +229,9 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
     open_deal_direction = None        # "BUY" or "SELL"
     last_heartbeat      = datetime.now(tz=timezone.utc)
     last_sig            = {"label": "—", "confidence": 0.0, "latest_price": 0.0}
+    # Deduplication for regime-block notifications: only notify when the
+    # (signal direction, regime) pair changes, not on every bar.
+    last_regime_block   = None        # (label, regime) of last notified block
 
     logger.info("Live loop started. Waiting for bar closes...")
 
@@ -335,19 +338,25 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
 
             # ── Entry logic ───────────────────────────────────────────
             if not sig["actionable"]:
-                # Log why specifically if a confident signal was regime-blocked
+                # Notify only when a confident signal is regime-blocked for
+                # the first time, or when direction/regime has changed since
+                # the last notification — suppresses repeated messages.
                 if (sig["signal"] != 0
                         and sig["confidence"] >= MIN_CONFIDENCE
                         and not sig.get("regime_ok", True)):
-                    logger.info(
-                        "Regime filter blocked %s (conf=%.0f%%) — SG regime is %s",
-                        sig["label"], sig["confidence"] * 100, sig.get("regime", "?"),
-                    )
-                    notifier.trade_rejected(
-                        sig["label"],
-                        f"SG regime filter: model says {sig['label']} but "
-                        f"SG(11/61) regime is {sig.get('regime', '?')}",
-                    )
+                    block_key = (sig["label"], sig.get("regime", "?"))
+                    if block_key != last_regime_block:
+                        logger.info(
+                            "Regime filter blocked %s (conf=%.0f%%) — SG regime is %s",
+                            sig["label"], sig["confidence"] * 100, sig.get("regime", "?"),
+                        )
+                        notifier.trade_rejected(
+                            sig["label"],
+                            f"SG regime filter: model says {sig['label']} but "
+                            f"SG(11/61) regime is {sig.get('regime', '?')} "
+                            f"— will retry silently until regime aligns",
+                        )
+                        last_regime_block = block_key
                 continue
 
             if bars_since_trade < MIN_BARS_BETWEEN_TRADES:
@@ -434,6 +443,7 @@ def run(dry_run: bool = False, retrain: bool = False, fixed_size: float = None) 
                         open_deal_id        = deal_id
                         open_deal_direction = sig["label"]   # "BUY" or "SELL"
                         bars_since_trade    = 0
+                        last_regime_block   = None           # re-arm for next block
                         session_history.append(trade_record)
                         _save_trade(trade_record)
                     else:
