@@ -34,7 +34,7 @@ STOP_ATR_MULTIPLE    = 1.5    # initial trailing stop distance = ATR × this
 MIN_CONFIDENCE       = 0.65   # minimum model confidence to trade
 TRAIL_INCREMENT_PIPS = 1.0    # IG trailing stop step size in points (minimum allowed)
 
-MIN_SIZE = 0.01             # minimum £/point position size (IG allows 0.01 for EURUSD)
+MIN_SIZE = 0.50             # IG minimum deal size for EURUSD spread bets (£/point)
 MAX_SIZE = 5.0              # safety cap
 
 # EUR/USD spread bet epic (DFB = daily funded bet, rolling)
@@ -167,13 +167,13 @@ class ExecutionEngine:
             "epic":                  self.epic,
             "expiry":                "DFB",
             "direction":             direction,
-            "size":                  str(size),
+            "size":                  size,                  # number, not string
             "orderType":             "MARKET",
             "timeInForce":           "FILL_OR_KILL",
             "guaranteedStop":        False,
             "trailingStop":          True,
-            "trailingStopDistance":  str(trail_distance_pips),
-            "trailingStopIncrement": str(TRAIL_INCREMENT_PIPS),
+            "trailingStopDistance":  trail_distance_pips,   # number, not string
+            "trailingStopIncrement": TRAIL_INCREMENT_PIPS,  # number, not string
             "forceOpen":             True,
             "currencyCode":          "GBP",
         }

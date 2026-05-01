@@ -175,6 +175,8 @@ class IGClient:
         if self._refresh_if_needed(resp):
             resp = self._session.post(url, json=payload, headers=self._build_headers(version))
 
+        if not resp.ok:
+            logger.error("POST %s → %s  body: %s", endpoint, resp.status_code, resp.text[:500])
         resp.raise_for_status()
         return resp.json()
 
