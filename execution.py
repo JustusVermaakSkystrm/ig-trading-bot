@@ -34,7 +34,7 @@ STOP_ATR_MULTIPLE    = 1.5    # initial trailing stop distance = ATR × this
 MIN_CONFIDENCE       = 0.65   # minimum model confidence to trade
 TRAIL_INCREMENT_PIPS = 1.0    # IG trailing stop step size in points (minimum allowed)
 
-MIN_SIZE = 0.50             # IG minimum deal size for EURUSD spread bets (£/point)
+MIN_SIZE = 0.01             # minimum £/point position size (IG minimum for EURUSD)
 MAX_SIZE = 5.0              # safety cap
 
 # EUR/USD spread bet epic (DFB = daily funded bet, rolling)
