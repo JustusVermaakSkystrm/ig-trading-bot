@@ -30,9 +30,9 @@ logger = logging.getLogger(__name__)
 # ------------------------------------------------------------------
 
 RISK_PER_TRADE_PCT   = 1.0    # % of account balance risked per trade
-STOP_ATR_MULTIPLE    = 1.5    # initial trailing stop distance = ATR × this
+STOP_ATR_MULTIPLE    = 1.5    # stop loss = ATR × this (in pips)
+TP_ATR_MULTIPLE      = 2.25   # take profit = ATR × this (1.5:1 R:R vs stop)
 MIN_CONFIDENCE       = 0.65   # minimum model confidence to trade
-TRAIL_INCREMENT_PIPS = 1.0    # IG trailing stop step size in points (minimum allowed)
 
 MIN_SIZE = 0.01             # minimum £/point position size (IG minimum for EURUSD)
 MAX_SIZE = 5.0              # safety cap
@@ -157,33 +157,29 @@ class ExecutionEngine:
         if size is None:
             size = self.calculate_size(atr)
 
-        # Initial trailing stop distance: ATR × multiplier, converted to points.
-        # IG enforces a minimum stop distance for each instrument; 2.0 pts is safe
-        # for EURUSD spread bets (real minimum is typically 1–2 pts).
-        trail_distance_pips = round((atr * self.stop_atr_mult) / PIP_SIZE, 1)
-        trail_distance_pips = max(trail_distance_pips, 2.0)
+        # Stop and TP distances in pips (1 pip = 0.0001 for EURUSD)
+        stop_pips = round((atr * STOP_ATR_MULTIPLE) / PIP_SIZE, 1)
+        stop_pips = max(stop_pips, 2.0)   # IG minimum stop distance
+        tp_pips   = round((atr * TP_ATR_MULTIPLE)   / PIP_SIZE, 1)
 
         payload = {
-            "epic":                  self.epic,
-            "expiry":                "DFB",
-            "direction":             direction,
-            "size":                  size,                  # number, not string
-            "orderType":             "MARKET",
-            "timeInForce":           "FILL_OR_KILL",
-            "guaranteedStop":        False,
-            "trailingStop":          True,
-            "trailingStopDistance":  trail_distance_pips,   # number, not string
-            "trailingStopIncrement": TRAIL_INCREMENT_PIPS,  # number, not string
-            "forceOpen":             True,
-            "currencyCode":          "GBP",
+            "epic":          self.epic,
+            "expiry":        "DFB",
+            "direction":     direction,
+            "size":          size,
+            "orderType":     "MARKET",
+            "timeInForce":   "FILL_OR_KILL",
+            "guaranteedStop": False,
+            "trailingStop":  False,
+            "stopDistance":  stop_pips,
+            "limitDistance": tp_pips,
+            "forceOpen":     True,
+            "currencyCode":  "GBP",
         }
 
         logger.info(
-            "→ Opening %s  size=£%.2f/point  "
-            "trailing_stop=%.1f pts (%.5f ATR)  increment=%.1f pts  price≈%.5f",
-            direction, size,
-            trail_distance_pips, atr * self.stop_atr_mult,
-            TRAIL_INCREMENT_PIPS, current_price,
+            "→ Opening %s  size=£%.2f/point  stop=%.1f pts  tp=%.1f pts  price≈%.5f",
+            direction, size, stop_pips, tp_pips, current_price,
         )
 
         try:
