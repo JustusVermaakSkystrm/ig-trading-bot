@@ -24,3 +24,6 @@ __pycache__/
 .vscode/
 .idea/
 *.swp
+
+# --- World Cup predictor: regenerable model artifact ---
+worldcup/data/goal_model.pkl

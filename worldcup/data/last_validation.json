@@ -1,0 +1,1 @@
+{"n_train": 30772, "validation": {"n_test": 2533, "model_rps": 0.1672458632220922, "elo_rps": 0.16830539345726453, "model_logloss": 0.8666411828550588, "elo_logloss": 0.8754744869541484, "goal_mae_home": 1.0173025073522428, "goal_mae_away": 0.8426238064173769}}
