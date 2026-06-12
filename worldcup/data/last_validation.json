@@ -1,1 +1,1 @@
-{"n_train": 30772, "validation": {"n_test": 2533, "model_rps": 0.1672458632220922, "elo_rps": 0.16830539345726453, "model_logloss": 0.8666411828550588, "elo_logloss": 0.8754744869541484, "goal_mae_home": 1.0173025073522428, "goal_mae_away": 0.8426238064173769}}
+{"n_train": 30774, "validation": {"n_test": 2535, "model_rps": 0.16719714951070844, "elo_rps": 0.16826412920626255, "model_logloss": 0.8663393156698822, "elo_logloss": 0.8752259506928127, "goal_mae_home": 1.0169532259902583, "goal_mae_away": 0.8422335462965185}}
