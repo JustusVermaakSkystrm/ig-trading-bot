@@ -147,10 +147,17 @@ def write_outputs(pred: MatchPredictor, res: SimResults, fixtures: pd.DataFrame,
     matches.to_csv(OUT_DIR / "match_probabilities.csv", index=False)
 
     tt = res.team_table()
-    tt.round(4).to_csv(OUT_DIR / "tournament_projections.csv", index=False)
+    prev = _load_previous_projections()
+    deltas = _compute_deltas(tt, prev)
+
+    proj = tt.copy()
+    proj.insert(0, "data_through", meta["data_through"])
+    proj.insert(1, "n_sims", meta["n_sims"])
+    proj.round(4).to_csv(OUT_DIR / "tournament_projections.csv", index=False)
+    _append_history(proj)
 
     bracket_path = predicted_bracket(pred, res, elo)
-    md = _render_markdown(pred, res, fixtures, tt, bracket_path, elo, meta)
+    md = _render_markdown(pred, res, fixtures, tt, bracket_path, elo, meta, deltas)
     (OUT_DIR / "report.md").write_text(md)
 
     archive = OUT_DIR / "archive"
@@ -158,8 +165,50 @@ def write_outputs(pred: MatchPredictor, res: SimResults, fixtures: pd.DataFrame,
     (archive / f"report_{meta['data_through']}.md").write_text(md)
 
 
+def _load_previous_projections() -> pd.DataFrame | None:
+    path = OUT_DIR / "tournament_projections.csv"
+    if not path.exists():
+        return None
+    return pd.read_csv(path)
+
+
+def _append_history(proj: pd.DataFrame) -> None:
+    """One row per team per run, for tracking prediction drift over time."""
+    path = OUT_DIR / "history.csv"
+    proj = proj.copy()
+    proj.insert(0, "run_at", pd.Timestamp.now().isoformat(timespec="seconds"))
+    proj.round(4).to_csv(path, mode="a", header=not path.exists(), index=False)
+
+
+DELTA_COLS = ["p_champion", "p_final", "p_SF", "p_QF", "p_R16", "p_R32",
+              "p_win_group", "exp_points"]
+
+
+def _compute_deltas(tt: pd.DataFrame, prev: pd.DataFrame | None) -> dict | None:
+    """Per-team change vs the previous run, in probability points."""
+    if prev is None or "team" not in prev.columns:
+        return None
+    merged = tt.merge(prev[["team"] + [c for c in DELTA_COLS if c in prev.columns]],
+                      on="team", how="left", suffixes=("", "_prev"))
+    delta = {}
+    for c in DELTA_COLS:
+        if f"{c}_prev" in merged.columns:
+            delta[c] = dict(zip(merged["team"], merged[c] - merged[f"{c}_prev"]))
+    label = str(prev["data_through"].iloc[0]) if "data_through" in prev.columns \
+        else "previous run"
+    return {"deltas": delta, "prev_label": label}
+
+
+def _fmt_delta(x: float, threshold: float = 0.0005) -> str:
+    if x != x:  # NaN: team absent from previous run
+        return "new"
+    if abs(x) < threshold:
+        return "–"
+    return f"{100 * x:+.1f}"
+
+
 def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
-                     meta) -> str:
+                     meta, deltas: dict | None = None) -> str:
     L = []
     add = L.append
     n_played = int(fixtures["home_score"].notna().sum())
@@ -179,13 +228,34 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
 
     # ---- title favourites
     add("## Title favourites\n")
-    add("| # | Team | Group | Champion | Final | Semi-final | Quarter-final | Rd of 16 |")
-    add("|---|------|:-----:|---------:|------:|-----------:|--------------:|---------:|")
+    dch = deltas["deltas"].get("p_champion", {}) if deltas else {}
+    dcol = f" Δ vs {deltas['prev_label']} |" if deltas else ""
+    add(f"| # | Team | Group | Champion |{dcol} Final | Semi-final | "
+        "Quarter-final | Rd of 16 |")
+    add("|---|------|:-----:|---------:|" + ("-------:|" if deltas else "")
+        + "------:|-----------:|--------------:|---------:|")
     for i, r in tt.head(15).iterrows():
-        add(f"| {i + 1} | {r['team']} | {r['group']} | **{_pct(r['p_champion'])}** | "
-            f"{_pct(r['p_final'])} | {_pct(r['p_SF'])} | {_pct(r['p_QF'])} | "
+        dcell = f" {_fmt_delta(dch.get(r['team'], float('nan')))} |" if deltas else ""
+        add(f"| {i + 1} | {r['team']} | {r['group']} | **{_pct(r['p_champion'])}** |"
+            f"{dcell} {_pct(r['p_final'])} | {_pct(r['p_SF'])} | {_pct(r['p_QF'])} | "
             f"{_pct(r['p_R16'])} |")
     add("")
+
+    # ---- movers since last run
+    if deltas and deltas["deltas"].get("p_champion"):
+        add(f"## Biggest movers since last run (data through {deltas['prev_label']})\n")
+        ch = pd.Series(deltas["deltas"]["p_champion"]).dropna()
+        r16 = pd.Series(deltas["deltas"].get("p_R16", {})).dropna()
+        movers = (ch.abs().sort_values(ascending=False).head(8)).index
+        add("| Team | Δ Champion | Δ Rd of 16 | Champion now |")
+        add("|------|----------:|-----------:|-------------:|")
+        tt_idx_ = tt.set_index("team")
+        for t in sorted(movers, key=lambda t: ch[t], reverse=True):
+            add(f"| {t} | {_fmt_delta(ch[t])} | "
+                f"{_fmt_delta(r16.get(t, float('nan')))} | "
+                f"{_pct(tt_idx_.loc[t, 'p_champion'])} |")
+        add("\n*Δ values in probability points. Full run-by-run series in "
+            "`outputs/history.csv`.*\n")
 
     # ---- upcoming matches
     add("## Upcoming group matches — outcome probabilities\n")
