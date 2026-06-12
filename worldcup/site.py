@@ -98,7 +98,7 @@ def build_site() -> Path:
     out.write_text(html)
     # Ship the machine-readable artifacts alongside the page.
     for csv in ("match_probabilities.csv", "tournament_projections.csv",
-                "history.csv", "value_bets.csv"):
+                "history.csv", "value_bets.csv", "best_bets.csv"):
         src = OUT_DIR / csv
         if src.exists():
             (SITE_DIR / csv).write_bytes(src.read_bytes())
