@@ -6,6 +6,17 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 *Rolling validation (7,966 matches, 2018–2026): RPS 0.1687 vs Elo-baseline 0.1711; log-loss 0.8652 vs 0.8809.*
 
+## Model scorecard
+
+**2 of 2 match outcomes called correctly** (the model's own probabilities expected ≈1.3 of 2) · exact scoreline predicted 1/2 · average probability placed on what actually happened: **65.2%** (33.3% = guessing).
+
+| Match | Model said | Likely score | Actual | Outcome | Score |
+|-------|-----------|:---:|:---:|:---:|:---:|
+| Mexico v South Africa | Mexico win (84.1%) | 2-0 | 2-0 | ✅ | ✅ |
+| South Korea v Czech Republic | South Korea win (46.3%) | 1-1 | 2-1 | ✅ | — |
+
+*Predictions are frozen at the last run before each result arrives, then graded — the scorecard never grades a model that has already seen the answer.*
+
 ## Title favourites
 
 | # | Team | Group | Champion | Δ vs 2026-06-11 | Final | Semi-final | Quarter-final | Rd of 16 |

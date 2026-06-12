@@ -147,6 +147,9 @@ def write_outputs(pred: MatchPredictor, res: SimResults, fixtures: pd.DataFrame,
     matches = match_probability_table(pred, fixtures)
     matches.to_csv(OUT_DIR / "match_probabilities.csv", index=False)
 
+    from .scorecard import summary, update_log
+    meta["scorecard"] = summary(update_log(matches))
+
     tt = res.team_table()
     prev = _load_previous_projections()
     deltas = _compute_deltas(tt, prev)
@@ -232,6 +235,28 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         add(f"*Rolling validation ({v['n_test']:,} matches, 2018–2026): "
             f"RPS {v['model_rps']:.4f} vs Elo-baseline {v['elo_rps']:.4f}; "
             f"log-loss {v['model_logloss']:.4f} vs {v['elo_logloss']:.4f}.*\n")
+
+    # ---- model scorecard
+    sc = meta.get("scorecard")
+    if sc:
+        add("## Model scorecard\n")
+        add(f"**{sc['hits']} of {sc['n']} match outcomes called correctly** "
+            f"(the model's own probabilities expected ≈{sc['expected_hits']:.1f} "
+            f"of {sc['n']}) · exact scoreline predicted {sc['score_hits']}/{sc['n']} "
+            f"· average probability placed on what actually happened: "
+            f"**{_pct(sc['mean_p_actual'])}** (33.3% = guessing).\n")
+        add("| Match | Model said | Likely score | Actual | Outcome | Score |")
+        add("|-------|-----------|:---:|:---:|:---:|:---:|")
+        for r in sc["rows"].itertuples(index=False):
+            probs = {f"{r.home} win": float(r.p_home), "Draw": float(r.p_draw),
+                     f"{r.away} win": float(r.p_away)}
+            pick = max(probs, key=probs.get)
+            add(f"| {r.home} v {r.away} | {pick} ({_pct(probs[pick])}) | "
+                f"{r.pred_score} | {int(r.home_score)}-{int(r.away_score)} | "
+                f"{'✅' if r.hit else '❌'} | {'✅' if r.score_hit else '—'} |")
+        add("\n*Predictions are frozen at the last run before each result "
+            "arrives, then graded — the scorecard never grades a model that "
+            "has already seen the answer.*\n")
 
     # ---- title favourites
     add("## Title favourites\n")
