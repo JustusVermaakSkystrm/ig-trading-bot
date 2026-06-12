@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 BASE = Path(__file__).parent
@@ -25,23 +26,33 @@ def value_table() -> pd.DataFrame:
     d = df["decimal_odds"]
     p = df["p_champion"]
     df["implied_prob"] = 1.0 / d
+    # Market-aware blend: log-odds midpoint of model and market. The market
+    # embeds news (injuries, lineups) the model can't see; the blend is the
+    # better central estimate, while model_edge drives the value bets.
+    lo = 0.5 * (np.log(p / (1 - p)) + np.log(df["implied_prob"] / (1 - df["implied_prob"])))
+    df["p_blend"] = 1.0 / (1.0 + np.exp(-lo))
     df["model_edge"] = p - df["implied_prob"]
     df["ev_per_unit"] = p * d - 1.0
     # Kelly fraction for a binary bet at decimal odds d: (d*p - 1) / (d - 1)
     df["kelly"] = ((d * p - 1.0) / (d - 1.0)).clip(lower=0.0)
-    return df.sort_values("kelly", ascending=False).reset_index(drop=True)
+    # Conservative sizing: Kelly evaluated at the blended probability.
+    df["kelly_blend"] = ((d * df["p_blend"] - 1.0) / (d - 1.0)).clip(lower=0.0)
+    return df.sort_values("kelly_blend", ascending=False).reset_index(drop=True)
 
 
 def main() -> None:
     df = value_table()
     out = df.copy()
-    for col in ("p_champion", "implied_prob", "model_edge", "ev_per_unit", "kelly"):
+    for col in ("p_champion", "implied_prob", "p_blend", "model_edge",
+                "ev_per_unit", "kelly", "kelly_blend"):
         out[col] = (100 * out[col]).round(2)
-    cols = ["team", "fractional_odds", "p_champion", "implied_prob",
-            "model_edge", "ev_per_unit", "kelly", "confirmed_skybet"]
+    cols = ["team", "fractional_odds", "p_champion", "implied_prob", "p_blend",
+            "model_edge", "ev_per_unit", "kelly", "kelly_blend",
+            "confirmed_skybet"]
     print(out[cols].rename(columns={
         "p_champion": "model_%", "implied_prob": "implied_%",
-        "model_edge": "edge_pp", "ev_per_unit": "EV_%", "kelly": "kelly_%",
+        "p_blend": "blend_%", "model_edge": "edge_pp", "ev_per_unit": "EV_%",
+        "kelly": "kelly_%", "kelly_blend": "kelly_blend_%",
     }).to_string(index=False))
     out_path = BASE / "outputs" / "value_bets.csv"
     df.round(4).to_csv(out_path, index=False)

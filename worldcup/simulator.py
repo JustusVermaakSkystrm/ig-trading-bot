@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 from .dataset import FeatureBuilder, load_teams
-from .model import GoalModel
+from .model import MAX_GOALS, GoalModel, score_matrix
 from .ratings import expected_score
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -43,9 +43,11 @@ class MatchPredictor:
 
     def __init__(self, model: GoalModel, state: FeatureBuilder, hosts: list[str]):
         self.model = model
+        self.rho = getattr(model, "rho", 0.0)
         self.state = state
         self.hosts = set(hosts)
         self.cache: dict[tuple, tuple[float, float]] = {}
+        self._cum: dict[tuple, np.ndarray] = {}
 
     def rates(self, home: str, away: str, venue_country: str | None) -> tuple[float, float]:
         # A side only gets home advantage when playing in its own country.
@@ -63,6 +65,26 @@ class MatchPredictor:
                 lh, la = self.model.predict_rates(pd.DataFrame([feats]))
             self.cache[key] = (float(lh[0]), float(la[0]))
         return self.cache[key]
+
+    def score_cdf(self, home: str, away: str, venue_country: str | None,
+                  et: bool = False) -> np.ndarray:
+        """Flattened cumulative scoreline distribution (Dixon-Coles
+        adjusted) for sampling. `et` scales rates to 30 minutes."""
+        key = (home, away, venue_country, et)
+        if key not in self._cum:
+            lh, la = self.rates(home, away, venue_country)
+            if et:
+                lh, la = lh * ET_RATE_FACTOR, la * ET_RATE_FACTOR
+            m = score_matrix(lh, la, self.rho)
+            self._cum[key] = np.cumsum(m.ravel())
+        return self._cum[key]
+
+
+def sample_scores(cum: np.ndarray, u: np.ndarray | float) -> tuple:
+    """Map uniform draws through a flattened scoreline CDF."""
+    idx = np.searchsorted(cum, u, side="right")
+    idx = np.minimum(idx, len(cum) - 1)
+    return idx // (MAX_GOALS + 1), idx % (MAX_GOALS + 1)
 
 
 # --------------------------------------------------------------- standings
@@ -191,11 +213,11 @@ class TournamentSimulator:
         gf = group_fixtures.reset_index(drop=True)
         self.fixtures = gf
         self.played_mask = gf["home_score"].notna().to_numpy()
-        self.lam = np.array([
-            predictor.rates(r.home_team, r.away_team,
-                            None if r.neutral else r.country)
+        self.cdfs = np.stack([
+            predictor.score_cdf(r.home_team, r.away_team,
+                                None if r.neutral else r.country)
             for r in gf.itertuples(index=False)
-        ])  # (72, 2)
+        ])  # (72, (MAX_GOALS+1)^2)
         self.elo = {t: predictor.state.elo.get(t)
                     for g in self.groups.values() for t in g}
         self._fix_tuples = [(r.home_team, r.away_team)
@@ -204,7 +226,13 @@ class TournamentSimulator:
                                  for g in self.groups}
 
     def _sample_group_scores(self, n_sims: int) -> np.ndarray:
-        scores = self.rng.poisson(self.lam, size=(n_sims, len(self.fixtures), 2))
+        n_fix = len(self.fixtures)
+        scores = np.empty((n_sims, n_fix, 2), dtype=np.int64)
+        u = self.rng.random((n_sims, n_fix))
+        for j in range(n_fix):
+            hg, ag = sample_scores(self.cdfs[j], u[:, j])
+            scores[:, j, 0] = hg
+            scores[:, j, 1] = ag
         actual = self.fixtures[["home_score", "away_score"]].to_numpy(dtype=float)
         scores[:, self.played_mask, :] = actual[self.played_mask].astype(np.int64)
         return scores
@@ -212,12 +240,13 @@ class TournamentSimulator:
     def _knockout_match(self, home: str, away: str, venue_country: str | None,
                         ) -> tuple[str, str]:
         """Returns (winner, loser): 90 minutes, then extra time, then pens."""
-        lh, la = self.pred.rates(home, away, venue_country)
-        hg, ag = self.rng.poisson(lh), self.rng.poisson(la)
+        hg, ag = sample_scores(self.pred.score_cdf(home, away, venue_country),
+                               self.rng.random())
         if hg != ag:
             return (home, away) if hg > ag else (away, home)
-        eh = self.rng.poisson(lh * ET_RATE_FACTOR)
-        ea = self.rng.poisson(la * ET_RATE_FACTOR)
+        eh, ea = sample_scores(
+            self.pred.score_cdf(home, away, venue_country, et=True),
+            self.rng.random())
         if eh != ea:
             return (home, away) if eh > ea else (away, home)
         p_home = 0.5 + PENALTY_ELO_EDGE * (

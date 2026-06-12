@@ -17,7 +17,7 @@ import pandas as pd
 
 from .dataset import (DATA_DIR, RESULTS_URL, SHOOTOUTS_URL,
                       build_training_table, load_teams, merged_results)
-from .model import MODEL_PATH, GoalModel, evaluate_holdout
+from .model import MODEL_PATH, GoalModel, evaluate_rolling
 from .report import write_outputs
 from .simulator import MatchPredictor, TournamentSimulator
 
@@ -49,24 +49,34 @@ def cmd_update() -> None:
           "have results.")
 
 
-def cmd_train() -> dict:
+def cmd_train(skip_validation: bool = False) -> None:
+    import json
     results = merged_results()
     table, _ = build_training_table(results)
     print(f"Training table: {len(table):,} matches "
           f"({table['date'].min().date()} – {table['date'].max().date()})")
-    print("Time-split validation (holdout from 2024-01-01)...")
-    metrics = evaluate_holdout(table)
-    print(f"  test matches : {metrics['n_test']:,}")
-    print(f"  RPS          : model {metrics['model_rps']:.4f} | "
-          f"Elo baseline {metrics['elo_rps']:.4f}")
-    print(f"  log-loss     : model {metrics['model_logloss']:.4f} | "
-          f"Elo baseline {metrics['elo_logloss']:.4f}")
+    meta = {"n_train": len(table), "validation": None}
+    if not skip_validation:
+        print("Rolling-origin validation (4 windows, 2018-2026)...")
+        ev = evaluate_rolling(table)
+        print(ev.round(4).to_string(index=False))
+        overall = ev[ev["window"] == "ALL"].set_index("model")
+        meta["validation"] = {
+            "n_test": int(overall.loc["v2_ad_dc", "n_test"]),
+            "model_rps": float(overall.loc["v2_ad_dc", "rps"]),
+            "elo_rps": float(overall.loc["elo_baseline", "rps"]),
+            "model_logloss": float(overall.loc["v2_ad_dc", "logloss"]),
+            "elo_logloss": float(overall.loc["elo_baseline", "logloss"]),
+            "v1_rps": float(overall.loc["v1_poisson", "rps"]),
+            "v1_logloss": float(overall.loc["v1_poisson", "logloss"]),
+        }
     print("Fitting final model on all data ...")
-    GoalModel().fit(table).save()
-    import json
-    META_PATH.write_text(json.dumps({"n_train": len(table), "validation": metrics}))
-    print(f"Saved {MODEL_PATH}")
-    return metrics
+    model = GoalModel().fit(table)
+    model.save()
+    print(f"Saved {MODEL_PATH} (Dixon-Coles rho = {model.rho:.4f})")
+    if meta["validation"] is None and META_PATH.exists():
+        meta["validation"] = json.loads(META_PATH.read_text()).get("validation")
+    META_PATH.write_text(json.dumps(meta))
 
 
 def world_cup_fixtures(results: pd.DataFrame) -> pd.DataFrame:
@@ -123,22 +133,26 @@ def main(argv=None) -> None:
     ap = argparse.ArgumentParser(prog="worldcup")
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("update")
-    sub.add_parser("train")
+    pt = sub.add_parser("train")
+    pt.add_argument("--skip-validation", action="store_true")
     for name in ("simulate", "all"):
         p = sub.add_parser(name)
         p.add_argument("--sims", type=int, default=100_000)
         p.add_argument("--seed", type=int, default=42)
+        if name == "all":
+            p.add_argument("--validate", action="store_true",
+                           help="run full rolling validation (slow)")
     args = ap.parse_args(argv)
 
     if args.cmd == "update":
         cmd_update()
     elif args.cmd == "train":
-        cmd_train()
+        cmd_train(skip_validation=args.skip_validation)
     elif args.cmd == "simulate":
         cmd_simulate(args.sims, args.seed)
     elif args.cmd == "all":
         cmd_update()
-        cmd_train()
+        cmd_train(skip_validation=not args.validate)
         cmd_simulate(args.sims, args.seed)
 
 

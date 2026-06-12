@@ -26,8 +26,9 @@ def _advance_prob(pred: MatchPredictor, elo: dict, home: str, away: str,
                   venue_country: str | None) -> float:
     """Analytic P(home advances) through 90', extra time and penalties."""
     lh, la = pred.rates(home, away, venue_country)
-    pw, pd_, _ = outcome_probs(lh, la)
-    pw_et, pd_et, _ = outcome_probs(lh * ET_RATE_FACTOR, la * ET_RATE_FACTOR)
+    pw, pd_, _ = outcome_probs(lh, la, pred.rho)
+    pw_et, pd_et, _ = outcome_probs(lh * ET_RATE_FACTOR, la * ET_RATE_FACTOR,
+                                    pred.rho)
     p_pens = 0.5 + PENALTY_ELO_EDGE * (expected_score(elo[home], elo[away]) - 0.5)
     return pw + pd_ * (pw_et + pd_et * p_pens)
 
@@ -39,8 +40,8 @@ def match_probability_table(pred: MatchPredictor, fixtures: pd.DataFrame) -> pd.
     for r in fixtures.itertuples(index=False):
         lh, la = pred.rates(r.home_team, r.away_team,
                             None if r.neutral else r.country)
-        ph, pdr, pa = outcome_probs(lh, la)
-        ms = most_likely_score(lh, la)
+        ph, pdr, pa = outcome_probs(lh, la, pred.rho)
+        ms = most_likely_score(lh, la, pred.rho)
         played = not (pd.isna(r.home_score) or pd.isna(r.away_score))
         rows.append({
             "date": r.date.date() if hasattr(r.date, "date") else r.date,
@@ -228,7 +229,7 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         "2026 bracket and tiebreaker rules.\n")
     if meta.get("validation"):
         v = meta["validation"]
-        add(f"*Holdout validation ({v['n_test']:,} matches since 2024): "
+        add(f"*Rolling validation ({v['n_test']:,} matches, 2018–2026): "
             f"RPS {v['model_rps']:.4f} vs Elo-baseline {v['elo_rps']:.4f}; "
             f"log-loss {v['model_logloss']:.4f} vs {v['elo_logloss']:.4f}.*\n")
 

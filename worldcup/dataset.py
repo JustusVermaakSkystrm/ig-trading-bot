@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .ratings import EloTracker, HOME_ADVANTAGE, importance_level
+from .ratings import AttackDefence, EloTracker, HOME_ADVANTAGE, importance_level
 
 DATA_DIR = Path(__file__).parent / "data"
 RESULTS_URL = "https://raw.githubusercontent.com/martj42/international_results/master/results.csv"
@@ -25,11 +25,17 @@ FORM_WINDOW = 10
 
 FEATURES = [
     "elo_home", "elo_away", "elo_diff_adj",
+    "att_home", "def_home", "att_away", "def_away",
     "form_gf_home", "form_ga_home", "form_ppg_home",
     "form_gf_away", "form_ga_away", "form_ppg_away",
     "matches_home", "matches_away",
     "neutral", "importance",
 ]
+
+# The original feature set (no attack/defence ratings), kept for
+# before/after validation comparisons.
+FEATURES_V1 = [f for f in FEATURES
+               if f not in ("att_home", "def_home", "att_away", "def_away")]
 
 
 def load_teams() -> dict:
@@ -111,6 +117,7 @@ class FeatureBuilder:
 
     def __init__(self):
         self.elo = EloTracker()
+        self.ad = AttackDefence()
         self.form: dict[str, _TeamForm] = {}
 
     def _form(self, team: str) -> _TeamForm:
@@ -122,12 +129,15 @@ class FeatureBuilder:
                        tournament: str) -> dict:
         rh, ra = self.elo.get(home), self.elo.get(away)
         bonus = 0.0 if neutral else HOME_ADVANTAGE
+        ah, dh = self.ad.get(home)
+        aa, da = self.ad.get(away)
         fh, fa = self._form(home), self._form(away)
         gf_h, ga_h, ppg_h = fh.features()
         gf_a, ga_a, ppg_a = fa.features()
         return {
             "elo_home": rh, "elo_away": ra,
             "elo_diff_adj": (rh + bonus) - ra,
+            "att_home": ah, "def_home": dh, "att_away": aa, "def_away": da,
             "form_gf_home": gf_h, "form_ga_home": ga_h, "form_ppg_home": ppg_h,
             "form_gf_away": gf_a, "form_ga_away": ga_a, "form_ppg_away": ppg_a,
             "matches_home": fh.n, "matches_away": fa.n,
@@ -137,6 +147,7 @@ class FeatureBuilder:
     def advance(self, home: str, away: str, hg: int, ag: int,
                 tournament: str, neutral: bool) -> None:
         self.elo.update(home, away, hg, ag, tournament, neutral)
+        self.ad.update(home, away, hg, ag, tournament, neutral)
         self._form(home).record(hg, ag)
         self._form(away).record(ag, hg)
 
