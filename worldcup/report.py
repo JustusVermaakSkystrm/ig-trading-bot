@@ -274,8 +274,12 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     add("| Date | Grp | Match | Home win | Draw | Away win | xG | Likely score |")
     add("|------|:---:|-------|---------:|-----:|---------:|----|:----:|")
     for r in upcoming[upcoming["date"].isin(horizon)].itertuples(index=False):
+        probs = [r.p_home_win, r.p_draw, r.p_away_win]
+        cells = [_pct(p) for p in probs]
+        best = probs.index(max(probs))
+        cells[best] = f"**{cells[best]}**"   # highlight the likeliest outcome
         add(f"| {r.date} | {r.group} | {r.home} v {r.away} | "
-            f"**{_pct(r.p_home_win)}** | {_pct(r.p_draw)} | {_pct(r.p_away_win)} | "
+            f"{cells[0]} | {cells[1]} | {cells[2]} | "
             f"{r.xg_home}–{r.xg_away} | {r.most_likely_score} |")
     add("")
 
