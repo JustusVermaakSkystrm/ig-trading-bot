@@ -63,6 +63,9 @@ jobs:
           python -m worldcup.run train --skip-validation
           python -m worldcup.run simulate --sims 50000
 
+      - name: Rebuild site (heartbeat timestamp)
+        run: python -m worldcup.site
+
       - name: Commit and push
         if: steps.upd.outputs.data_changed == 'true' || steps.upd.outputs.sim_changed == 'true'
         run: |
@@ -74,12 +77,10 @@ jobs:
           git push origin "HEAD:$BRANCH"
 
       - name: Upload site artifact
-        if: steps.upd.outputs.sim_changed == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: worldcup/outputs/site
 
       - name: Deploy to GitHub Pages
-        if: steps.upd.outputs.sim_changed == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
