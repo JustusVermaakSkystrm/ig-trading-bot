@@ -1,73 +1,73 @@
 date,group,home,away,status,score,p_home_win,p_draw,p_away_win,xg_home,xg_away,most_likely_score
-2026-06-11,A,Mexico,South Africa,played,2-0,0.8163,0.1392,0.0445,2.45,0.43,2-0
-2026-06-11,A,South Korea,Czech Republic,played,2-1,0.5268,0.2588,0.2144,1.64,0.96,1-1
-2026-06-12,B,Canada,Bosnia and Herzegovina,upcoming,,0.7495,0.1721,0.0784,2.28,0.61,2-0
-2026-06-12,D,United States,Paraguay,upcoming,,0.3312,0.2789,0.3899,1.22,1.35,1-1
-2026-06-13,B,Qatar,Switzerland,upcoming,,0.0633,0.139,0.7977,0.65,2.66,0-2
-2026-06-13,C,Brazil,Morocco,upcoming,,0.4816,0.2864,0.232,1.40,0.89,1-0
-2026-06-13,C,Haiti,Scotland,upcoming,,0.2542,0.2707,0.4751,1.04,1.51,1-1
-2026-06-13,D,Australia,Turkey,upcoming,,0.295,0.2849,0.4201,1.09,1.35,1-1
-2026-06-14,F,Sweden,Tunisia,upcoming,,0.4251,0.2849,0.29,1.36,1.08,1-1
-2026-06-14,F,Netherlands,Japan,upcoming,,0.3269,0.2966,0.3765,1.11,1.21,1-1
-2026-06-14,E,Germany,Curaçao,upcoming,,0.8253,0.1275,0.0472,2.67,0.52,2-0
-2026-06-14,E,Ivory Coast,Ecuador,upcoming,,0.1868,0.2503,0.5628,0.88,1.71,0-1
-2026-06-15,G,Belgium,Egypt,upcoming,,0.5658,0.2493,0.1849,1.72,0.88,1-0
-2026-06-15,G,Iran,New Zealand,upcoming,,0.5331,0.2643,0.2026,1.59,0.88,1-0
-2026-06-15,H,Spain,Cape Verde,upcoming,,0.917,0.0646,0.0184,3.54,0.44,3-0
-2026-06-15,H,Saudi Arabia,Uruguay,upcoming,,0.1604,0.2587,0.5809,0.73,1.62,0-1
-2026-06-16,J,Austria,Jordan,upcoming,,0.5205,0.2567,0.2228,1.66,1.01,1-1
-2026-06-16,J,Argentina,Algeria,upcoming,,0.6595,0.2205,0.12,1.90,0.68,1-0
-2026-06-16,I,France,Senegal,upcoming,,0.5626,0.249,0.1883,1.72,0.90,1-0
-2026-06-16,I,Iraq,Norway,upcoming,,0.1316,0.2344,0.6341,0.68,1.79,0-1
-2026-06-17,K,Portugal,DR Congo,upcoming,,0.6582,0.2195,0.1223,1.92,0.70,1-0
-2026-06-17,K,Uzbekistan,Colombia,upcoming,,0.151,0.2548,0.5942,0.70,1.64,0-1
-2026-06-17,L,England,Croatia,upcoming,,0.5644,0.2524,0.1832,1.69,0.86,1-0
-2026-06-17,L,Ghana,Panama,upcoming,,0.2253,0.2636,0.5112,0.98,1.59,1-1
-2026-06-18,A,Czech Republic,South Africa,upcoming,,0.5395,0.2582,0.2023,1.64,0.91,1-1
-2026-06-18,A,Mexico,South Korea,upcoming,,0.572,0.2392,0.1888,1.82,0.96,1-1
-2026-06-18,B,Switzerland,Bosnia and Herzegovina,upcoming,,0.7403,0.1696,0.0901,2.39,0.72,2-0
-2026-06-18,B,Canada,Qatar,upcoming,,0.835,0.1239,0.0411,2.65,0.46,2-0
-2026-06-19,D,Turkey,Paraguay,upcoming,,0.4176,0.2741,0.3082,1.43,1.19,1-1
-2026-06-19,C,Scotland,Morocco,upcoming,,0.1948,0.243,0.5622,0.96,1.79,1-1
-2026-06-19,C,Brazil,Haiti,upcoming,,0.7976,0.1436,0.0587,2.54,0.57,2-0
-2026-06-19,D,United States,Australia,upcoming,,0.3777,0.2845,0.3379,1.28,1.20,1-1
-2026-06-20,F,Netherlands,Sweden,upcoming,,0.6298,0.2145,0.1557,2.06,0.93,2-0
-2026-06-20,F,Tunisia,Japan,upcoming,,0.1616,0.2449,0.5934,0.79,1.74,0-1
-2026-06-20,E,Germany,Ivory Coast,upcoming,,0.5616,0.2453,0.1932,1.76,0.94,1-1
-2026-06-20,E,Ecuador,Curaçao,upcoming,,0.7823,0.1571,0.0606,2.35,0.52,2-0
-2026-06-21,G,Belgium,Iran,upcoming,,0.4773,0.2639,0.2588,1.57,1.10,1-1
-2026-06-21,G,New Zealand,Egypt,upcoming,,0.3144,0.2807,0.4049,1.17,1.36,1-1
-2026-06-21,H,Spain,Saudi Arabia,upcoming,,0.7914,0.1559,0.0527,2.30,0.45,2-0
-2026-06-21,H,Uruguay,Cape Verde,upcoming,,0.7705,0.1608,0.0687,2.37,0.58,2-0
-2026-06-22,I,France,Iraq,upcoming,,0.7021,0.1936,0.1042,2.15,0.70,2-0
-2026-06-22,I,Norway,Senegal,upcoming,,0.4954,0.2637,0.2409,1.59,1.03,1-1
-2026-06-22,J,Argentina,Austria,upcoming,,0.6496,0.218,0.1324,1.96,0.77,2-0
-2026-06-22,J,Jordan,Algeria,upcoming,,0.2213,0.2535,0.5252,1.02,1.69,1-1
-2026-06-23,K,Portugal,Uzbekistan,upcoming,,0.6209,0.2351,0.144,1.81,0.75,1-0
-2026-06-23,K,Colombia,DR Congo,upcoming,,0.6573,0.2165,0.1262,1.96,0.73,2-0
-2026-06-23,L,England,Ghana,upcoming,,0.777,0.1632,0.0598,2.27,0.48,2-0
-2026-06-23,L,Panama,Croatia,upcoming,,0.2703,0.2559,0.4738,1.19,1.65,1-1
-2026-06-24,C,Morocco,Haiti,upcoming,,0.7157,0.1921,0.0922,2.11,0.62,2-0
-2026-06-24,B,Bosnia and Herzegovina,Qatar,upcoming,,0.4345,0.2965,0.269,1.29,0.96,1-1
-2026-06-24,C,Scotland,Brazil,upcoming,,0.1564,0.2276,0.6159,0.85,1.91,0-1
-2026-06-24,A,South Africa,South Korea,upcoming,,0.1789,0.2589,0.5623,0.81,1.63,0-1
-2026-06-24,A,Mexico,Czech Republic,upcoming,,0.7566,0.1667,0.0767,2.34,0.62,2-0
-2026-06-24,B,Canada,Switzerland,upcoming,,0.4056,0.3005,0.2938,1.23,1.00,1-1
-2026-06-25,D,United States,Turkey,upcoming,,0.2643,0.2569,0.4788,1.16,1.64,1-1
-2026-06-25,D,Paraguay,Australia,upcoming,,0.3548,0.3133,0.3319,1.08,1.03,1-1
-2026-06-25,E,Curaçao,Ivory Coast,upcoming,,0.1885,0.2754,0.5361,0.78,1.49,0-1
-2026-06-25,E,Ecuador,Germany,upcoming,,0.336,0.313,0.351,1.04,1.07,1-1
-2026-06-25,F,Japan,Sweden,upcoming,,0.6302,0.2201,0.1498,1.98,0.86,2-0
-2026-06-25,F,Tunisia,Netherlands,upcoming,,0.1408,0.2223,0.6369,0.79,1.93,0-2
-2026-06-26,I,Senegal,Iraq,upcoming,,0.5648,0.2611,0.1741,1.61,0.78,1-0
-2026-06-26,I,Norway,France,upcoming,,0.2104,0.2485,0.5411,1.00,1.74,1-1
-2026-06-26,H,Uruguay,Spain,upcoming,,0.1741,0.2702,0.5557,0.74,1.53,0-1
-2026-06-26,G,New Zealand,Belgium,upcoming,,0.146,0.2061,0.6479,0.92,2.14,0-2
-2026-06-26,G,Egypt,Iran,upcoming,,0.277,0.2931,0.4299,1.00,1.31,1-1
-2026-06-26,H,Cape Verde,Saudi Arabia,upcoming,,0.2953,0.2994,0.4053,1.01,1.24,1-1
-2026-06-27,L,Panama,England,upcoming,,0.1333,0.2283,0.6385,0.72,1.85,0-1
-2026-06-27,J,Algeria,Austria,upcoming,,0.3262,0.3003,0.3735,1.08,1.18,1-1
-2026-06-27,J,Jordan,Argentina,upcoming,,0.0565,0.151,0.7925,0.50,2.40,0-2
-2026-06-27,K,Colombia,Portugal,upcoming,,0.3322,0.2931,0.3748,1.14,1.22,1-1
-2026-06-27,K,DR Congo,Uzbekistan,upcoming,,0.3342,0.299,0.3667,1.11,1.17,1-1
-2026-06-27,L,Croatia,Ghana,upcoming,,0.7428,0.1749,0.0823,2.27,0.63,2-0
+2026-06-11,A,Mexico,South Africa,played,2-0,0.8045,0.1492,0.0464,2.33,0.41,2-0
+2026-06-11,A,South Korea,Czech Republic,played,2-1,0.5122,0.2577,0.2301,1.65,1.03,1-1
+2026-06-12,B,Canada,Bosnia and Herzegovina,played,1-1,0.6618,0.2234,0.1148,1.86,0.64,1-0
+2026-06-12,D,United States,Paraguay,upcoming,,0.3397,0.2944,0.3659,1.15,1.20,1-1
+2026-06-13,B,Qatar,Switzerland,upcoming,,0.0741,0.1604,0.7655,0.63,2.42,0-2
+2026-06-13,C,Brazil,Morocco,upcoming,,0.4975,0.2715,0.2309,1.52,0.96,1-1
+2026-06-13,C,Haiti,Scotland,upcoming,,0.2336,0.262,0.5044,1.02,1.61,1-1
+2026-06-13,D,Australia,Turkey,upcoming,,0.2757,0.2954,0.4289,0.98,1.29,1-1
+2026-06-14,F,Sweden,Tunisia,upcoming,,0.4288,0.2759,0.2954,1.43,1.14,1-1
+2026-06-14,F,Netherlands,Japan,upcoming,,0.3845,0.2975,0.318,1.22,1.08,1-1
+2026-06-14,E,Germany,Curaçao,upcoming,,0.8425,0.1118,0.0457,2.97,0.60,2-0
+2026-06-14,E,Ivory Coast,Ecuador,upcoming,,0.1965,0.2815,0.522,0.78,1.45,0-1
+2026-06-15,G,Belgium,Egypt,upcoming,,0.5151,0.2677,0.2172,1.56,0.92,1-1
+2026-06-15,G,Iran,New Zealand,upcoming,,0.542,0.2565,0.2015,1.66,0.92,1-1
+2026-06-15,H,Spain,Cape Verde,upcoming,,0.8739,0.0924,0.0337,3.19,0.55,3-0
+2026-06-15,H,Saudi Arabia,Uruguay,upcoming,,0.1231,0.2359,0.6411,0.63,1.76,0-1
+2026-06-16,J,Austria,Jordan,upcoming,,0.5257,0.2613,0.2131,1.62,0.94,1-1
+2026-06-16,J,Argentina,Algeria,upcoming,,0.6643,0.2197,0.116,1.90,0.66,1-0
+2026-06-16,I,France,Senegal,upcoming,,0.5697,0.2459,0.1844,1.75,0.90,1-0
+2026-06-16,I,Iraq,Norway,upcoming,,0.1128,0.2268,0.6604,0.61,1.82,0-1
+2026-06-17,K,Portugal,DR Congo,upcoming,,0.6697,0.2175,0.1128,1.91,0.65,1-0
+2026-06-17,K,Uzbekistan,Colombia,upcoming,,0.1223,0.2521,0.6255,0.57,1.63,0-1
+2026-06-17,L,England,Croatia,upcoming,,0.6016,0.2378,0.1607,1.81,0.82,1-0
+2026-06-17,L,Ghana,Panama,upcoming,,0.1907,0.2595,0.5497,0.86,1.63,0-1
+2026-06-18,A,Czech Republic,South Africa,upcoming,,0.5412,0.2559,0.2029,1.67,0.93,1-1
+2026-06-18,A,Mexico,South Korea,upcoming,,0.5021,0.2499,0.248,1.73,1.15,1-1
+2026-06-18,B,Switzerland,Bosnia and Herzegovina,upcoming,,0.701,0.1951,0.1039,2.13,0.69,2-0
+2026-06-18,B,Canada,Qatar,upcoming,,0.8135,0.1365,0.0501,2.56,0.51,2-0
+2026-06-19,D,Turkey,Paraguay,upcoming,,0.4128,0.2828,0.3043,1.36,1.13,1-1
+2026-06-19,C,Scotland,Morocco,upcoming,,0.2254,0.2532,0.5214,1.04,1.70,1-1
+2026-06-19,C,Brazil,Haiti,upcoming,,0.8065,0.1365,0.0571,2.64,0.59,2-0
+2026-06-19,D,United States,Australia,upcoming,,0.3281,0.2926,0.3793,1.13,1.24,1-1
+2026-06-20,F,Netherlands,Sweden,upcoming,,0.5903,0.2262,0.1835,1.97,1.01,1-1
+2026-06-20,F,Tunisia,Japan,upcoming,,0.1367,0.229,0.6344,0.74,1.86,0-1
+2026-06-20,E,Germany,Ivory Coast,upcoming,,0.5803,0.2393,0.1804,1.82,0.91,1-1
+2026-06-20,E,Ecuador,Curaçao,upcoming,,0.7926,0.1471,0.0603,2.50,0.57,2-0
+2026-06-21,G,Belgium,Iran,upcoming,,0.4501,0.2812,0.2687,1.41,1.03,1-1
+2026-06-21,G,New Zealand,Egypt,upcoming,,0.3166,0.288,0.3954,1.13,1.29,1-1
+2026-06-21,H,Spain,Saudi Arabia,upcoming,,0.791,0.1559,0.0531,2.31,0.45,2-0
+2026-06-21,H,Uruguay,Cape Verde,upcoming,,0.7684,0.1578,0.0738,2.46,0.64,2-0
+2026-06-22,I,France,Iraq,upcoming,,0.7278,0.1816,0.0906,2.23,0.66,2-0
+2026-06-22,I,Norway,Senegal,upcoming,,0.4706,0.2772,0.2523,1.46,1.00,1-1
+2026-06-22,J,Argentina,Austria,upcoming,,0.6342,0.2138,0.1521,2.06,0.91,2-0
+2026-06-22,J,Jordan,Algeria,upcoming,,0.2587,0.2744,0.4669,1.04,1.48,1-1
+2026-06-23,K,Portugal,Uzbekistan,upcoming,,0.6426,0.223,0.1344,1.91,0.75,1-0
+2026-06-23,K,Colombia,DR Congo,upcoming,,0.6383,0.2288,0.1329,1.85,0.72,1-0
+2026-06-23,L,England,Ghana,upcoming,,0.8302,0.1341,0.0357,2.42,0.35,2-0
+2026-06-23,L,Panama,Croatia,upcoming,,0.2719,0.2601,0.4679,1.17,1.60,1-1
+2026-06-24,C,Morocco,Haiti,upcoming,,0.7226,0.1863,0.091,2.18,0.64,2-0
+2026-06-24,B,Bosnia and Herzegovina,Qatar,upcoming,,0.4361,0.3005,0.2634,1.27,0.92,1-1
+2026-06-24,C,Scotland,Brazil,upcoming,,0.1383,0.2279,0.6338,0.75,1.87,0-1
+2026-06-24,A,South Africa,South Korea,upcoming,,0.1312,0.2423,0.6265,0.65,1.72,0-1
+2026-06-24,A,Mexico,Czech Republic,upcoming,,0.7351,0.1835,0.0815,2.16,0.58,2-0
+2026-06-24,B,Canada,Switzerland,upcoming,,0.3599,0.3097,0.3304,1.11,1.05,1-1
+2026-06-25,D,United States,Turkey,upcoming,,0.2421,0.2525,0.5055,1.11,1.70,1-1
+2026-06-25,D,Paraguay,Australia,upcoming,,0.3504,0.3102,0.3394,1.08,1.06,1-1
+2026-06-25,E,Curaçao,Ivory Coast,upcoming,,0.1788,0.2707,0.5505,0.76,1.53,0-1
+2026-06-25,E,Ecuador,Germany,upcoming,,0.3441,0.31,0.3459,1.07,1.08,1-1
+2026-06-25,F,Japan,Sweden,upcoming,,0.5868,0.2331,0.1801,1.88,0.95,1-1
+2026-06-25,F,Tunisia,Netherlands,upcoming,,0.1327,0.2214,0.646,0.75,1.93,0-2
+2026-06-26,I,Senegal,Iraq,upcoming,,0.5594,0.2597,0.1809,1.62,0.81,1-0
+2026-06-26,I,Norway,France,upcoming,,0.2135,0.2541,0.5325,0.98,1.69,1-1
+2026-06-26,H,Uruguay,Spain,upcoming,,0.1452,0.2564,0.5985,0.67,1.62,0-1
+2026-06-26,G,New Zealand,Belgium,upcoming,,0.1499,0.2051,0.645,0.95,2.16,0-2
+2026-06-26,G,Egypt,Iran,upcoming,,0.309,0.3083,0.3827,1.01,1.15,1-1
+2026-06-26,H,Cape Verde,Saudi Arabia,upcoming,,0.2716,0.2907,0.4377,0.99,1.33,1-1
+2026-06-27,L,Panama,England,upcoming,,0.1384,0.2209,0.6407,0.79,1.94,0-2
+2026-06-27,J,Algeria,Austria,upcoming,,0.3329,0.3005,0.3666,1.10,1.17,1-1
+2026-06-27,J,Jordan,Argentina,upcoming,,0.0565,0.159,0.7845,0.47,2.30,0-2
+2026-06-27,K,Colombia,Portugal,upcoming,,0.343,0.2951,0.3619,1.15,1.19,1-1
+2026-06-27,K,DR Congo,Uzbekistan,upcoming,,0.3466,0.299,0.3544,1.14,1.15,1-1
+2026-06-27,L,Croatia,Ghana,upcoming,,0.7426,0.1732,0.0842,2.31,0.65,2-0
