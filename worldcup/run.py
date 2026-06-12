@@ -46,9 +46,11 @@ def cmd_update() -> None:
             print(f"  {name}: {new['home_score'].notna().sum() - before:+d} "
                   f"newly recorded results, latest date "
                   f"{new.dropna(subset=['home_score'])['date'].max()}")
+    official_map = _refresh_official_results()
     wc_raw = world_cup_fixtures(merged_results(), validated_only=False)
     scored = wc_raw.dropna(subset=["home_score", "away_score"])
-    summary = validate_results(scored, load_manual_results())
+    summary = validate_results(scored, load_manual_results(),
+                               official=official_map)
     for kind in ("accepted", "quarantined", "corrected", "unstable"):
         for line in summary[kind]:
             print(f"  [{kind}] {line}")
@@ -56,6 +58,52 @@ def cmd_update() -> None:
     print(f"World Cup 2026: {len(scored)}/72 group matches have raw scores; "
           f"{int(validated['home_score'].notna().sum())}/72 validated for "
           "simulation.")
+
+
+def _refresh_official_results() -> dict:
+    """Query the official scoreboard for completed matches and persist them
+    to data/official_results.csv (so they enter the simulation as soon as
+    they are confirmed, ahead of the daily upstream snapshot).
+
+    Returns {(date, home, away): (home_score, away_score)} for the ledger.
+    """
+    from .official import fetch_official_results
+    teams = load_teams()
+    all_teams = {t for g in teams["groups"].values() for t in g}
+    confirmed = fetch_official_results(known_teams=all_teams)
+
+    path = DATA_DIR / "official_results.csv"
+    existing = pd.read_csv(path) if path.exists() else pd.DataFrame()
+    fixtures = world_cup_fixtures(merged_results(), validated_only=False)
+    by_pair = {frozenset((r.home_team, r.away_team)): r
+               for r in fixtures.itertuples(index=False)}
+
+    rows = {(r["date"], r["home_team"], r["away_team"]): r
+            for r in existing.to_dict("records")} if not existing.empty else {}
+    added = []
+    for m in confirmed:
+        fix = by_pair.get(frozenset((m["home"], m["away"])))
+        if fix is None:
+            continue
+        if fix.home_team == m["home"]:
+            hs, as_ = m["home_score"], m["away_score"]
+        else:  # official listed orientation differs from our fixture
+            hs, as_ = m["away_score"], m["home_score"]
+        date_str = pd.Timestamp(fix.date).strftime("%Y-%m-%d")
+        key = (date_str, fix.home_team, fix.away_team)
+        row = {"date": date_str, "home_team": fix.home_team,
+               "away_team": fix.away_team, "home_score": hs, "away_score": as_,
+               "tournament": "FIFA World Cup", "city": fix.city,
+               "country": fix.country, "neutral": fix.neutral}
+        if key not in rows or (rows[key]["home_score"], rows[key]["away_score"]) != (hs, as_):
+            added.append(f"{fix.home_team} {hs}-{as_} {fix.away_team}")
+        rows[key] = row
+    if rows:
+        pd.DataFrame(list(rows.values())).to_csv(path, index=False)
+    if added:
+        print(f"  official full-time results: {'; '.join(added)}")
+    return {(r["date"], r["home_team"], r["away_team"]):
+            (int(r["home_score"]), int(r["away_score"])) for r in rows.values()}
 
 
 def cmd_train(skip_validation: bool = False) -> None:

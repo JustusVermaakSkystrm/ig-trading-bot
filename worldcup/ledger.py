@@ -54,11 +54,14 @@ def _key_set(df: pd.DataFrame) -> set[tuple]:
 
 
 def validate_results(scored: pd.DataFrame, manual: pd.DataFrame,
+                     official: dict | None = None,
                      now: datetime | None = None) -> dict:
     """Update the accepted/pending ledgers from freshly downloaded scores.
 
     `scored`: current-tournament rows that carry a score in the merged
-    snapshot. Returns a summary of what was accepted/quarantined.
+    snapshot. `official`: {(date, home, away): (hs, as)} full-time scores
+    confirmed by an official source — these accept immediately.
+    Returns a summary of what was accepted/quarantined.
     """
     now = now or datetime.now(timezone.utc)
     today = now.date()
@@ -96,6 +99,9 @@ def validate_results(scored: pd.DataFrame, manual: pd.DataFrame,
                 f"{key}: accepted {acc_scores[key]} -> upstream now {hs}-{as_}")
         elif key in manual_keys:
             accept(key, hs, as_)
+            continue
+        elif official and key in official and tuple(official[key]) == (hs, as_):
+            accept(key, hs, as_)   # official full-time confirmation
             continue
         elif (today - pd.Timestamp(date_str).date()).days >= SAFE_AGE_DAYS:
             accept(key, hs, as_)

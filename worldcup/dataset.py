@@ -69,25 +69,44 @@ def load_manual_results() -> pd.DataFrame:
     return df
 
 
-def merged_results() -> pd.DataFrame:
-    """Upstream snapshot with manual overrides applied (manual rows win)."""
-    base = load_results()
-    manual = load_manual_results()
-    if manual.empty:
+def load_official_results() -> pd.DataFrame:
+    """Full-time scores confirmed by an official source (see official.py),
+    written by the update command. Same columns as results.csv."""
+    path = DATA_DIR / "official_results.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_csv(path)
+    if df.empty:
+        return df
+    df["date"] = pd.to_datetime(df["date"])
+    df["neutral"] = df["neutral"].astype(bool)
+    return df
+
+
+def _overlay(base: pd.DataFrame, extra: pd.DataFrame) -> pd.DataFrame:
+    """Apply score overrides from `extra` on top of `base` (extra wins)."""
+    if extra.empty:
         return base
     key = ["date", "home_team", "away_team"]
-    base = base.merge(manual[key + ["home_score", "away_score"]],
-                      on=key, how="left", suffixes=("", "_manual"))
-    override = base["home_score_manual"].notna()
-    base.loc[override, "home_score"] = base.loc[override, "home_score_manual"]
-    base.loc[override, "away_score"] = base.loc[override, "away_score_manual"]
-    base = base.drop(columns=["home_score_manual", "away_score_manual"])
-    extra = manual.merge(base[key], on=key, how="left", indicator=True)
-    extra = extra[extra["_merge"] == "left_only"].drop(columns="_merge")
-    if not extra.empty:
-        base = pd.concat([base, extra], ignore_index=True).sort_values(
+    base = base.merge(extra[key + ["home_score", "away_score"]],
+                      on=key, how="left", suffixes=("", "_x"))
+    override = base["home_score_x"].notna()
+    base.loc[override, "home_score"] = base.loc[override, "home_score_x"]
+    base.loc[override, "away_score"] = base.loc[override, "away_score_x"]
+    base = base.drop(columns=["home_score_x", "away_score_x"])
+    missing = extra.merge(base[key], on=key, how="left", indicator=True)
+    missing = missing[missing["_merge"] == "left_only"].drop(columns="_merge")
+    if not missing.empty:
+        base = pd.concat([base, missing], ignore_index=True).sort_values(
             "date", kind="stable").reset_index(drop=True)
     return base
+
+
+def merged_results() -> pd.DataFrame:
+    """Upstream snapshot with official-result and manual overrides applied
+    (manual entries have the final word)."""
+    return _overlay(_overlay(load_results(), load_official_results()),
+                    load_manual_results())
 
 
 class _TeamForm:

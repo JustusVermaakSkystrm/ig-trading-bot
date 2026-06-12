@@ -69,9 +69,13 @@ scores pass through a **quarantine ledger** (`ledger.py`) before the
 simulator may use them:
 
 - manually entered results (`data/manual_results.csv`) are trusted at once;
+- scores confirmed **full-time by an official scoreboard** (ESPN's public
+  World Cup API, queried from the Actions runner — see `official.py`) are
+  accepted immediately and persisted to `data/official_results.csv`, so
+  they reach the simulation minutes after the final whistle;
 - matches two or more days old are accepted as certainly final;
-- anything more recent must be observed **unchanged on three consecutive
-  runs spanning at least an hour** (`data/pending_results.csv` tracks
+- anything else must be observed **unchanged on three consecutive runs
+  spanning at least an hour** (`data/pending_results.csv` tracks
   sightings). A changing in-progress score resets the count and is flagged;
   upstream corrections to accepted scores are re-quarantined the same way.
 
