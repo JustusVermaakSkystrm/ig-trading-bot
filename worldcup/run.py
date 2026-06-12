@@ -16,7 +16,9 @@ from pathlib import Path
 import pandas as pd
 
 from .dataset import (DATA_DIR, RESULTS_URL, SHOOTOUTS_URL,
-                      build_training_table, load_teams, merged_results)
+                      build_training_table, load_manual_results, load_teams,
+                      merged_results)
+from .ledger import apply_ledger, validate_results
 from .model import MODEL_PATH, GoalModel, evaluate_rolling
 from .report import write_outputs
 from .simulator import MatchPredictor, TournamentSimulator
@@ -44,9 +46,16 @@ def cmd_update() -> None:
             print(f"  {name}: {new['home_score'].notna().sum() - before:+d} "
                   f"newly recorded results, latest date "
                   f"{new.dropna(subset=['home_score'])['date'].max()}")
-    wc = world_cup_fixtures(merged_results())
-    print(f"World Cup 2026: {wc['home_score'].notna().sum()}/72 group matches "
-          "have results.")
+    wc_raw = world_cup_fixtures(merged_results(), validated_only=False)
+    scored = wc_raw.dropna(subset=["home_score", "away_score"])
+    summary = validate_results(scored, load_manual_results())
+    for kind in ("accepted", "quarantined", "corrected", "unstable"):
+        for line in summary[kind]:
+            print(f"  [{kind}] {line}")
+    validated = world_cup_fixtures(merged_results())
+    print(f"World Cup 2026: {len(scored)}/72 group matches have raw scores; "
+          f"{int(validated['home_score'].notna().sum())}/72 validated for "
+          "simulation.")
 
 
 def cmd_train(skip_validation: bool = False) -> None:
@@ -79,8 +88,13 @@ def cmd_train(skip_validation: bool = False) -> None:
     META_PATH.write_text(json.dumps(meta))
 
 
-def world_cup_fixtures(results: pd.DataFrame) -> pd.DataFrame:
-    """The 72 group-stage matches with a `group` column attached."""
+def world_cup_fixtures(results: pd.DataFrame, validated_only: bool = True
+                       ) -> pd.DataFrame:
+    """The 72 group-stage matches with a `group` column attached.
+
+    With validated_only, scores that haven't cleared the result ledger
+    (see ledger.py) are blanked so mid-game data can't enter a simulation.
+    """
     teams = load_teams()
     group_of = {t: g for g, members in teams["groups"].items() for t in members}
     wc = results[(results["tournament"] == "FIFA World Cup")
@@ -90,7 +104,10 @@ def world_cup_fixtures(results: pd.DataFrame) -> pd.DataFrame:
     wc["group"] = wc["home_team"].map(group_of)
     if len(wc) != 72:
         raise RuntimeError(f"Expected 72 group fixtures, found {len(wc)}")
-    return wc.sort_values("date").reset_index(drop=True)
+    wc = wc.sort_values("date").reset_index(drop=True)
+    if validated_only:
+        wc = apply_ledger(wc, load_manual_results())
+    return wc
 
 
 def cmd_simulate(n_sims: int, seed: int) -> None:

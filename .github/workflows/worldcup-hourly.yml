@@ -1,0 +1,85 @@
+name: Hourly World Cup prediction update
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: worldcup-hourly
+  cancel-in-progress: false
+
+env:
+  BRANCH: claude/world-cup-ml-predictor-fht6vt
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/world-cup-ml-predictor-fht6vt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: worldcup/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r worldcup/requirements.txt markdown
+
+      - name: Pull latest results (ledger-validated)
+        id: upd
+        run: |
+          python -m worldcup.run update
+          # Heavy re-run only when simulation-relevant inputs changed;
+          # the pending quarantine ledger must be committed every time so
+          # its observation counts advance between runs.
+          if git diff --quiet -- worldcup/data/results.csv \
+               worldcup/data/accepted_results.csv worldcup/data/manual_results.csv; then
+            echo "sim_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "sim_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          if git diff --quiet -- worldcup/data; then
+            echo "data_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "data_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Retrain and re-simulate
+        if: steps.upd.outputs.sim_changed == 'true'
+        run: |
+          python -m worldcup.run train --skip-validation
+          python -m worldcup.run simulate --sims 50000
+
+      - name: Commit and push
+        if: steps.upd.outputs.data_changed == 'true' || steps.upd.outputs.sim_changed == 'true'
+        run: |
+          git config user.name "worldcup-hourly[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add worldcup/data worldcup/outputs
+          git commit -m "Hourly update: results ledger, ratings and simulations"
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:$BRANCH"
+
+      - name: Upload site artifact
+        if: steps.upd.outputs.sim_changed == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: worldcup/outputs/site
+
+      - name: Deploy to GitHub Pages
+        if: steps.upd.outputs.sim_changed == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

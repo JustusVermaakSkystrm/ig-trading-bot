@@ -59,6 +59,24 @@ python -m worldcup.run simulate --sims 100000 --seed 42
 
 Run from the repository root (the directory containing `worldcup/`).
 
+### Automated hourly updates
+
+A scheduled GitHub Actions workflow (`.github/workflows/worldcup-hourly.yml`,
+on the repository's default branch) re-runs the pipeline every hour:
+download results → validate → retrain → 50,000 simulations → commit →
+redeploy the site. Because a run may coincide with a match in progress,
+scores pass through a **quarantine ledger** (`ledger.py`) before the
+simulator may use them:
+
+- manually entered results (`data/manual_results.csv`) are trusted at once;
+- matches two or more days old are accepted as certainly final;
+- anything more recent must be observed **unchanged on three consecutive
+  runs spanning at least an hour** (`data/pending_results.csv` tracks
+  sightings). A changing in-progress score resets the count and is flagged;
+  upstream corrections to accepted scores are re-quarantined the same way.
+
+`data/accepted_results.csv` is the audit trail of validated results.
+
 ### Updating after each match day
 
 `python -m worldcup.run all` re-downloads the results dataset, re-rates every
