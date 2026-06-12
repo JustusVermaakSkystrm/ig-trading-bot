@@ -164,6 +164,12 @@ def write_outputs(pred: MatchPredictor, res: SimResults, fixtures: pd.DataFrame,
     archive.mkdir(exist_ok=True)
     (archive / f"report_{meta['data_through']}.md").write_text(md)
 
+    try:
+        from .site import build_site
+        build_site()
+    except ImportError:  # markdown package not installed; site is optional
+        pass
+
 
 def _load_previous_projections() -> pd.DataFrame | None:
     path = OUT_DIR / "tournament_projections.csv"
