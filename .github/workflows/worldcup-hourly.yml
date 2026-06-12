@@ -2,7 +2,7 @@ name: Hourly World Cup prediction update
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "47 * * * *"
   workflow_dispatch:
 
 permissions:
