@@ -1,103 +1,100 @@
-match,date,sel,odds,dec,model,implied,ev,kelly
-Germany v Curaçao,2026-06-14,Draw,18/1,19.0,0.128,0.053,1.422,0.079
-Austria v Jordan,2026-06-16,Jordan,15/2,8.5,0.223,0.118,0.894,0.119
-Brazil v Haiti,2026-06-19,Draw,12/1,13.0,0.144,0.077,0.867,0.072
-Ghana v Panama,2026-06-17,Panama,12/5,3.4,0.511,0.294,0.738,0.308
-Iraq v Norway,2026-06-16,Draw,6/1,7.0,0.234,0.143,0.641,0.107
-United States v Australia,2026-06-19,Australia,15/4,4.75,0.338,0.211,0.605,0.161
-Iraq v Norway,2026-06-16,Iraq,11/1,12.0,0.132,0.083,0.579,0.053
-United States v Paraguay,2026-06-12,Paraguay,14/5,3.8,0.39,0.263,0.482,0.172
-Australia v Turkey,2026-06-13,Australia,4/1,5.0,0.295,0.2,0.475,0.119
-Haiti v Scotland,2026-06-13,Haiti,9/2,5.5,0.254,0.182,0.398,0.088
-Netherlands v Japan,2026-06-14,Japan,13/5,3.6,0.376,0.278,0.355,0.137
-Ivory Coast v Ecuador,2026-06-14,Ecuador,7/5,2.4,0.563,0.417,0.351,0.251
-Canada v Bosnia and Herzegovina,2026-06-12,Canada,4/5,1.8,0.75,0.556,0.349,0.436
-Austria v Jordan,2026-06-16,Draw,17/4,5.25,0.257,0.19,0.348,0.082
-France v Senegal,2026-06-16,Senegal,6/1,7.0,0.188,0.143,0.318,0.053
-Brazil v Morocco,2026-06-13,Morocco,9/2,5.5,0.232,0.182,0.276,0.061
-Portugal v DR Congo,2026-06-17,Draw,19/4,5.75,0.22,0.174,0.262,0.055
-Sweden v Tunisia,2026-06-14,Tunisia,10/3,4.33,0.29,0.231,0.257,0.077
-Portugal v DR Congo,2026-06-17,DR Congo,9/1,10.0,0.122,0.1,0.223,0.025
-Uzbekistan v Colombia,2026-06-17,Uzbekistan,7/1,8.0,0.151,0.125,0.208,0.03
-Uzbekistan v Colombia,2026-06-17,Draw,18/5,4.6,0.255,0.217,0.172,0.048
-Saudi Arabia v Uruguay,2026-06-15,Draw,7/2,4.5,0.259,0.222,0.164,0.047
-Switzerland v Bosnia and Herzegovina,2026-06-18,Switzerland,11/20,1.55,0.74,0.645,0.147,0.268
-Saudi Arabia v Uruguay,2026-06-15,Saudi Arabia,6/1,7.0,0.16,0.143,0.123,0.02
-Mexico v South Korea,2026-06-18,Mexico,19/20,1.95,0.572,0.513,0.115,0.121
-Germany v Ivory Coast,2026-06-20,Ivory Coast,19/4,5.75,0.193,0.174,0.111,0.023
-Ecuador v Curaçao,2026-06-20,Draw,6/1,7.0,0.157,0.143,0.1,0.017
-Germany v Curaçao,2026-06-14,Curaçao,22/1,23.0,0.047,0.043,0.086,0.004
-Haiti v Scotland,2026-06-13,Draw,3/1,4.0,0.271,0.25,0.083,0.028
-Brazil v Morocco,2026-06-13,Draw,11/4,3.75,0.286,0.267,0.074,0.027
-Canada v Qatar,2026-06-18,Canada,2/7,1.29,0.835,0.778,0.074,0.257
-Scotland v Morocco,2026-06-19,Morocco,10/11,1.91,0.562,0.524,0.073,0.081
-France v Senegal,2026-06-16,Draw,16/5,4.2,0.249,0.238,0.046,0.014
-Australia v Turkey,2026-06-13,Draw,13/5,3.6,0.285,0.278,0.026,0.01
-United States v Australia,2026-06-19,Draw,13/5,3.6,0.284,0.278,0.024,0.009
-Argentina v Algeria,2026-06-16,Algeria,15/2,8.5,0.12,0.118,0.02,0.003
-Netherlands v Sweden,2026-06-20,Netherlands,8/13,1.62,0.63,0.619,0.017,0.028
-Belgium v Egypt,2026-06-15,Egypt,9/2,5.5,0.185,0.182,0.017,0.004
-Turkey v Paraguay,2026-06-19,Paraguay,23/10,3.3,0.308,0.303,0.017,0.007
-Czech Republic v South Africa,2026-06-18,South Africa,4/1,5.0,0.202,0.2,0.012,0.003
-Tunisia v Japan,2026-06-20,Japan,7/10,1.7,0.593,0.588,0.009,0.013
-Netherlands v Japan,2026-06-14,Draw,12/5,3.4,0.297,0.294,0.008,0.004
-Argentina v Algeria,2026-06-16,Draw,7/2,4.5,0.22,0.222,-0.008,0.0
-Spain v Cape Verde,2026-06-15,Spain,1/14,1.07,0.917,0.933,-0.017,0.0
-Germany v Ivory Coast,2026-06-20,Draw,3/1,4.0,0.245,0.25,-0.019,0.0
-Qatar v Switzerland,2026-06-13,Draw,6/1,7.0,0.139,0.143,-0.027,0.0
-Czech Republic v South Africa,2026-06-18,Draw,11/4,3.75,0.258,0.267,-0.032,0.0
-Iran v New Zealand,2026-06-15,Iran,4/5,1.8,0.533,0.556,-0.04,0.0
-England v Croatia,2026-06-17,England,7/10,1.7,0.564,0.588,-0.041,0.0
-Qatar v Switzerland,2026-06-13,Switzerland,1/5,1.2,0.798,0.833,-0.043,0.0
-Belgium v Egypt,2026-06-15,Draw,14/5,3.8,0.249,0.263,-0.053,0.0
-Sweden v Tunisia,2026-06-14,Draw,23/10,3.3,0.285,0.303,-0.06,0.0
-Ecuador v Curaçao,2026-06-20,Ecuador,1/5,1.2,0.782,0.833,-0.061,0.0
-Turkey v Paraguay,2026-06-19,Turkey,6/5,2.2,0.418,0.455,-0.081,0.0
-Belgium v Egypt,2026-06-15,Belgium,8/13,1.62,0.566,0.619,-0.086,0.0
-Iran v New Zealand,2026-06-15,New Zealand,7/2,4.5,0.203,0.222,-0.088,0.0
-England v Croatia,2026-06-17,Draw,13/5,3.6,0.252,0.278,-0.091,0.0
-Argentina v Algeria,2026-06-16,Argentina,4/11,1.36,0.66,0.733,-0.101,0.0
-Czech Republic v South Africa,2026-06-18,Czech Republic,4/6,1.67,0.54,0.6,-0.101,0.0
-United States v Paraguay,2026-06-12,Draw,11/5,3.2,0.279,0.312,-0.108,0.0
-Brazil v Haiti,2026-06-19,Haiti,14/1,15.0,0.059,0.067,-0.119,0.0
-England v Croatia,2026-06-17,Croatia,19/5,4.8,0.183,0.208,-0.121,0.0
-Iran v New Zealand,2026-06-15,Draw,23/10,3.3,0.264,0.303,-0.128,0.0
-Ghana v Panama,2026-06-17,Draw,23/10,3.3,0.264,0.303,-0.13,0.0
-Germany v Ivory Coast,2026-06-20,Germany,8/15,1.53,0.562,0.652,-0.139,0.0
-Turkey v Paraguay,2026-06-19,Draw,21/10,3.1,0.274,0.323,-0.15,0.0
-Germany v Curaçao,2026-06-14,Germany,1/33,1.03,0.825,0.971,-0.15,0.0
-Brazil v Haiti,2026-06-19,Brazil,1/16,1.06,0.798,0.941,-0.153,0.0
-Portugal v DR Congo,2026-06-17,Portugal,2/7,1.29,0.658,0.778,-0.154,0.0
-Saudi Arabia v Uruguay,2026-06-15,Uruguay,4/9,1.44,0.581,0.692,-0.161,0.0
-Tunisia v Japan,2026-06-20,Draw,12/5,3.4,0.245,0.294,-0.167,0.0
-Scotland v Morocco,2026-06-19,Scotland,16/5,4.2,0.195,0.238,-0.182,0.0
-Netherlands v Sweden,2026-06-20,Draw,14/5,3.8,0.214,0.263,-0.185,0.0
-France v Senegal,2026-06-16,France,4/9,1.44,0.563,0.692,-0.187,0.0
-Uzbekistan v Colombia,2026-06-17,Colombia,4/11,1.36,0.594,0.733,-0.19,0.0
-Tunisia v Japan,2026-06-20,Tunisia,4/1,5.0,0.162,0.2,-0.192,0.0
-Scotland v Morocco,2026-06-19,Draw,9/4,3.25,0.243,0.308,-0.21,0.0
-Sweden v Tunisia,2026-06-14,Sweden,17/20,1.85,0.425,0.541,-0.214,0.0
-Netherlands v Sweden,2026-06-20,Sweden,4/1,5.0,0.156,0.2,-0.222,0.0
-Brazil v Morocco,2026-06-13,Brazil,8/13,1.62,0.482,0.619,-0.222,0.0
-Mexico v South Korea,2026-06-18,Draw,9/4,3.25,0.239,0.308,-0.223,0.0
-Spain v Cape Verde,2026-06-15,Draw,11/1,12.0,0.065,0.083,-0.225,0.0
-Iraq v Norway,2026-06-16,Norway,1/5,1.2,0.634,0.833,-0.239,0.0
-Qatar v Switzerland,2026-06-13,Qatar,11/1,12.0,0.063,0.083,-0.24,0.0
-Haiti v Scotland,2026-06-13,Scotland,11/20,1.55,0.475,0.645,-0.264,0.0
-Mexico v South Korea,2026-06-18,South Korea,29/10,3.9,0.189,0.256,-0.264,0.0
-Australia v Turkey,2026-06-13,Turkey,4/6,1.67,0.42,0.6,-0.3,0.0
-United States v Paraguay,2026-06-12,United States,21/20,2.05,0.331,0.488,-0.321,0.0
-Austria v Jordan,2026-06-16,Austria,3/10,1.3,0.52,0.769,-0.323,0.0
-Ivory Coast v Ecuador,2026-06-14,Draw,17/10,2.7,0.25,0.37,-0.324,0.0
-Ecuador v Curaçao,2026-06-20,Curaçao,10/1,11.0,0.061,0.091,-0.333,0.0
-Switzerland v Bosnia and Herzegovina,2026-06-18,Draw,29/10,3.9,0.17,0.256,-0.339,0.0
-Ivory Coast v Ecuador,2026-06-14,Ivory Coast,5/2,3.5,0.187,0.286,-0.346,0.0
-Canada v Qatar,2026-06-18,Draw,17/4,5.25,0.124,0.19,-0.35,0.0
-United States v Australia,2026-06-19,United States,7/10,1.7,0.378,0.588,-0.358,0.0
-Netherlands v Japan,2026-06-14,Netherlands,19/20,1.95,0.327,0.513,-0.363,0.0
-Canada v Bosnia and Herzegovina,2026-06-12,Draw,5/2,3.5,0.172,0.286,-0.398,0.0
-Switzerland v Bosnia and Herzegovina,2026-06-18,Bosnia and Herzegovina,5/1,6.0,0.09,0.167,-0.459,0.0
-Ghana v Panama,2026-06-17,Ghana,11/10,2.1,0.225,0.476,-0.527,0.0
-Canada v Qatar,2026-06-18,Qatar,8/1,9.0,0.041,0.111,-0.63,0.0
-Canada v Bosnia and Herzegovina,2026-06-12,Bosnia and Herzegovina,7/2,4.5,0.078,0.222,-0.647,0.0
-Spain v Cape Verde,2026-06-15,Cape Verde,18/1,19.0,0.018,0.053,-0.65,0.0
+date,match,sel,odds,dec,model,imp,ev,kelly
+2026-06-14,Germany v Curaçao,Draw,18/1,19.0,0.127,0.053,1.407,0.078
+2026-06-16,Austria v Jordan,Jordan,15/2,8.5,0.234,0.118,0.985,0.131
+2026-06-19,Brazil v Haiti,Draw,11/1,12.0,0.162,0.083,0.946,0.086
+2026-06-17,Ghana v Panama,Panama,23/10,3.3,0.53,0.303,0.75,0.326
+2026-06-16,Iraq v Norway,Draw,13/2,7.5,0.233,0.133,0.749,0.115
+2026-06-16,Iraq v Norway,Iraq,11/1,12.0,0.141,0.083,0.698,0.063
+2026-06-21,Spain v Saudi Arabia,Draw,8/1,9.0,0.166,0.111,0.491,0.061
+2026-06-19,Brazil v Haiti,Haiti,18/1,19.0,0.077,0.053,0.471,0.026
+2026-06-16,Austria v Jordan,Draw,17/4,5.25,0.264,0.19,0.383,0.09
+2026-06-19,United States v Australia,Australia,9/2,5.5,0.246,0.182,0.352,0.078
+2026-06-13,Haiti v Scotland,Haiti,9/2,5.5,0.243,0.182,0.338,0.075
+2026-06-13,Qatar v Switzerland,Draw,13/2,7.5,0.176,0.133,0.324,0.05
+2026-06-13,Australia v Turkey,Australia,4/1,5.0,0.261,0.2,0.306,0.077
+2026-06-17,Portugal v DR Congo,DR Congo,9/1,10.0,0.129,0.1,0.293,0.033
+2026-06-15,Spain v Cape Verde,Draw,11/1,12.0,0.107,0.083,0.28,0.025
+2026-06-17,Uzbekistan v Colombia,Uzbekistan,7/1,8.0,0.159,0.125,0.275,0.039
+2026-06-16,France v Senegal,Senegal,6/1,7.0,0.182,0.143,0.273,0.045
+2026-06-14,Sweden v Tunisia,Tunisia,10/3,4.33,0.285,0.231,0.234,0.07
+2026-06-17,Portugal v DR Congo,Draw,19/4,5.75,0.213,0.174,0.226,0.048
+2026-06-20,Germany v Ivory Coast,Ivory Coast,19/4,5.75,0.21,0.174,0.206,0.043
+2026-06-13,Haiti v Scotland,Draw,7/2,4.5,0.265,0.222,0.193,0.055
+2026-06-17,Uzbekistan v Colombia,Draw,18/5,4.6,0.259,0.217,0.191,0.053
+2026-06-14,Ivory Coast v Ecuador,Ecuador,11/8,2.38,0.501,0.421,0.19,0.138
+2026-06-16,Argentina v Algeria,Algeria,15/2,8.5,0.14,0.118,0.189,0.025
+2026-06-21,Spain v Saudi Arabia,Saudi Arabia,18/1,19.0,0.062,0.053,0.186,0.01
+2026-06-15,Saudi Arabia v Uruguay,Saudi Arabia,13/2,7.5,0.157,0.133,0.174,0.027
+2026-06-14,Netherlands v Japan,Japan,13/5,3.6,0.326,0.278,0.173,0.066
+2026-06-15,Belgium v Egypt,Egypt,9/2,5.5,0.199,0.182,0.095,0.021
+2026-06-20,Ecuador v Curaçao,Draw,13/2,7.5,0.146,0.133,0.094,0.014
+2026-06-13,Australia v Turkey,Draw,14/5,3.8,0.287,0.263,0.089,0.032
+2026-06-18,Switzerland v Bosnia and Herzegovina,Switzerland,4/7,1.57,0.689,0.636,0.083,0.146
+2026-06-16,France v Senegal,Draw,16/5,4.2,0.255,0.238,0.071,0.022
+2026-06-20,Tunisia v Japan,Japan,7/10,1.7,0.626,0.588,0.065,0.092
+2026-06-19,Turkey v Paraguay,Paraguay,29/10,3.9,0.273,0.256,0.065,0.023
+2026-06-14,Germany v Curaçao,Curaçao,18/1,19.0,0.056,0.053,0.06,0.003
+2026-06-15,Saudi Arabia v Uruguay,Draw,16/5,4.2,0.251,0.238,0.053,0.016
+2026-06-19,United States v Australia,Draw,16/5,4.2,0.251,0.238,0.052,0.016
+2026-06-18,Canada v Qatar,Canada,2/7,1.29,0.814,0.778,0.047,0.165
+2026-06-18,Mexico v South Korea,Mexico,1/1,2.0,0.521,0.5,0.043,0.043
+2026-06-13,Qatar v Switzerland,Qatar,11/1,12.0,0.086,0.083,0.028,0.003
+2026-06-20,Germany v Ivory Coast,Draw,3/1,4.0,0.255,0.25,0.021,0.007
+2026-06-14,Netherlands v Japan,Draw,12/5,3.4,0.297,0.294,0.01,0.004
+2026-06-13,Brazil v Morocco,Morocco,4/1,5.0,0.202,0.2,0.008,0.002
+2026-06-13,Brazil v Morocco,Draw,11/4,3.75,0.268,0.267,0.007,0.002
+2026-06-16,Argentina v Algeria,Draw,7/2,4.5,0.223,0.222,0.005,0.002
+2026-06-18,Czech Republic v South Africa,Czech Republic,8/11,1.73,0.572,0.579,-0.012,0.0
+2026-06-20,Netherlands v Sweden,Sweden,4/1,5.0,0.197,0.2,-0.017,0.0
+2026-06-19,Scotland v Morocco,Morocco,10/11,1.91,0.514,0.524,-0.019,0.0
+2026-06-14,Sweden v Tunisia,Draw,12/5,3.4,0.287,0.294,-0.023,0.0
+2026-06-20,Ecuador v Curaçao,Ecuador,1/5,1.2,0.8,0.833,-0.04,0.0
+2026-06-15,Iran v New Zealand,New Zealand,7/2,4.5,0.212,0.222,-0.045,0.0
+2026-06-17,England v Croatia,England,4/6,1.67,0.571,0.6,-0.049,0.0
+2026-06-18,Mexico v South Korea,South Korea,3/1,4.0,0.233,0.25,-0.068,0.0
+2026-06-15,Belgium v Egypt,Draw,14/5,3.8,0.243,0.263,-0.075,0.0
+2026-06-15,Iran v New Zealand,Iran,4/5,1.8,0.513,0.556,-0.077,0.0
+2026-06-20,Netherlands v Sweden,Netherlands,8/13,1.62,0.566,0.619,-0.086,0.0
+2026-06-15,Spain v Cape Verde,Spain,1/16,1.06,0.854,0.941,-0.093,0.0
+2026-06-15,Iran v New Zealand,Draw,23/10,3.3,0.275,0.303,-0.093,0.0
+2026-06-19,Scotland v Morocco,Scotland,3/1,4.0,0.225,0.25,-0.098,0.0
+2026-06-20,Netherlands v Sweden,Draw,14/5,3.8,0.237,0.263,-0.098,0.0
+2026-06-17,England v Croatia,Draw,13/5,3.6,0.248,0.278,-0.108,0.0
+2026-06-19,Turkey v Paraguay,Turkey,19/20,1.95,0.457,0.513,-0.109,0.0
+2026-06-13,Brazil v Morocco,Brazil,4/6,1.67,0.53,0.6,-0.117,0.0
+2026-06-18,Czech Republic v South Africa,Draw,13/5,3.6,0.245,0.278,-0.117,0.0
+2026-06-15,Belgium v Egypt,Belgium,4/7,1.57,0.557,0.636,-0.124,0.0
+2026-06-13,Qatar v Switzerland,Switzerland,2/11,1.18,0.738,0.846,-0.128,0.0
+2026-06-17,England v Croatia,Croatia,19/5,4.8,0.181,0.208,-0.129,0.0
+2026-06-16,Argentina v Algeria,Argentina,4/11,1.36,0.637,0.733,-0.132,0.0
+2026-06-19,Turkey v Paraguay,Draw,11/5,3.2,0.27,0.312,-0.137,0.0
+2026-06-21,Spain v Saudi Arabia,Spain,1/10,1.1,0.772,0.909,-0.151,0.0
+2026-06-19,Scotland v Morocco,Draw,9/4,3.25,0.261,0.308,-0.153,0.0
+2026-06-17,Portugal v DR Congo,Portugal,2/7,1.29,0.657,0.778,-0.155,0.0
+2026-06-14,Germany v Curaçao,Germany,1/33,1.03,0.818,0.971,-0.158,0.0
+2026-06-15,Saudi Arabia v Uruguay,Uruguay,2/5,1.4,0.593,0.714,-0.17,0.0
+2026-06-18,Czech Republic v South Africa,South Africa,7/2,4.5,0.183,0.222,-0.178,0.0
+2026-06-20,Germany v Ivory Coast,Germany,8/15,1.53,0.535,0.652,-0.18,0.0
+2026-06-17,Ghana v Panama,Draw,9/4,3.25,0.252,0.308,-0.182,0.0
+2026-06-16,France v Senegal,France,4/9,1.44,0.563,0.692,-0.186,0.0
+2026-06-19,Brazil v Haiti,Brazil,1/16,1.06,0.76,0.941,-0.192,0.0
+2026-06-14,Ivory Coast v Ecuador,Ivory Coast,5/2,3.5,0.229,0.286,-0.199,0.0
+2026-06-17,Uzbekistan v Colombia,Colombia,4/11,1.36,0.582,0.733,-0.207,0.0
+2026-06-14,Sweden v Tunisia,Sweden,17/20,1.85,0.428,0.541,-0.209,0.0
+2026-06-18,Mexico v South Korea,Draw,11/5,3.2,0.245,0.312,-0.214,0.0
+2026-06-20,Tunisia v Japan,Draw,12/5,3.4,0.228,0.294,-0.224,0.0
+2026-06-19,United States v Australia,United States,8/15,1.53,0.504,0.652,-0.228,0.0
+2026-06-18,Canada v Qatar,Draw,9/2,5.5,0.138,0.182,-0.239,0.0
+2026-06-15,Spain v Cape Verde,Cape Verde,18/1,19.0,0.04,0.053,-0.242,0.0
+2026-06-14,Netherlands v Japan,Netherlands,1/1,2.0,0.377,0.5,-0.246,0.0
+2026-06-13,Australia v Turkey,Turkey,4/6,1.67,0.452,0.6,-0.247,0.0
+2026-06-18,Switzerland v Bosnia and Herzegovina,Draw,14/5,3.8,0.198,0.263,-0.248,0.0
+2026-06-14,Ivory Coast v Ecuador,Draw,7/4,2.75,0.27,0.364,-0.257,0.0
+2026-06-13,Haiti v Scotland,Scotland,1/2,1.5,0.492,0.667,-0.262,0.0
+2026-06-16,Iraq v Norway,Norway,1/6,1.17,0.625,0.857,-0.27,0.0
+2026-06-20,Tunisia v Japan,Tunisia,4/1,5.0,0.146,0.2,-0.272,0.0
+2026-06-16,Austria v Jordan,Austria,3/10,1.3,0.503,0.769,-0.346,0.0
+2026-06-18,Switzerland v Bosnia and Herzegovina,Bosnia and Herzegovina,19/4,5.75,0.113,0.174,-0.352,0.0
+2026-06-20,Ecuador v Curaçao,Curaçao,10/1,11.0,0.055,0.091,-0.399,0.0
+2026-06-17,Ghana v Panama,Ghana,23/20,2.15,0.218,0.465,-0.531,0.0
+2026-06-18,Canada v Qatar,Qatar,17/2,9.5,0.047,0.105,-0.551,0.0
