@@ -1,55 +1,56 @@
 # FIFA World Cup 2026 — ML Prediction Report
 
-*Generated 2026-06-12 · data through **2026-06-12** · 50,000 Monte Carlo simulations · 3/72 group matches played*
+*Generated 2026-06-13 · data through **2026-06-12** · 50,000 Monte Carlo simulations · 4/72 group matches played*
 
-Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 30,775 internationals, simulated through the official 2026 bracket and tiebreaker rules.
+Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 30,776 internationals, simulated through the official 2026 bracket and tiebreaker rules.
 
 *Rolling validation (7,966 matches, 2018–2026): RPS 0.1687 vs Elo-baseline 0.1711; log-loss 0.8652 vs 0.8809.*
 
 ## Model scorecard
 
-**2 of 3 match outcomes called correctly** (the model's own probabilities expected ≈2.1 of 3) · exact scoreline predicted 1/3 · average probability placed on what actually happened: **49.2%** (33.3% = guessing).
+**2 of 4 match outcomes called correctly** (the model's own probabilities expected ≈2.4 of 4) · exact scoreline predicted 1/4 · average probability placed on what actually happened: **45.4%** (33.3% = guessing).
 
 | Match | Model said | Likely score | Actual | Outcome | Score |
 |-------|-----------|:---:|:---:|:---:|:---:|
 | Mexico v South Africa | Mexico win (84.1%) | 2-0 | 2-0 | ✅ | ✅ |
 | South Korea v Czech Republic | South Korea win (46.3%) | 1-1 | 2-1 | ✅ | — |
 | Canada v Bosnia and Herzegovina | Canada win (75.0%) | 2-0 | 1-1 | ❌ | — |
+| United States v Paraguay | Paraguay win (36.6%) | 1-1 | 4-1 | ❌ | — |
 
 *Predictions are frozen at the last run before each result arrives, then graded — the scorecard never grades a model that has already seen the answer.*
 
 ## Title favourites
 
-| # | Team | Group | Champion | Δ vs 2026-06-11 | Final | Semi-final | Quarter-final | Rd of 16 |
+| # | Team | Group | Champion | Δ vs 2026-06-12 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Spain | H | **18.0%** | -1.8 | 28.8% | 40.2% | 55.5% | 72.3% |
-| 2 | Argentina | J | **17.4%** | -0.7 | 26.5% | 38.2% | 52.6% | 68.0% |
-| 3 | France | I | **7.1%** | +0.4 | 13.1% | 25.8% | 43.4% | 65.8% |
-| 4 | England | L | **6.8%** | -1.3 | 12.5% | 22.3% | 39.1% | 69.3% |
-| 5 | Brazil | C | **5.8%** | +0.1 | 10.8% | 22.7% | 37.7% | 61.2% |
-| 6 | Colombia | K | **5.1%** | +0.8 | 10.2% | 17.9% | 31.9% | 59.1% |
-| 7 | Portugal | K | **4.7%** | +0.9 | 9.8% | 17.8% | 33.1% | 61.1% |
-| 8 | Ecuador | E | **3.8%** | +0.1 | 8.0% | 16.5% | 29.6% | 55.8% |
-| 9 | Netherlands | F | **3.3%** | +0.5 | 7.2% | 16.1% | 29.8% | 50.5% |
-| 10 | Mexico | A | **3.0%** | -0.8 | 7.4% | 17.5% | 39.2% | 68.1% |
-| 11 | Germany | E | **2.9%** | +0.8 | 6.6% | 15.4% | 29.0% | 56.7% |
-| 12 | Belgium | G | **2.9%** | – | 6.9% | 13.6% | 31.0% | 57.6% |
-| 13 | Japan | F | **2.5%** | -0.2 | 5.7% | 13.1% | 26.0% | 45.5% |
-| 14 | Norway | I | **2.3%** | +0.4 | 5.3% | 12.7% | 25.5% | 48.5% |
-| 15 | Switzerland | B | **2.3%** | +0.2 | 5.7% | 12.4% | 26.4% | 58.8% |
+| 1 | Spain | H | **17.4%** | -0.6 | 26.6% | 38.0% | 52.7% | 71.2% |
+| 2 | Argentina | J | **14.8%** | -2.6 | 23.2% | 33.6% | 48.7% | 66.7% |
+| 3 | France | I | **8.0%** | +0.9 | 14.2% | 26.3% | 43.5% | 65.2% |
+| 4 | England | L | **7.0%** | +0.3 | 12.8% | 22.7% | 37.9% | 66.4% |
+| 5 | Brazil | C | **6.2%** | +0.4 | 11.5% | 23.4% | 38.5% | 61.6% |
+| 6 | Colombia | K | **4.9%** | -0.3 | 9.7% | 17.9% | 32.4% | 59.4% |
+| 7 | Portugal | K | **4.8%** | +0.1 | 9.7% | 18.2% | 32.8% | 59.2% |
+| 8 | Netherlands | F | **3.8%** | +0.4 | 8.2% | 16.8% | 30.8% | 51.4% |
+| 9 | Mexico | A | **3.6%** | +0.7 | 8.5% | 19.7% | 40.6% | 69.0% |
+| 10 | Ecuador | E | **3.2%** | -0.6 | 7.2% | 15.1% | 28.7% | 55.1% |
+| 11 | Belgium | G | **2.8%** | – | 7.2% | 14.5% | 32.0% | 57.9% |
+| 12 | Switzerland | B | **2.7%** | +0.4 | 6.3% | 13.6% | 27.9% | 59.4% |
+| 13 | Germany | E | **2.7%** | -0.2 | 6.0% | 13.6% | 27.2% | 54.1% |
+| 14 | Japan | F | **2.6%** | +0.2 | 6.1% | 13.1% | 26.5% | 45.9% |
+| 15 | Norway | I | **2.2%** | -0.1 | 5.0% | 11.9% | 24.9% | 46.8% |
 
-## Biggest movers since last run (data through 2026-06-11)
+## Biggest movers since last run (data through 2026-06-12)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| Portugal | +0.9 | +0.5 | 4.7% |
-| Colombia | +0.8 | +0.4 | 5.1% |
-| Germany | +0.8 | +2.7 | 2.9% |
-| Netherlands | +0.5 | +1.6 | 3.3% |
-| Argentina | -0.7 | -0.5 | 17.4% |
-| Mexico | -0.8 | -2.0 | 3.0% |
-| England | -1.3 | +1.5 | 6.8% |
-| Spain | -1.8 | +0.4 | 18.0% |
+| United States | +1.8 | +30.5 | 2.2% |
+| France | +0.9 | -0.6 | 8.0% |
+| Mexico | +0.7 | +0.9 | 3.6% |
+| Morocco | -0.5 | -3.3 | 1.7% |
+| Paraguay | -0.5 | -20.8 | 0.2% |
+| Ecuador | -0.6 | -0.7 | 3.2% |
+| Spain | -0.6 | -1.0 | 17.4% |
+| Argentina | -2.6 | -1.3 | 14.8% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -59,19 +60,22 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | Date | Grp | Match | Home win | Draw | Away win | xG | Likely score |
 |------|:---:|-------|---------:|-----:|---------:|----|:----:|
-| 2026-06-12 | D | United States v Paraguay | 34.0% | 29.4% | **36.6%** | 1.15–1.20 | 1-1 |
-| 2026-06-13 | B | Qatar v Switzerland | 7.4% | 16.0% | **76.5%** | 0.63–2.42 | 0-2 |
-| 2026-06-13 | C | Brazil v Morocco | **49.8%** | 27.2% | 23.1% | 1.52–0.96 | 1-1 |
-| 2026-06-13 | C | Haiti v Scotland | 23.4% | 26.2% | **50.4%** | 1.02–1.61 | 1-1 |
-| 2026-06-13 | D | Australia v Turkey | 27.6% | 29.5% | **42.9%** | 0.98–1.29 | 1-1 |
-| 2026-06-14 | F | Sweden v Tunisia | **42.9%** | 27.6% | 29.5% | 1.43–1.14 | 1-1 |
-| 2026-06-14 | F | Netherlands v Japan | **38.5%** | 29.8% | 31.8% | 1.22–1.08 | 1-1 |
-| 2026-06-14 | E | Germany v Curaçao | **84.2%** | 11.2% | 4.6% | 2.97–0.60 | 2-0 |
-| 2026-06-14 | E | Ivory Coast v Ecuador | 19.7% | 28.1% | **52.2%** | 0.78–1.45 | 0-1 |
-| 2026-06-15 | G | Belgium v Egypt | **51.5%** | 26.8% | 21.7% | 1.56–0.92 | 1-1 |
-| 2026-06-15 | G | Iran v New Zealand | **54.2%** | 25.7% | 20.2% | 1.66–0.92 | 1-1 |
-| 2026-06-15 | H | Spain v Cape Verde | **87.4%** | 9.2% | 3.4% | 3.19–0.55 | 3-0 |
-| 2026-06-15 | H | Saudi Arabia v Uruguay | 12.3% | 23.6% | **64.1%** | 0.63–1.76 | 0-1 |
+| 2026-06-13 | B | Qatar v Switzerland | 8.6% | 17.6% | **73.8%** | 0.65–2.27 | 0-2 |
+| 2026-06-13 | C | Brazil v Morocco | **53.0%** | 26.8% | 20.2% | 1.55–0.86 | 1-0 |
+| 2026-06-13 | C | Haiti v Scotland | 24.3% | 26.5% | **49.2%** | 1.04–1.57 | 1-1 |
+| 2026-06-13 | D | Australia v Turkey | 26.1% | 28.7% | **45.2%** | 0.98–1.37 | 1-1 |
+| 2026-06-14 | F | Sweden v Tunisia | **42.8%** | 28.7% | 28.5% | 1.34–1.05 | 1-1 |
+| 2026-06-14 | F | Netherlands v Japan | **37.7%** | 29.7% | 32.6% | 1.20–1.10 | 1-1 |
+| 2026-06-14 | E | Germany v Curaçao | **81.8%** | 12.7% | 5.6% | 2.80–0.64 | 2-0 |
+| 2026-06-14 | E | Ivory Coast v Ecuador | 22.9% | 27.0% | **50.1%** | 0.96–1.53 | 1-1 |
+| 2026-06-15 | G | Belgium v Egypt | **55.8%** | 24.3% | 19.9% | 1.79–0.98 | 1-1 |
+| 2026-06-15 | G | Iran v New Zealand | **51.3%** | 27.5% | 21.2% | 1.50–0.87 | 1-0 |
+| 2026-06-15 | H | Spain v Cape Verde | **85.4%** | 10.7% | 4.0% | 2.97–0.55 | 2-0 |
+| 2026-06-15 | H | Saudi Arabia v Uruguay | 15.7% | 25.1% | **59.3%** | 0.74–1.68 | 0-1 |
+| 2026-06-16 | J | Austria v Jordan | **50.3%** | 26.4% | 23.4% | 1.59–1.01 | 1-1 |
+| 2026-06-16 | J | Argentina v Algeria | **63.7%** | 22.3% | 14.0% | 1.92–0.78 | 2-0 |
+| 2026-06-16 | I | France v Senegal | **56.3%** | 25.5% | 18.2% | 1.66–0.84 | 1-0 |
+| 2026-06-16 | I | Iraq v Norway | 14.1% | 23.3% | **62.5%** | 0.74–1.82 | 0-1 |
 
 ## Group projections
 
@@ -79,109 +83,109 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Mexico | 1 | 1-0-0 | 2-0 | **3** | 7.16 | 66.4% | 94.9% | 99.6% |
-| South Korea | 1 | 1-0-0 | 2-1 | **3** | 6.12 | 31.5% | 89.5% | 96.5% |
-| Czech Republic | 1 | 0-0-1 | 1-2 | **0** | 2.31 | 1.8% | 9.4% | 48.1% |
-| South Africa | 1 | 0-0-1 | 0-2 | **0** | 1.49 | 0.4% | 6.2% | 19.3% |
+| Mexico | 1 | 1-0-0 | 2-0 | **3** | 7.19 | 66.9% | 94.7% | 99.6% |
+| South Korea | 1 | 1-0-0 | 2-1 | **3** | 6.13 | 31.0% | 89.8% | 96.5% |
+| Czech Republic | 1 | 0-0-1 | 1-2 | **0** | 2.41 | 1.8% | 9.9% | 49.9% |
+| South Africa | 1 | 0-0-1 | 0-2 | **0** | 1.38 | 0.3% | 5.6% | 16.9% |
 
 ### Group B
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Bosnia and Herzegovina | 1 | 0-1-0 | 1-1 | **1** | 3.12 | 5.9% | 24.5% | 55.8% |
-| Canada | 1 | 0-1-0 | 1-1 | **1** | 4.96 | 36.9% | 81.5% | 92.7% |
-| Qatar | 0 | 0-0-0 | 0-0 | **0** | 1.75 | 2.6% | 9.8% | 23.0% |
-| Switzerland | 0 | 0-0-0 | 0-0 | **0** | 6.06 | 54.5% | 84.2% | 94.6% |
+| Bosnia and Herzegovina | 1 | 0-1-0 | 1-1 | **1** | 3.21 | 6.8% | 26.5% | 58.0% |
+| Canada | 1 | 0-1-0 | 1-1 | **1** | 4.87 | 34.9% | 79.7% | 92.1% |
+| Qatar | 0 | 0-0-0 | 0-0 | **0** | 1.74 | 2.8% | 10.0% | 22.4% |
+| Switzerland | 0 | 0-0-0 | 0-0 | **0** | 6.07 | 55.5% | 83.8% | 94.1% |
 
 ### Group C
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Brazil | 6.44 | 59.3% | 87.0% | 96.1% |
-| Morocco | 5.13 | 28.8% | 70.7% | 88.0% |
-| Scotland | 3.35 | 9.9% | 32.5% | 59.1% |
-| Haiti | 1.73 | 1.9% | 9.8% | 23.1% |
+| Brazil | 6.34 | 59.7% | 85.4% | 95.1% |
+| Morocco | 4.92 | 26.1% | 66.8% | 84.7% |
+| Scotland | 3.41 | 11.2% | 34.9% | 59.8% |
+| Haiti | 1.94 | 2.9% | 12.9% | 27.4% |
 
 ### Group D
 
-| Team | xPts | Win grp | Top 2 | Advance* |
-|------|-----:|--------:|------:|--------:|
-| Turkey | 4.87 | 38.1% | 64.6% | 80.6% |
-| Paraguay | 3.96 | 22.8% | 48.4% | 67.2% |
-| Australia | 3.87 | 21.1% | 46.2% | 65.9% |
-| United States | 3.57 | 18.1% | 40.8% | 60.2% |
+| Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
+|------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
+| United States | 1 | 1-0-0 | 4-1 | **3** | 6.02 | 53.7% | 84.2% | 97.0% |
+| Australia | 0 | 0-0-0 | 0-0 | **0** | 3.52 | 13.9% | 37.9% | 60.3% |
+| Turkey | 0 | 0-0-0 | 0-0 | **0** | 4.73 | 29.3% | 61.6% | 79.0% |
+| Paraguay | 1 | 0-0-1 | 1-4 | **0** | 2.34 | 3.1% | 16.3% | 34.3% |
 
 ### Group E
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Germany | 5.96 | 46.7% | 81.5% | 95.1% |
-| Ecuador | 5.72 | 41.3% | 78.1% | 93.2% |
-| Ivory Coast | 3.57 | 10.9% | 34.4% | 64.3% |
-| Curaçao | 1.38 | 1.1% | 6.1% | 15.7% |
+| Germany | 5.82 | 44.7% | 79.0% | 93.8% |
+| Ecuador | 5.64 | 40.8% | 76.3% | 92.6% |
+| Ivory Coast | 3.75 | 13.3% | 38.5% | 66.9% |
+| Curaçao | 1.41 | 1.2% | 6.2% | 15.9% |
 
 ### Group F
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Netherlands | 5.61 | 45.0% | 77.0% | 90.0% |
-| Japan | 5.37 | 39.0% | 73.5% | 88.2% |
-| Sweden | 3.12 | 10.2% | 30.1% | 53.2% |
-| Tunisia | 2.42 | 5.8% | 19.3% | 37.5% |
+| Netherlands | 5.51 | 43.9% | 75.1% | 88.9% |
+| Japan | 5.25 | 38.0% | 71.6% | 86.8% |
+| Sweden | 3.28 | 12.0% | 33.3% | 55.6% |
+| Tunisia | 2.43 | 6.1% | 20.0% | 37.5% |
 
 ### Group G
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Belgium | 5.60 | 48.8% | 76.2% | 89.1% |
-| Iran | 4.43 | 26.0% | 56.9% | 76.4% |
-| Egypt | 3.62 | 16.2% | 41.0% | 61.9% |
-| New Zealand | 2.75 | 9.0% | 25.9% | 44.4% |
+| Belgium | 5.67 | 50.4% | 77.1% | 89.5% |
+| Iran | 4.38 | 25.3% | 56.0% | 75.0% |
+| Egypt | 3.56 | 15.1% | 40.0% | 60.6% |
+| New Zealand | 2.80 | 9.2% | 26.9% | 45.2% |
 
 ### Group H
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Spain | 7.29 | 74.8% | 95.7% | 99.0% |
-| Uruguay | 5.32 | 21.5% | 79.5% | 91.8% |
-| Saudi Arabia | 2.52 | 2.6% | 16.7% | 41.9% |
-| Cape Verde | 1.68 | 1.1% | 8.1% | 21.5% |
+| Spain | 7.11 | 71.5% | 94.3% | 98.6% |
+| Uruguay | 5.20 | 23.4% | 75.5% | 89.5% |
+| Saudi Arabia | 2.73 | 3.8% | 20.9% | 46.4% |
+| Cape Verde | 1.73 | 1.4% | 9.3% | 22.7% |
 
 ### Group I
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| France | 6.18 | 56.9% | 83.5% | 94.0% |
-| Norway | 4.78 | 25.7% | 63.4% | 83.2% |
-| Senegal | 3.77 | 14.4% | 41.3% | 67.8% |
-| Iraq | 1.83 | 3.0% | 11.9% | 24.8% |
+| France | 6.06 | 55.6% | 82.0% | 92.7% |
+| Norway | 4.68 | 25.4% | 61.5% | 81.0% |
+| Senegal | 3.77 | 14.8% | 41.6% | 66.8% |
+| Iraq | 2.04 | 4.1% | 14.8% | 28.9% |
 
 ### Group J
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Argentina | 6.83 | 71.4% | 91.1% | 97.1% |
-| Austria | 3.90 | 14.4% | 48.7% | 69.4% |
-| Algeria | 3.54 | 10.7% | 40.9% | 62.8% |
-| Jordan | 2.29 | 3.5% | 19.3% | 35.5% |
+| Argentina | 6.78 | 69.9% | 90.3% | 97.0% |
+| Austria | 3.83 | 13.9% | 46.6% | 67.6% |
+| Algeria | 3.80 | 12.9% | 45.6% | 67.7% |
+| Jordan | 2.18 | 3.3% | 17.5% | 32.7% |
 
 ### Group K
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| Portugal | 5.75 | 45.6% | 80.3% | 91.9% |
-| Colombia | 5.60 | 42.9% | 78.3% | 90.4% |
-| Uzbekistan | 2.60 | 5.9% | 21.3% | 42.6% |
-| DR Congo | 2.53 | 5.5% | 20.1% | 40.8% |
+| Portugal | 5.65 | 44.8% | 78.1% | 90.7% |
+| Colombia | 5.49 | 41.7% | 76.2% | 89.3% |
+| Uzbekistan | 2.83 | 7.6% | 25.1% | 46.8% |
+| DR Congo | 2.51 | 6.0% | 20.5% | 39.5% |
 
 ### Group L
 
 | Team | xPts | Win grp | Top 2 | Advance* |
 |------|-----:|--------:|------:|--------:|
-| England | 6.80 | 66.9% | 90.2% | 97.6% |
-| Croatia | 4.79 | 21.3% | 64.2% | 85.6% |
-| Panama | 3.62 | 10.7% | 38.0% | 64.9% |
-| Ghana | 1.50 | 1.2% | 7.6% | 18.3% |
+| England | 6.59 | 62.9% | 88.2% | 96.4% |
+| Croatia | 4.95 | 24.6% | 67.0% | 86.7% |
+| Panama | 3.51 | 10.8% | 35.8% | 62.2% |
+| Ghana | 1.66 | 1.7% | 9.1% | 21.3% |
 
 *\*Advance = top two or one of the eight best third-placed teams.*
 
@@ -193,59 +197,59 @@ Each tie shows the most probable pairing given projected group finishes, the cha
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 73 | 2026-06-28 | SoFi Stadium, Los Angeles | South Korea v Canada | **South Korea** | 54.1% | 25.7% |
-| 74 | 2026-06-29 | Gillette Stadium, Boston | Germany v Czech Republic | **Germany** | 76.8% | 2.6% |
-| 75 | 2026-06-29 | Estadio BBVA, Monterrey | Netherlands v Morocco | **Netherlands** | 57.7% | 18.8% |
-| 76 | 2026-06-29 | NRG Stadium, Houston | Brazil v Japan | **Brazil** | 61.9% | 20.4% |
-| 77 | 2026-06-30 | MetLife Stadium, New York/New Jersey | France v Scotland | **France** | 74.9% | 4.4% |
-| 78 | 2026-06-30 | AT&T Stadium, Dallas | Ecuador v Norway | **Ecuador** | 54.5% | 13.9% |
-| 79 | 2026-06-30 | Estadio Azteca, Mexico City | Mexico v Ivory Coast | **Mexico** | 82.8% | 8.0% |
-| 80 | 2026-07-01 | Mercedes-Benz Stadium, Atlanta | England v Senegal | **England** | 72.9% | 1.6% |
-| 81 | 2026-07-01 | Levi's Stadium, San Francisco Bay Area | Turkey v Bosnia and Herzegovina | **Turkey** | 82.4% | 7.8% |
-| 82 | 2026-07-01 | Lumen Field, Seattle | Belgium v Saudi Arabia | **Belgium** | 82.0% | 4.2% |
-| 83 | 2026-07-02 | BMO Field, Toronto | Colombia v Croatia | **Colombia** | 69.7% | 15.2% |
-| 84 | 2026-07-02 | SoFi Stadium, Los Angeles | Spain v Austria | **Spain** | 78.2% | 25.8% |
-| 85 | 2026-07-02 | BC Place, Vancouver | Switzerland v Sweden | **Switzerland** | 60.5% | 4.0% |
-| 86 | 2026-07-03 | Hard Rock Stadium, Miami | Argentina v Uruguay | **Argentina** | 77.3% | 41.4% |
-| 87 | 2026-07-03 | Arrowhead Stadium, Kansas City | Portugal v Panama | **Portugal** | 71.1% | 12.2% |
-| 88 | 2026-07-03 | AT&T Stadium, Dallas | Paraguay v Iran | **Paraguay** | 50.6% | 7.9% |
+| 73 | 2026-06-28 | SoFi Stadium, Los Angeles | South Korea v Canada | **South Korea** | 60.1% | 26.5% |
+| 74 | 2026-06-29 | Gillette Stadium, Boston | Germany v Czech Republic | **Germany** | 77.1% | 2.8% |
+| 75 | 2026-06-29 | Estadio BBVA, Monterrey | Netherlands v Morocco | **Netherlands** | 61.6% | 17.8% |
+| 76 | 2026-06-29 | NRG Stadium, Houston | Brazil v Japan | **Brazil** | 63.1% | 20.0% |
+| 77 | 2026-06-30 | MetLife Stadium, New York/New Jersey | France v Australia | **France** | 71.4% | 5.0% |
+| 78 | 2026-06-30 | AT&T Stadium, Dallas | Ecuador v Norway | **Ecuador** | 53.6% | 12.7% |
+| 79 | 2026-06-30 | Estadio Azteca, Mexico City | Mexico v Scotland | **Mexico** | 79.2% | 6.4% |
+| 80 | 2026-07-01 | Mercedes-Benz Stadium, Atlanta | England v Ivory Coast | **England** | 80.4% | 1.6% |
+| 81 | 2026-07-01 | Levi's Stadium, San Francisco Bay Area | United States v Bosnia and Herzegovina | **United States** | 85.0% | 10.8% |
+| 82 | 2026-07-01 | Lumen Field, Seattle | Belgium v Saudi Arabia | **Belgium** | 79.7% | 4.2% |
+| 83 | 2026-07-02 | BMO Field, Toronto | Colombia v Croatia | **Colombia** | 67.3% | 14.6% |
+| 84 | 2026-07-02 | SoFi Stadium, Los Angeles | Spain v Austria | **Spain** | 77.2% | 23.3% |
+| 85 | 2026-07-02 | BC Place, Vancouver | Switzerland v Senegal | **Switzerland** | 60.6% | 2.3% |
+| 86 | 2026-07-03 | Hard Rock Stadium, Miami | Argentina v Uruguay | **Argentina** | 76.8% | 36.3% |
+| 87 | 2026-07-03 | Arrowhead Stadium, Kansas City | Portugal v Panama | **Portugal** | 72.8% | 11.8% |
+| 88 | 2026-07-03 | AT&T Stadium, Dallas | Turkey v Iran | **Turkey** | 58.4% | 9.9% |
 
 ### Round of 16
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 89 | 2026-07-04 | Lincoln Financial Field, Philadelphia | Germany v France | **France** | 66.6% | 12.8% |
-| 90 | 2026-07-04 | NRG Stadium, Houston | South Korea v Netherlands | **Netherlands** | 72.5% | 8.2% |
-| 91 | 2026-07-05 | MetLife Stadium, New York/New Jersey | Brazil v Ecuador | **Brazil** | 59.7% | 7.8% |
-| 92 | 2026-07-05 | Estadio Azteca, Mexico City | Mexico v England | **Mexico** | 54.6% | 23.3% |
-| 93 | 2026-07-06 | AT&T Stadium, Dallas | Colombia v Spain | **Spain** | 77.8% | 13.0% |
-| 94 | 2026-07-06 | Lumen Field, Seattle | Turkey v Belgium | **Belgium** | 57.3% | 8.8% |
-| 95 | 2026-07-07 | Mercedes-Benz Stadium, Atlanta | Argentina v Paraguay | **Argentina** | 82.4% | 7.4% |
-| 96 | 2026-07-07 | BC Place, Vancouver | Switzerland v Portugal | **Portugal** | 64.0% | 11.1% |
+| 89 | 2026-07-04 | Lincoln Financial Field, Philadelphia | Germany v France | **France** | 68.3% | 11.6% |
+| 90 | 2026-07-04 | NRG Stadium, Houston | South Korea v Netherlands | **Netherlands** | 72.3% | 9.1% |
+| 91 | 2026-07-05 | MetLife Stadium, New York/New Jersey | Brazil v Ecuador | **Brazil** | 62.3% | 7.6% |
+| 92 | 2026-07-05 | Estadio Azteca, Mexico City | Mexico v England | **Mexico** | 54.1% | 21.6% |
+| 93 | 2026-07-06 | AT&T Stadium, Dallas | Colombia v Spain | **Spain** | 73.0% | 12.1% |
+| 94 | 2026-07-06 | Lumen Field, Seattle | United States v Belgium | **Belgium** | 62.8% | 12.6% |
+| 95 | 2026-07-07 | Mercedes-Benz Stadium, Atlanta | Argentina v Turkey | **Argentina** | 62.6% | 9.6% |
+| 96 | 2026-07-07 | BC Place, Vancouver | Switzerland v Portugal | **Portugal** | 64.4% | 11.4% |
 
 ### Quarter-finals
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 97 | 2026-07-09 | Gillette Stadium, Boston | France v Netherlands | **Netherlands** | 53.3% | 4.7% |
-| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v Belgium | **Spain** | 66.1% | 8.9% |
-| 99 | 2026-07-11 | Hard Rock Stadium, Miami | Brazil v Mexico | **Brazil** | 64.5% | 6.1% |
-| 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | Argentina v Portugal | **Argentina** | 67.4% | 8.5% |
+| 97 | 2026-07-09 | Gillette Stadium, Boston | France v Netherlands | **France** | 50.9% | 4.8% |
+| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v Belgium | **Spain** | 66.4% | 8.5% |
+| 99 | 2026-07-11 | Hard Rock Stadium, Miami | Brazil v Mexico | **Brazil** | 61.2% | 6.9% |
+| 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | Argentina v Portugal | **Argentina** | 63.7% | 7.6% |
 
 ### Semi-finals
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 101 | 2026-07-14 | AT&T Stadium, Dallas | Netherlands v Spain | **Spain** | 69.7% | 3.4% |
-| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | Brazil v Argentina | **Argentina** | 69.5% | 4.0% |
+| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 64.1% | 4.9% |
+| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | Brazil v Argentina | **Argentina** | 71.4% | 3.7% |
 
 ### Final
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Spain** | 51.0% | 6.0% |
+| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Spain** | 58.1% | 4.5% |
 
-**Projected champion: Spain** (overall title probability 18.0%; the single most likely path above is itself only one of many ways the tournament can unfold).
+**Projected champion: Spain** (overall title probability 17.4%; the single most likely path above is itself only one of many ways the tournament can unfold).
 
 ## How to read this
 
