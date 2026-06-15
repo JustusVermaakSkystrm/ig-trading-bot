@@ -272,8 +272,8 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     champ = bracket_path["final"][0]["winner"]
     champ_prob = float(tt.set_index("team").loc[champ, "p_champion"])
     add("## Path to the final\n")
-    add("The model's single most likely knockout bracket — the 16 projected "
-        "round-of-16 teams and every unplayed tie, each line carrying the "
+    add("The model's single most likely knockout bracket — all 32 projected "
+        "round-of-32 teams and every unplayed tie, each line carrying the "
         "projected winner down to the next round until they converge on the "
         "champion. Percentages are each side's chance of advancing from that "
         "tie.\n")
