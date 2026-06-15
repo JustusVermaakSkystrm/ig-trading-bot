@@ -236,28 +236,6 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
             f"RPS {v['model_rps']:.4f} vs Elo-baseline {v['elo_rps']:.4f}; "
             f"log-loss {v['model_logloss']:.4f} vs {v['elo_logloss']:.4f}.*\n")
 
-    # ---- model scorecard
-    sc = meta.get("scorecard")
-    if sc:
-        add("## Model scorecard\n")
-        add(f"**{sc['hits']} of {sc['n']} match outcomes called correctly** "
-            f"(the model's own probabilities expected ≈{sc['expected_hits']:.1f} "
-            f"of {sc['n']}) · exact scoreline predicted {sc['score_hits']}/{sc['n']} "
-            f"· average probability placed on what actually happened: "
-            f"**{_pct(sc['mean_p_actual'])}** (33.3% = guessing).\n")
-        add("| Match | Model said | Likely score | Actual | Outcome | Score |")
-        add("|-------|-----------|:---:|:---:|:---:|:---:|")
-        for r in sc["rows"].itertuples(index=False):
-            probs = {f"{r.home} win": float(r.p_home), "Draw": float(r.p_draw),
-                     f"{r.away} win": float(r.p_away)}
-            pick = max(probs, key=probs.get)
-            add(f"| {r.home} v {r.away} | {pick} ({_pct(probs[pick])}) | "
-                f"{r.pred_score} | {int(r.home_score)}-{int(r.away_score)} | "
-                f"{'✅' if r.hit else '❌'} | {'✅' if r.score_hit else '—'} |")
-        add("\n*Predictions are frozen at the last run before each result "
-            "arrives, then graded — the scorecard never grades a model that "
-            "has already seen the answer.*\n")
-
     # ---- title favourites
     add("## Title favourites\n")
     dch = deltas["deltas"].get("p_champion", {}) if deltas else {}
@@ -288,6 +266,20 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
                 f"{_pct(tt_idx_.loc[t, 'p_champion'])} |")
         add("\n*Δ values in probability points. Full run-by-run series in "
             "`outputs/history.csv`.*\n")
+
+    # ---- path to the final (SVG bracket)
+    from .viz import bracket_svg
+    champ = bracket_path["final"][0]["winner"]
+    champ_prob = float(tt.set_index("team").loc[champ, "p_champion"])
+    add("## Path to the final\n")
+    add("The model's single most likely knockout bracket — the 16 projected "
+        "round-of-16 teams and every unplayed tie, each line carrying the "
+        "projected winner down to the next round until they converge on the "
+        "champion. Percentages are each side's chance of advancing from that "
+        "tie.\n")
+    add('<div style="overflow-x:auto; margin:1rem 0;">')
+    add(bracket_svg(bracket_path, champ, champ_prob))
+    add('</div>\n')
 
     # ---- upcoming matches
     add("## Upcoming group matches — outcome probabilities\n")
@@ -371,4 +363,26 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         "and re-simulate.")
     add("- Machine-readable outputs: `match_probabilities.csv`, "
         "`tournament_projections.csv`. Past reports in `outputs/archive/`.")
+
+    # ---- model scorecard (kept at the bottom: a running accuracy record)
+    sc = meta.get("scorecard")
+    if sc:
+        add("\n## Model scorecard\n")
+        add(f"**{sc['hits']} of {sc['n']} match outcomes called correctly** "
+            f"(the model's own probabilities expected ≈{sc['expected_hits']:.1f} "
+            f"of {sc['n']}) · exact scoreline predicted {sc['score_hits']}/{sc['n']} "
+            f"· average probability placed on what actually happened: "
+            f"**{_pct(sc['mean_p_actual'])}** (33.3% = guessing).\n")
+        add("| Match | Model said | Likely score | Actual | Outcome | Score |")
+        add("|-------|-----------|:---:|:---:|:---:|:---:|")
+        for r in sc["rows"].itertuples(index=False):
+            probs = {f"{r.home} win": float(r.p_home), "Draw": float(r.p_draw),
+                     f"{r.away} win": float(r.p_away)}
+            pick = max(probs, key=probs.get)
+            add(f"| {r.home} v {r.away} | {pick} ({_pct(probs[pick])}) | "
+                f"{r.pred_score} | {int(r.home_score)}-{int(r.away_score)} | "
+                f"{'✅' if r.hit else '❌'} | {'✅' if r.score_hit else '—'} |")
+        add("\n*Predictions are frozen at the last run before each result "
+            "arrives, then graded — the scorecard never grades a model that "
+            "has already seen the answer.*\n")
     return "\n".join(L) + "\n"
