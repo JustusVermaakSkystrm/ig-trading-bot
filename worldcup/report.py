@@ -382,6 +382,33 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
             add(f"| {r.home} v {r.away} | {pick} ({_pct(probs[pick])}) | "
                 f"{r.pred_score} | {int(r.home_score)}-{int(r.away_score)} | "
                 f"{'✅' if r.hit else '❌'} | {'✅' if r.score_hit else '—'} |")
+        bm = sc.get("benchmark")
+        if bm:
+            gap = bm["model_logloss"] - bm["market_logloss"]
+            if abs(gap) < 0.05:
+                vs_mkt = "essentially level with the market"
+            elif gap < 0:
+                vs_mkt = "ahead of the market"
+            else:
+                vs_mkt = "behind the market"
+            add(f"\n**Calibration vs benchmarks** (the {bm['n']} graded games "
+                "with bookmaker prices on file) — log-loss, lower is better. "
+                "This is the honest test: is the model bad, or were the games "
+                "hard for everyone?\n")
+            add("| Forecaster | Log-loss |")
+            add("|------------|---------:|")
+            add(f"| **This model** | **{bm['model_logloss']:.3f}** |")
+            add(f"| Sky Bet (de-vigged) | {bm['market_logloss']:.3f} |")
+            add(f"| Coin-flip (33/33/33) | {bm['uniform_logloss']:.3f} |")
+            both_lost = (bm["model_logloss"] > bm["uniform_logloss"]
+                         and bm["market_logloss"] > bm["uniform_logloss"])
+            msg = f"The model is **{vs_mkt}** ({gap:+.3f} log-loss)."
+            if both_lost:
+                msg += (" Note both the model **and** the bookmaker scored worse "
+                        "than a coin-flip here — with this many draws and upsets, "
+                        "the slate was close to unforecastable for anyone, which "
+                        "is the real reason the hit-rate looks poor.")
+            add("\n" + msg + "\n")
         add("\n*Predictions are frozen at the last run before each result "
             "arrives, then graded — the scorecard never grades a model that "
             "has already seen the answer.*\n")
