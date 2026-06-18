@@ -69,13 +69,20 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
     modal_thirds: list[tuple[str, str, tuple]] = []
 
     for g, members in res.groups.items():
-        remaining = list(members)
-        order = []
-        for col in ("p_win_group", "p_runner_up", "p_third"):
-            pick = max(remaining, key=lambda t: tt.loc[t, col])
-            order.append(pick)
-            remaining.remove(pick)
-        order.append(remaining[0])
+        # Project the two qualifiers as the teams most likely to finish in
+        # the top two (P(win) + P(runner-up)); the more win-skewed of the
+        # pair is the projected winner. A purely greedy "winner then highest
+        # runner-up-prob" pick can wrongly drop a strong, win-skewed team to
+        # 3rd (its runner-up-specific prob is deflated by its win prob).
+        top2 = sorted(members,
+                      key=lambda t: tt.loc[t, "p_win_group"] + tt.loc[t, "p_runner_up"],
+                      reverse=True)[:2]
+        winner = max(top2, key=lambda t: tt.loc[t, "p_win_group"])
+        runner = next(t for t in top2 if t != winner)
+        rest = [t for t in members if t not in (winner, runner)]
+        third = max(rest, key=lambda t: tt.loc[t, "p_third"])
+        fourth = next(t for t in rest if t != third)
+        order = [winner, runner, third, fourth]
         slots[f"W_{g}"] = order[0]
         slots[f"RU_{g}"] = order[1]
         modal_thirds.append((g, order[2], ()))
