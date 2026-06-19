@@ -70,10 +70,13 @@ def _box(cx: float, y: int, tie: dict) -> str:
     x = cx - BOX_W / 2
     home, away, winner = tie["home"], tie["away"], tie["winner"]
     p_home = tie["p_home_advance"]
+    confirmed = tie.get("confirmed", False)
     rows = [(home, p_home, winner == home), (away, 1 - p_home, winner == away)]
+    # Confirmed ties (same pairing in every simulation) get a gold border.
+    stroke, sw = ("#f5c542", 2.5) if confirmed else ("#26314f", 1)
     parts = [
         f'<rect x="{x:.0f}" y="{y}" width="{BOX_W}" height="{BOX_H}" rx="6" '
-        f'fill="#161e31" stroke="#26314f" stroke-width="1"/>'
+        f'fill="#161e31" stroke="{stroke}" stroke-width="{sw}"/>'
     ]
     for r, (team, p, win) in enumerate(rows):
         ty = y + 17 + r * 20

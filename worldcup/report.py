@@ -106,7 +106,8 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
             pair_freq = res.match_pairings[m["match"]][(home, away)] / res.n
             ties.append({"match": m["match"], "date": m["date"], "venue": m["venue"],
                          "home": home, "away": away, "p_home_advance": p_home,
-                         "winner": winner, "pairing_freq": pair_freq})
+                         "winner": winner, "pairing_freq": pair_freq,
+                         "confirmed": pair_freq > 0.9999})
         path[key] = ties
 
     fm = bracket["final"]
@@ -115,7 +116,8 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
     path["final"] = [{"match": fm["match"], "date": fm["date"], "venue": fm["venue"],
                       "home": fh, "away": fa, "p_home_advance": p_home,
                       "winner": fh if p_home >= 0.5 else fa,
-                      "pairing_freq": res.match_pairings[fm["match"]][(fh, fa)] / res.n}]
+                      "pairing_freq": res.match_pairings[fm["match"]][(fh, fa)] / res.n,
+                      "confirmed": False}]
     return path
 
 
@@ -280,11 +282,14 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     champ = bracket_path["final"][0]["winner"]
     champ_prob = float(tt.set_index("team").loc[champ, "p_champion"])
     add("## Path to the final\n")
+    n_locked = sum(t["confirmed"] for t in bracket_path["round_of_32"])
     add("The model's single most likely knockout bracket — all 32 projected "
         "round-of-32 teams and every unplayed tie, each line carrying the "
         "projected winner down to the next round until they converge on the "
         "champion. Percentages are each side's chance of advancing from that "
-        "tie.\n")
+        "tie. **A gold-bordered box is a confirmed Round-of-32 tie** (the same "
+        f"pairing in every simulation — mathematically locked): {n_locked}/16 "
+        "locked so far, the rest finalise as the group stage ends on 27 June.\n")
     add('<div style="overflow-x:auto; margin:1rem 0;">')
     add(bracket_svg(bracket_path, champ, champ_prob))
     add('</div>\n')
@@ -355,19 +360,26 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
 
     # ---- predicted bracket
     add("## Most likely knockout bracket\n")
-    add("Each tie shows the most probable pairing given projected group "
+    n_locked = sum(t["confirmed"] for t in bracket_path["round_of_32"])
+    add(f"Each tie shows the most probable pairing given projected group "
         "finishes, the chance the named winner goes through **in that "
         "pairing**, and how often the exact pairing occurred across all "
-        "simulations.\n")
+        "simulations. **🔒 marks a confirmed tie** — the same two teams in "
+        "every simulation, i.e. mathematically locked. "
+        f"({n_locked}/16 Round-of-32 ties locked so far; the rest finalise as "
+        "the group stage completes on 27 June.)\n")
     for key, title in ROUND_TITLES + [("final", "Final")]:
         add(f"### {title}\n")
         add("| Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |")
         add("|:-----:|------|-------|-----|------------------|---------:|-------------:|")
         for t in bracket_path[key]:
             p = t["p_home_advance"] if t["winner"] == t["home"] else 1 - t["p_home_advance"]
+            tie = f"{t['home']} v {t['away']}"
+            freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
+            if t["confirmed"]:
+                tie = f"🔒 {tie}"
             add(f"| {t['match']} | {t['date']} | {t['venue']} | "
-                f"{t['home']} v {t['away']} | **{t['winner']}** | {_pct(p)} | "
-                f"{_pct(t['pairing_freq'])} |")
+                f"{tie} | **{t['winner']}** | {_pct(p)} | {freq} |")
         add("")
     champ = bracket_path["final"][0]["winner"]
     add(f"**Projected champion: {champ}** "
