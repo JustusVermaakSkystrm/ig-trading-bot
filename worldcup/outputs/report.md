@@ -10,34 +10,34 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | # | Team | Group | Champion | Δ vs 2026-06-18 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Argentina | J | **17.2%** | +0.3 | 26.0% | 38.1% | 53.9% | 70.8% |
-| 2 | Spain | H | **14.8%** | -0.7 | 24.1% | 34.7% | 47.2% | 62.9% |
-| 3 | France | I | **9.4%** | -0.2 | 17.3% | 30.5% | 49.1% | 71.3% |
-| 4 | England | L | **8.6%** | -0.9 | 14.3% | 25.9% | 39.5% | 72.7% |
-| 5 | Colombia | K | **6.4%** | -0.4 | 12.2% | 22.1% | 42.8% | 71.9% |
-| 6 | Brazil | C | **5.4%** | -0.5 | 10.3% | 19.9% | 34.9% | 57.8% |
-| 7 | Mexico | A | **3.9%** | +0.7 | 8.7% | 19.7% | 42.0% | 71.7% |
-| 8 | Portugal | K | **3.3%** | -0.2 | 7.5% | 14.5% | 25.5% | 51.3% |
-| 9 | Norway | I | **3.1%** | +0.1 | 6.9% | 15.8% | 33.9% | 59.1% |
-| 10 | Japan | F | **2.8%** | +0.2 | 6.2% | 13.2% | 25.5% | 45.8% |
-| 11 | Netherlands | F | **2.7%** | +0.4 | 6.1% | 13.3% | 25.9% | 47.1% |
-| 12 | Germany | E | **2.7%** | +0.4 | 5.8% | 12.7% | 25.7% | 53.6% |
-| 13 | Belgium | G | **2.3%** | +0.1 | 6.0% | 12.1% | 26.1% | 50.3% |
-| 14 | Switzerland | B | **2.3%** | +0.4 | 5.7% | 13.4% | 28.1% | 63.5% |
-| 15 | Morocco | C | **2.3%** | +0.4 | 5.3% | 11.5% | 24.4% | 45.3% |
+| 1 | Argentina | J | **17.2%** | – | 26.0% | 38.1% | 53.9% | 70.8% |
+| 2 | Spain | H | **14.8%** | – | 24.1% | 34.7% | 47.2% | 62.9% |
+| 3 | France | I | **9.4%** | – | 17.3% | 30.5% | 49.1% | 71.3% |
+| 4 | England | L | **8.6%** | – | 14.3% | 25.9% | 39.5% | 72.7% |
+| 5 | Colombia | K | **6.4%** | – | 12.2% | 22.1% | 42.8% | 71.9% |
+| 6 | Brazil | C | **5.4%** | – | 10.3% | 19.9% | 34.9% | 57.8% |
+| 7 | Mexico ✅ | A | **3.9%** | – | 8.7% | 19.7% | 42.0% | 71.7% |
+| 8 | Portugal | K | **3.3%** | – | 7.5% | 14.5% | 25.5% | 51.3% |
+| 9 | Norway | I | **3.1%** | – | 6.9% | 15.8% | 33.9% | 59.1% |
+| 10 | Japan | F | **2.8%** | – | 6.2% | 13.2% | 25.5% | 45.8% |
+| 11 | Netherlands | F | **2.7%** | – | 6.1% | 13.3% | 25.9% | 47.1% |
+| 12 | Germany | E | **2.7%** | – | 5.8% | 12.7% | 25.7% | 53.6% |
+| 13 | Belgium | G | **2.3%** | – | 6.0% | 12.1% | 26.1% | 50.3% |
+| 14 | Switzerland ✅ | B | **2.3%** | – | 5.7% | 13.4% | 28.1% | 63.5% |
+| 15 | Morocco | C | **2.3%** | – | 5.3% | 11.5% | 24.4% | 45.3% |
 
 ## Biggest movers since last run (data through 2026-06-18)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| Mexico | +0.7 | +6.0 | 3.9% |
-| Germany | +0.4 | -0.1 | 2.7% |
-| Switzerland | +0.4 | +2.2 | 2.3% |
-| Netherlands | +0.4 | +1.3 | 2.7% |
-| Morocco | +0.4 | +1.2 | 2.3% |
-| Brazil | -0.5 | -3.8 | 5.4% |
-| Spain | -0.7 | – | 14.8% |
-| England | -0.9 | +0.4 | 8.6% |
+| Algeria | – | – | 0.2% |
+| Senegal | – | – | 0.3% |
+| Canada | – | – | 0.9% |
+| Ivory Coast | – | – | 0.3% |
+| Uruguay | – | – | 1.4% |
+| Germany | – | – | 2.7% |
+| Netherlands | – | – | 2.7% |
+| Portugal | – | – | 3.3% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -76,19 +76,23 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 ### Group A
 
+**✅ Into the knockouts:** Mexico
+
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Mexico | 2 | 2-0-0 | 3-0 | **6** | 8.51 | 100.0% | 100.0% | 100.0% |
+| Mexico ✅ | 2 | 2-0-0 | 3-0 | **6** | 8.51 | 100.0% | 100.0% | 100.0% |
 | South Korea | 2 | 1-0-1 | 2-2 | **3** | 4.89 | 0.0% | 81.2% | 92.9% |
 | Czech Republic | 2 | 0-1-1 | 2-3 | **1** | 1.34 | 0.0% | 1.0% | 6.8% |
 | South Africa | 2 | 0-1-1 | 1-3 | **1** | 1.84 | 0.0% | 17.9% | 19.0% |
 
 ### Group B
 
+**✅ Into the knockouts:** Canada, Switzerland
+
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Canada | 2 | 1-1-0 | 7-1 | **4** | 5.38 | 65.1% | 100.0% | 100.0% |
-| Switzerland | 2 | 1-1-0 | 5-2 | **4** | 5.33 | 34.9% | 100.0% | 100.0% |
+| Canada ✅ | 2 | 1-1-0 | 7-1 | **4** | 5.38 | 65.1% | 100.0% | 100.0% |
+| Switzerland ✅ | 2 | 1-1-0 | 5-2 | **4** | 5.33 | 34.9% | 100.0% | 100.0% |
 | Bosnia and Herzegovina | 2 | 0-1-1 | 2-5 | **1** | 2.65 | 0.0% | 0.0% | 45.9% |
 | Qatar | 2 | 0-1-1 | 1-7 | **1** | 2.07 | 0.0% | 0.0% | 26.1% |
 
@@ -183,6 +187,8 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 | Croatia | 1 | 0-0-1 | 2-4 | **0** | 3.69 | 3.0% | 52.3% | 69.7% |
 
 *\*Advance = top two or one of the eight best third-placed teams.*
+
+*✅ = already reached the knockout stage — locked into the Round of 32 in every simulation. (Reaching later rounds still requires winning knockout games, so those stay below 100%.)*
 
 ## Most likely knockout bracket
 

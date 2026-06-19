@@ -253,7 +253,8 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         + "------:|-----------:|--------------:|---------:|")
     for i, r in tt.head(15).iterrows():
         dcell = f" {_fmt_delta(dch.get(r['team'], float('nan')))} |" if deltas else ""
-        add(f"| {i + 1} | {r['team']} | {r['group']} | **{_pct(r['p_champion'])}** |"
+        name = f"{r['team']} ✅" if r['p_R32'] >= 0.9999 else r['team']
+        add(f"| {i + 1} | {name} | {r['group']} | **{_pct(r['p_champion'])}** |"
             f"{dcell} {_pct(r['p_final'])} | {_pct(r['p_SF'])} | {_pct(r['p_QF'])} | "
             f"{_pct(r['p_R16'])} |")
     add("")
@@ -313,8 +314,17 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     groups_cfg = load_teams()["groups"]
     cur = current_group_tables(fixtures, groups_cfg)
     tt_idx = tt.set_index("team")
+    QUALIFIED = 0.9999   # reaches the knockouts in (effectively) every simulation
+
+    def _label(team):
+        return f"{team} ✅" if tt_idx.loc[team, "p_R32"] >= QUALIFIED else team
+
+    any_qualified = (tt_idx["p_R32"] >= QUALIFIED).any()
     for g, members in groups_cfg.items():
+        through = [t for t in members if tt_idx.loc[t, "p_R32"] >= QUALIFIED]
         add(f"### Group {g}\n")
+        if through:
+            add(f"**✅ Into the knockouts:** {', '.join(through)}\n")
         table = cur[g]
         if table["P"].sum() > 0:
             add("| Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |")
@@ -322,7 +332,7 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
             for r in table.itertuples(index=False):
                 p = tt_idx.loc[r.team]
                 adv = p["p_win_group"] + p["p_runner_up"] + p["p_third_advance"]
-                add(f"| {r.team} | {r.P} | {r.W}-{r.D}-{r.L} | {r.GF}-{r.GA} | "
+                add(f"| {_label(r.team)} | {r.P} | {r.W}-{r.D}-{r.L} | {r.GF}-{r.GA} | "
                     f"**{r.Pts}** | {p['exp_points']:.2f} | {_pct(p['p_win_group'])} | "
                     f"{_pct(p['p_win_group'] + p['p_runner_up'])} | {_pct(adv)} |")
         else:
@@ -333,10 +343,15 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
             for t in order:
                 p = tt_idx.loc[t]
                 adv = p["p_win_group"] + p["p_runner_up"] + p["p_third_advance"]
-                add(f"| {t} | {p['exp_points']:.2f} | {_pct(p['p_win_group'])} | "
+                add(f"| {_label(t)} | {p['exp_points']:.2f} | {_pct(p['p_win_group'])} | "
                     f"{_pct(p['p_win_group'] + p['p_runner_up'])} | {_pct(adv)} |")
         add("")
-    add("*\\*Advance = top two or one of the eight best third-placed teams.*\n")
+    note = "*\\*Advance = top two or one of the eight best third-placed teams.*"
+    if any_qualified:
+        note += ("\n\n*✅ = already reached the knockout stage — locked into the "
+                 "Round of 32 in every simulation. (Reaching later rounds still "
+                 "requires winning knockout games, so those stay below 100%.)*")
+    add(note + "\n")
 
     # ---- predicted bracket
     add("## Most likely knockout bracket\n")
