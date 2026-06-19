@@ -69,7 +69,7 @@ TEMPLATE = """<!DOCTYPE html>
 <header class="hero">
   <h1>&#9917; World Cup 2026 — ML Predictions</h1>
   <p>Machine-learned probabilities for every match, group and the road to the final</p>
-  <p>Last checked {updated} UTC — refreshes hourly; predictions move when new results arrive</p>
+  <p>Last updated {updated} UTC — refreshed several times a day; predictions move as new results come in</p>
 </header>
 <main>
 {body}
