@@ -95,29 +95,42 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
 
     path = {}
     advancers: dict[str, str] = {}
+    # Advance the side more likely to win the tournament (its title
+    # probability), so the projected bracket is consistent with the headline
+    # "most likely champion". This matches the single-match favourite in
+    # almost every tie; the two differ only in a near-even tie between teams
+    # whose paths have differed (e.g. a coin-flip final), which is flagged.
+    champ_p = res.team_table().set_index("team")["p_champion"]
+
+    def resolve(home, away, p_home):
+        winner = home if champ_p.get(home, 0) >= champ_p.get(away, 0) else away
+        h2h = p_home if winner == home else 1 - p_home
+        return winner, h2h
+
     for key, _title in ROUND_TITLES:
         ties = []
         for m in bracket[key]:
             home = slots.get(m["home"]) or advancers[m["home"]]
             away = slots.get(m["away"]) or advancers[m["away"]]
             p_home = _advance_prob(pred, elo, home, away, m.get("venue_country"))
-            winner = home if p_home >= 0.5 else away
+            winner, h2h = resolve(home, away, p_home)
             advancers[f"W{m['match']}"] = winner
             pair_freq = res.match_pairings[m["match"]][(home, away)] / res.n
             ties.append({"match": m["match"], "date": m["date"], "venue": m["venue"],
                          "home": home, "away": away, "p_home_advance": p_home,
-                         "winner": winner, "pairing_freq": pair_freq,
-                         "confirmed": pair_freq > 0.9999})
+                         "winner": winner, "win_prob": h2h, "pairing_freq": pair_freq,
+                         "confirmed": pair_freq > 0.9999, "h2h_underdog": h2h < 0.5})
         path[key] = ties
 
     fm = bracket["final"]
     fh, fa = advancers[fm["home"]], advancers[fm["away"]]
     p_home = _advance_prob(pred, elo, fh, fa, fm.get("venue_country"))
+    winner, h2h = resolve(fh, fa, p_home)
     path["final"] = [{"match": fm["match"], "date": fm["date"], "venue": fm["venue"],
                       "home": fh, "away": fa, "p_home_advance": p_home,
-                      "winner": fh if p_home >= 0.5 else fa,
+                      "winner": winner, "win_prob": h2h,
                       "pairing_freq": res.match_pairings[fm["match"]][(fh, fa)] / res.n,
-                      "confirmed": False}]
+                      "confirmed": False, "h2h_underdog": h2h < 0.5}]
     return path
 
 
@@ -361,31 +374,38 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     # ---- predicted bracket
     add("## Most likely knockout bracket\n")
     n_locked = sum(t["confirmed"] for t in bracket_path["round_of_32"])
-    add(f"Each tie shows the most probable pairing given projected group "
-        "finishes, the chance the named winner goes through **in that "
-        "pairing**, and how often the exact pairing occurred across all "
-        "simulations. **🔒 marks a confirmed tie** — the same two teams in "
-        "every simulation, i.e. mathematically locked. "
-        f"({n_locked}/16 Round-of-32 ties locked so far; the rest finalise as "
-        "the group stage completes on 27 June.)\n")
+    add(f"Each tie shows the projected pairing and the side that advances — "
+        "the team **more likely to win the tournament** of the two, so the "
+        "bracket crowns the overall favourite. 'Win prob' is that team's chance "
+        "in that single match (a **†** flags a near-even tie where the title "
+        "favourite is a slight underdog in the one-off game). **🔒 marks a "
+        "confirmed tie** — the same two teams in every simulation, "
+        f"mathematically locked. ({n_locked}/16 Round-of-32 ties locked so far; "
+        "the rest finalise as the group stage completes on 27 June.)\n")
     for key, title in ROUND_TITLES + [("final", "Final")]:
         add(f"### {title}\n")
         add("| Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |")
         add("|:-----:|------|-------|-----|------------------|---------:|-------------:|")
         for t in bracket_path[key]:
-            p = t["p_home_advance"] if t["winner"] == t["home"] else 1 - t["p_home_advance"]
             tie = f"{t['home']} v {t['away']}"
             freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
             if t["confirmed"]:
                 tie = f"🔒 {tie}"
+            wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
             add(f"| {t['match']} | {t['date']} | {t['venue']} | "
-                f"{tie} | **{t['winner']}** | {_pct(p)} | {freq} |")
+                f"{tie} | **{t['winner']}** | {wp} | {freq} |")
         add("")
     champ = bracket_path["final"][0]["winner"]
     add(f"**Projected champion: {champ}** "
-        f"(overall title probability {_pct(tt.set_index('team').loc[champ, 'p_champion'])}; "
-        "the single most likely path above is itself only one of many ways "
-        "the tournament can unfold).\n")
+        f"(overall title probability {_pct(tt.set_index('team').loc[champ, 'p_champion'])}). "
+        "The bracket advances the team more likely to go all the way in each "
+        "tie, so the champion here matches the title favourite at the top of "
+        "the page.\n")
+    if any(t["h2h_underdog"] for k in (*[r[0] for r in ROUND_TITLES], "final")
+           for t in bracket_path[k]):
+        add("*† The title favourite reaches this tie via an easier path, so it "
+            "wins the tournament most often even though this specific one-off "
+            "match is a near coin-flip the other side shades.*\n")
 
     add("## How to read this\n")
     add("- All figures are probabilities, not certainties — a 65% favourite "

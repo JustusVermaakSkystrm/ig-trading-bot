@@ -71,6 +71,7 @@ def _box(cx: float, y: int, tie: dict) -> str:
     home, away, winner = tie["home"], tie["away"], tie["winner"]
     p_home = tie["p_home_advance"]
     confirmed = tie.get("confirmed", False)
+    underdog = tie.get("h2h_underdog", False)
     rows = [(home, p_home, winner == home), (away, 1 - p_home, winner == away)]
     # Confirmed ties (same pairing in every simulation) get a gold border.
     stroke, sw = ("#f5c542", 2.5) if confirmed else ("#26314f", 1)
@@ -89,10 +90,11 @@ def _box(cx: float, y: int, tie: dict) -> str:
         parts.append(
             f'<text x="{x + 8:.0f}" y="{ty}" font-size="10.5" font-weight="{weight}" '
             f'fill="{fill}">{escape(_short(team))}</text>')
+        pct = _pct(p) + ("†" if win and underdog else "")
         parts.append(
             f'<text x="{x + BOX_W - 8:.0f}" y="{ty}" font-size="9" '
             f'text-anchor="end" fill="{"#cfe8d8" if win else "#5d6880"}">'
-            f'{_pct(p)}</text>')
+            f'{pct}</text>')
     return "".join(parts)
 
 
