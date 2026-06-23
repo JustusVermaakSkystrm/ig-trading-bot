@@ -1,43 +1,43 @@
 # FIFA World Cup 2026 — ML Prediction Report
 
-*Generated 2026-06-22 · data through **2026-06-22** · 50,000 Monte Carlo simulations · 41/72 group matches played*
+*Generated 2026-06-23 · data through **2026-06-22** · 50,000 Monte Carlo simulations · 42/72 group matches played*
 
-Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 30,813 internationals, simulated through the official 2026 bracket and tiebreaker rules.
+Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 30,814 internationals, simulated through the official 2026 bracket and tiebreaker rules.
 
 *Rolling validation (7,966 matches, 2018–2026): RPS 0.1687 vs Elo-baseline 0.1711; log-loss 0.8652 vs 0.8809.*
 
 ## Title favourites
 
-| # | Team | Group | Champion | Δ vs 2026-06-21 | Final | Semi-final | Quarter-final | Rd of 16 |
+| # | Team | Group | Champion | Δ vs 2026-06-22 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Argentina ✅ | J | **22.5%** | +0.4 | 35.6% | 52.8% | 69.9% | 88.1% |
-| 2 | Spain ✅ | H | **18.3%** | +0.3 | 29.4% | 42.7% | 57.6% | 75.8% |
-| 3 | France | I | **9.5%** | +0.8 | 17.6% | 32.2% | 51.9% | 76.3% |
-| 4 | England | L | **6.6%** | -1.8 | 12.0% | 23.0% | 37.3% | 72.2% |
-| 5 | Colombia | K | **5.4%** | -0.3 | 10.4% | 19.0% | 41.1% | 72.6% |
-| 6 | Brazil ✅ | C | **4.3%** | – | 8.9% | 18.8% | 33.4% | 57.0% |
-| 7 | United States ✅ | D | **4.3%** | +0.2 | 10.5% | 22.8% | 55.2% | 83.2% |
-| 8 | Netherlands ✅ | F | **4.0%** | +0.1 | 8.7% | 18.9% | 34.9% | 56.4% |
-| 9 | Mexico ✅ | A | **3.8%** | +0.9 | 9.0% | 21.6% | 48.0% | 78.3% |
-| 10 | Japan ✅ | F | **3.2%** | +0.3 | 7.2% | 15.8% | 30.6% | 51.7% |
-| 11 | Norway | I | **2.7%** | +0.6 | 6.3% | 15.8% | 33.0% | 63.9% |
-| 12 | Germany ✅ | E | **2.5%** | -0.4 | 6.4% | 13.9% | 28.2% | 66.4% |
-| 13 | Portugal | K | **2.3%** | -0.2 | 5.6% | 11.7% | 23.9% | 52.5% |
-| 14 | Morocco ✅ | C | **1.9%** | -0.3 | 5.0% | 11.2% | 24.1% | 43.0% |
-| 15 | Switzerland ✅ | B | **1.7%** | +0.3 | 4.8% | 11.7% | 26.7% | 64.5% |
+| 1 | Argentina ✅ | J | **22.7%** | +0.2 | 34.9% | 49.5% | 67.6% | 86.4% |
+| 2 | Spain ✅ | H | **19.8%** | +1.5 | 31.0% | 43.9% | 57.3% | 75.3% |
+| 3 | France ✅ | I | **10.0%** | +0.6 | 18.7% | 33.6% | 52.9% | 77.2% |
+| 4 | England | L | **6.5%** | -0.1 | 12.4% | 24.7% | 38.8% | 73.1% |
+| 5 | Colombia | K | **5.2%** | -0.2 | 10.8% | 19.5% | 39.8% | 71.2% |
+| 6 | Brazil ✅ | C | **4.3%** | – | 8.6% | 19.1% | 34.3% | 57.3% |
+| 7 | Netherlands ✅ | F | **3.7%** | -0.3 | 8.3% | 18.8% | 35.6% | 56.2% |
+| 8 | Mexico ✅ | A | **3.6%** | -0.2 | 8.9% | 21.2% | 46.8% | 78.0% |
+| 9 | United States ✅ | D | **3.5%** | -0.7 | 9.3% | 21.2% | 53.9% | 83.2% |
+| 10 | Portugal | K | **2.7%** | +0.3 | 6.3% | 13.1% | 25.7% | 54.2% |
+| 11 | Japan ✅ | F | **2.6%** | -0.6 | 6.3% | 14.6% | 29.7% | 50.5% |
+| 12 | Germany ✅ | E | **2.5%** | – | 6.4% | 14.2% | 27.6% | 65.5% |
+| 13 | Norway | I | **2.4%** | -0.3 | 5.7% | 14.6% | 31.6% | 64.4% |
+| 14 | Morocco ✅ | C | **1.7%** | -0.2 | 4.6% | 10.9% | 25.1% | 43.8% |
+| 15 | Switzerland ✅ | B | **1.5%** | -0.2 | 4.4% | 10.9% | 25.8% | 63.4% |
 
-## Biggest movers since last run (data through 2026-06-21)
+## Biggest movers since last run (data through 2026-06-22)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| Mexico | +0.9 | +3.1 | 3.8% |
-| France | +0.8 | +3.7 | 9.5% |
-| Norway | +0.6 | +1.5 | 2.7% |
-| Argentina | +0.4 | +5.8 | 22.5% |
-| Spain | +0.3 | +2.9 | 18.3% |
-| Colombia | -0.3 | -0.6 | 5.4% |
-| Germany | -0.4 | -1.8 | 2.5% |
-| England | -1.8 | -0.9 | 6.6% |
+| Spain | +1.5 | -0.6 | 19.8% |
+| France | +0.6 | +0.9 | 10.0% |
+| Portugal | +0.3 | +1.7 | 2.7% |
+| Uruguay | +0.2 | +2.9 | 0.7% |
+| Norway | -0.3 | +0.5 | 2.4% |
+| Netherlands | -0.3 | -0.2 | 3.7% |
+| Japan | -0.6 | -1.2 | 2.6% |
+| United States | -0.7 | – | 3.5% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -46,7 +46,7 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 The model's single most likely knockout bracket — all 32 projected round-of-32 teams and every unplayed tie, each line carrying the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed Round-of-32 tie** (the same pairing in every simulation — mathematically locked): 0/16 locked so far, the rest finalise as the group stage ends on 27 June.
 
 <div style="overflow-x:auto; margin:1rem 0;">
-<svg viewBox="0 0 1964 662" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M82,98 C82,134 142,134 142,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M202,98 C202,134 142,134 142,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M322,98 C322,134 382,134 382,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M442,98 C442,134 382,134 382,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M562,98 C562,134 622,134 622,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M682,98 C682,134 622,134 622,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M802,98 C802,134 862,134 862,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M922,98 C922,134 862,134 862,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1042,98 C1042,134 1102,134 1102,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1162,98 C1162,134 1102,134 1102,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1282,98 C1282,134 1342,134 1342,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1402,98 C1402,134 1342,134 1342,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1522,98 C1522,134 1582,134 1582,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1642,98 C1642,134 1582,134 1582,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1762,98 C1762,134 1822,134 1822,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1882,98 C1882,134 1822,134 1822,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M142,214 C142,250 262,250 262,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M382,214 C382,250 262,250 262,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M622,214 C622,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M862,214 C862,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1102,214 C1102,250 1222,250 1222,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1342,214 C1342,250 1222,250 1222,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1582,214 C1582,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1822,214 C1822,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M262,330 C262,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M742,330 C742,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1222,330 C1222,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1702,330 C1702,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M502,446 C502,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1462,446 C1462,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M982,562 C982,580 982,580 982,598" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="76" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 76)" text-anchor="middle">ROUND OF 32</text><text x="11" y="192" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 192)" text-anchor="middle">ROUND OF 16</text><text x="11" y="308" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 308)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="424" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 424)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="540" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 540)" text-anchor="middle">FINAL</text><rect x="26" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="26" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="34" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Germany</text><text x="130" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">78%</text><text x="34" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Sweden</text><text x="130" y="91" font-size="9" text-anchor="end" fill="#5d6880">22%</text><rect x="146" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="146" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="154" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="250" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">75%</text><text x="154" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Paraguay</text><text x="250" y="91" font-size="9" text-anchor="end" fill="#5d6880">25%</text><rect x="266" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="274" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">S. Korea</text><text x="370" y="71" font-size="9" text-anchor="end" fill="#5d6880">38%</text><rect x="266" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="274" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Switzerland</text><text x="370" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">62%</text><rect x="386" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="386" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="394" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Netherlands</text><text x="490" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="394" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Morocco</text><text x="490" y="91" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="506" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="506" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="514" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Portugal</text><text x="610" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">61%</text><text x="514" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Croatia</text><text x="610" y="91" font-size="9" text-anchor="end" fill="#5d6880">39%</text><rect x="626" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="626" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="634" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="730" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">79%</text><text x="634" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Austria</text><text x="730" y="91" font-size="9" text-anchor="end" fill="#5d6880">21%</text><rect x="746" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="746" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="754" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">USA</text><text x="850" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">89%</text><text x="754" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Bosnia</text><text x="850" y="91" font-size="9" text-anchor="end" fill="#5d6880">11%</text><rect x="866" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="866" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="874" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Egypt</text><text x="970" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">50%</text><text x="874" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Algeria</text><text x="970" y="91" font-size="9" text-anchor="end" fill="#5d6880">50%</text><rect x="986" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="986" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="994" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1090" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><text x="994" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Japan</text><text x="1090" y="91" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="1106" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1114" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">Ivory Coast</text><text x="1210" y="71" font-size="9" text-anchor="end" fill="#5d6880">32%</text><rect x="1106" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1114" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Norway</text><text x="1210" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">68%</text><rect x="1226" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1226" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1234" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Mexico</text><text x="1330" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">82%</text><text x="1234" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Scotland</text><text x="1330" y="91" font-size="9" text-anchor="end" fill="#5d6880">18%</text><rect x="1346" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1346" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1354" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">England</text><text x="1450" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">74%</text><text x="1354" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Senegal</text><text x="1450" y="91" font-size="9" text-anchor="end" fill="#5d6880">26%</text><rect x="1466" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1466" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1474" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1570" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">93%</text><text x="1474" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">C. Verde</text><text x="1570" y="91" font-size="9" text-anchor="end" fill="#5d6880">7%</text><rect x="1586" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1594" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">Australia</text><text x="1690" y="71" font-size="9" text-anchor="end" fill="#5d6880">44%</text><rect x="1586" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1594" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Belgium</text><text x="1690" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">56%</text><rect x="1706" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1706" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1714" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Canada</text><text x="1810" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">64%</text><text x="1714" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Iran</text><text x="1810" y="91" font-size="9" text-anchor="end" fill="#5d6880">36%</text><rect x="1826" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1826" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1834" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1930" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">85%</text><text x="1834" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Ghana</text><text x="1930" y="91" font-size="9" text-anchor="end" fill="#5d6880">15%</text><rect x="86" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="94" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Germany</text><text x="190" y="187" font-size="9" text-anchor="end" fill="#5d6880">32%</text><rect x="86" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="94" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="190" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">68%</text><rect x="326" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="334" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Switzerland</text><text x="430" y="187" font-size="9" text-anchor="end" fill="#5d6880">35%</text><rect x="326" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="334" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Netherlands</text><text x="430" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">65%</text><rect x="566" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="574" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Portugal</text><text x="670" y="187" font-size="9" text-anchor="end" fill="#5d6880">30%</text><rect x="566" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="574" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="670" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">70%</text><rect x="806" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="806" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="814" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">USA</text><text x="910" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">70%</text><text x="814" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Egypt</text><text x="910" y="207" font-size="9" text-anchor="end" fill="#5d6880">30%</text><rect x="1046" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1046" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1054" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1150" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">52%</text><text x="1054" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Norway</text><text x="1150" y="207" font-size="9" text-anchor="end" fill="#5d6880">48%</text><rect x="1286" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1286" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1294" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Mexico</text><text x="1390" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">54%</text><text x="1294" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">England</text><text x="1390" y="207" font-size="9" text-anchor="end" fill="#5d6880">46%</text><rect x="1526" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1526" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1534" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1630" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">73%</text><text x="1534" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Belgium</text><text x="1630" y="207" font-size="9" text-anchor="end" fill="#5d6880">27%</text><rect x="1766" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1774" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Canada</text><text x="1870" y="187" font-size="9" text-anchor="end" fill="#5d6880">44%</text><rect x="1766" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1774" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1870" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">56%</text><rect x="206" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="206" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="214" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="310" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><text x="214" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Netherlands</text><text x="310" y="323" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="686" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="686" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="694" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="790" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">71%</text><text x="694" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">USA</text><text x="790" y="323" font-size="9" text-anchor="end" fill="#5d6880">29%</text><rect x="1166" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1166" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1174" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1270" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">58%</text><text x="1174" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Mexico</text><text x="1270" y="323" font-size="9" text-anchor="end" fill="#5d6880">42%</text><rect x="1646" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1646" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1654" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1750" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">67%</text><text x="1654" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Colombia</text><text x="1750" y="323" font-size="9" text-anchor="end" fill="#5d6880">33%</text><rect x="446" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="454" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">France</text><text x="550" y="419" font-size="9" text-anchor="end" fill="#5d6880">39%</text><rect x="446" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="454" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="550" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">61%</text><rect x="1406" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1414" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">Brazil</text><text x="1510" y="419" font-size="9" text-anchor="end" fill="#5d6880">31%</text><rect x="1406" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1414" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1510" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">69%</text><rect x="926" y="518" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="926" y="520" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="934" y="535" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="1030" y="535" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><text x="934" y="555" font-size="10.5" font-weight="400" fill="#7c89a3">Argentina</text><text x="1030" y="555" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="888" y="598" width="188" height="46" rx="10" fill="#f5c542"/><text x="982" y="619" font-size="13" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Spain</text><text x="982" y="635" font-size="10" fill="#5a4a00" text-anchor="middle">projected champion · 18% to win</text></svg>
+<svg viewBox="0 0 1964 662" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M82,98 C82,134 142,134 142,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M202,98 C202,134 142,134 142,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M322,98 C322,134 382,134 382,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M442,98 C442,134 382,134 382,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M562,98 C562,134 622,134 622,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M682,98 C682,134 622,134 622,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M802,98 C802,134 862,134 862,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M922,98 C922,134 862,134 862,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1042,98 C1042,134 1102,134 1102,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1162,98 C1162,134 1102,134 1102,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1282,98 C1282,134 1342,134 1342,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1402,98 C1402,134 1342,134 1342,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1522,98 C1522,134 1582,134 1582,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1642,98 C1642,134 1582,134 1582,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1762,98 C1762,134 1822,134 1822,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1882,98 C1882,134 1822,134 1822,170" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M142,214 C142,250 262,250 262,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M382,214 C382,250 262,250 262,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M622,214 C622,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M862,214 C862,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1102,214 C1102,250 1222,250 1222,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1342,214 C1342,250 1222,250 1222,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1582,214 C1582,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1822,214 C1822,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M262,330 C262,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M742,330 C742,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1222,330 C1222,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1702,330 C1702,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M502,446 C502,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1462,446 C1462,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M982,562 C982,580 982,580 982,598" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="76" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 76)" text-anchor="middle">ROUND OF 32</text><text x="11" y="192" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 192)" text-anchor="middle">ROUND OF 16</text><text x="11" y="308" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 308)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="424" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 424)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="540" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 540)" text-anchor="middle">FINAL</text><rect x="26" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="26" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="34" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Germany</text><text x="130" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">77%</text><text x="34" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Sweden</text><text x="130" y="91" font-size="9" text-anchor="end" fill="#5d6880">23%</text><rect x="146" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="146" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="154" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="250" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">78%</text><text x="154" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Paraguay</text><text x="250" y="91" font-size="9" text-anchor="end" fill="#5d6880">22%</text><rect x="266" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="274" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">S. Korea</text><text x="370" y="71" font-size="9" text-anchor="end" fill="#5d6880">39%</text><rect x="266" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="274" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Switzerland</text><text x="370" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">61%</text><rect x="386" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="386" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="394" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Netherlands</text><text x="490" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="394" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Morocco</text><text x="490" y="91" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="506" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="506" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="514" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Portugal</text><text x="610" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="514" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Croatia</text><text x="610" y="91" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="626" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="626" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="634" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="730" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">79%</text><text x="634" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Austria</text><text x="730" y="91" font-size="9" text-anchor="end" fill="#5d6880">21%</text><rect x="746" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="746" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="754" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">USA</text><text x="850" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">90%</text><text x="754" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Bosnia</text><text x="850" y="91" font-size="9" text-anchor="end" fill="#5d6880">10%</text><rect x="866" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="866" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="874" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Egypt</text><text x="970" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">51%</text><text x="874" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Algeria</text><text x="970" y="91" font-size="9" text-anchor="end" fill="#5d6880">49%</text><rect x="986" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="986" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="994" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1090" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><text x="994" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Japan</text><text x="1090" y="91" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="1106" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1114" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">Ivory Coast</text><text x="1210" y="71" font-size="9" text-anchor="end" fill="#5d6880">31%</text><rect x="1106" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1114" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Norway</text><text x="1210" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">69%</text><rect x="1226" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1226" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1234" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Mexico</text><text x="1330" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">83%</text><text x="1234" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Scotland</text><text x="1330" y="91" font-size="9" text-anchor="end" fill="#5d6880">17%</text><rect x="1346" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1346" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1354" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">England</text><text x="1450" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">75%</text><text x="1354" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Senegal</text><text x="1450" y="91" font-size="9" text-anchor="end" fill="#5d6880">25%</text><rect x="1466" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1466" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1474" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1570" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">91%</text><text x="1474" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">C. Verde</text><text x="1570" y="91" font-size="9" text-anchor="end" fill="#5d6880">9%</text><rect x="1586" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1594" y="71" font-size="10.5" font-weight="400" fill="#7c89a3">Australia</text><text x="1690" y="71" font-size="9" text-anchor="end" fill="#5d6880">46%</text><rect x="1586" y="77" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1594" y="91" font-size="10.5" font-weight="700" fill="#7ef0b6">Belgium</text><text x="1690" y="91" font-size="9" text-anchor="end" fill="#cfe8d8">54%</text><rect x="1706" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1706" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1714" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Canada</text><text x="1810" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">62%</text><text x="1714" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Iran</text><text x="1810" y="91" font-size="9" text-anchor="end" fill="#5d6880">38%</text><rect x="1826" y="54" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1826" y="56" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1834" y="71" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1930" y="71" font-size="9" text-anchor="end" fill="#cfe8d8">86%</text><text x="1834" y="91" font-size="10.5" font-weight="400" fill="#7c89a3">Ghana</text><text x="1930" y="91" font-size="9" text-anchor="end" fill="#5d6880">14%</text><rect x="86" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="94" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Germany</text><text x="190" y="187" font-size="9" text-anchor="end" fill="#5d6880">33%</text><rect x="86" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="94" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="190" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">67%</text><rect x="326" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="334" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Switzerland</text><text x="430" y="187" font-size="9" text-anchor="end" fill="#5d6880">35%</text><rect x="326" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="334" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Netherlands</text><text x="430" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">65%</text><rect x="566" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="574" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Portugal</text><text x="670" y="187" font-size="9" text-anchor="end" fill="#5d6880">30%</text><rect x="566" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="574" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="670" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">70%</text><rect x="806" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="806" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="814" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">USA</text><text x="910" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">68%</text><text x="814" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Egypt</text><text x="910" y="207" font-size="9" text-anchor="end" fill="#5d6880">32%</text><rect x="1046" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1046" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1054" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1150" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">57%</text><text x="1054" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Norway</text><text x="1150" y="207" font-size="9" text-anchor="end" fill="#5d6880">43%</text><rect x="1286" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1286" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1294" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Mexico</text><text x="1390" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">52%</text><text x="1294" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">England</text><text x="1390" y="207" font-size="9" text-anchor="end" fill="#5d6880">48%</text><rect x="1526" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1526" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1534" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1630" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">71%</text><text x="1534" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Belgium</text><text x="1630" y="207" font-size="9" text-anchor="end" fill="#5d6880">29%</text><rect x="1766" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1774" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Canada</text><text x="1870" y="187" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="1766" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1774" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1870" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><rect x="206" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="206" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="214" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="310" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><text x="214" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Netherlands</text><text x="310" y="323" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="686" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="686" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="694" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="790" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">74%</text><text x="694" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">USA</text><text x="790" y="323" font-size="9" text-anchor="end" fill="#5d6880">26%</text><rect x="1166" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1166" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1174" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Brazil</text><text x="1270" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">62%</text><text x="1174" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Mexico</text><text x="1270" y="323" font-size="9" text-anchor="end" fill="#5d6880">38%</text><rect x="1646" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1646" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1654" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1750" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="1654" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Colombia</text><text x="1750" y="323" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="446" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="454" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">France</text><text x="550" y="419" font-size="9" text-anchor="end" fill="#5d6880">36%</text><rect x="446" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="454" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="550" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">64%</text><rect x="1406" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1414" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">Brazil</text><text x="1510" y="419" font-size="9" text-anchor="end" fill="#5d6880">27%</text><rect x="1406" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1414" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1510" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">73%</text><rect x="926" y="518" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="926" y="520" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="934" y="535" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="1030" y="535" font-size="9" text-anchor="end" fill="#cfe8d8">52%</text><text x="934" y="555" font-size="10.5" font-weight="400" fill="#7c89a3">Argentina</text><text x="1030" y="555" font-size="9" text-anchor="end" fill="#5d6880">48%</text><rect x="888" y="598" width="188" height="46" rx="10" fill="#f5c542"/><text x="982" y="619" font-size="13" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Spain</text><text x="982" y="635" font-size="10" fill="#5a4a00" text-anchor="middle">projected champion · 20% to win</text></svg>
 </div>
 
 ## Upcoming group matches — outcome probabilities
@@ -55,25 +55,24 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Date | Grp | Match | Home win | Draw | Away win | xG | Likely score |
 |------|:---:|-------|---------:|-----:|---------:|----|:----:|
-| 2026-06-22 | I | France v Iraq | **76.5%** | 16.4% | 7.1% | 2.34–0.58 | 2-0 |
-| 2026-06-22 | I | Norway v Senegal | **51.7%** | 25.8% | 22.5% | 1.64–1.00 | 1-1 |
-| 2026-06-22 | J | Jordan v Algeria | 22.4% | 25.3% | **52.3%** | 1.03–1.69 | 1-1 |
-| 2026-06-23 | K | Portugal v Uzbekistan | **60.7%** | 23.5% | 15.9% | 1.83–0.83 | 1-0 |
-| 2026-06-23 | K | Colombia v DR Congo | **64.4%** | 21.8% | 13.8% | 1.98–0.80 | 2-0 |
-| 2026-06-23 | L | England v Ghana | **73.3%** | 18.5% | 8.2% | 2.14–0.57 | 2-0 |
-| 2026-06-23 | L | Panama v Croatia | 25.1% | 26.6% | **48.4%** | 1.06–1.56 | 1-1 |
-| 2026-06-24 | C | Morocco v Haiti | **71.3%** | 19.6% | 9.2% | 2.06–0.60 | 2-0 |
-| 2026-06-24 | B | Bosnia and Herzegovina v Qatar | **46.7%** | 27.8% | 25.5% | 1.45–1.00 | 1-1 |
-| 2026-06-24 | C | Scotland v Brazil | 16.5% | 23.2% | **60.3%** | 0.87–1.87 | 0-1 |
-| 2026-06-24 | A | South Africa v South Korea | 15.8% | 24.2% | **60.0%** | 0.79–1.76 | 0-1 |
-| 2026-06-24 | A | Mexico v Czech Republic | **79.0%** | 15.5% | 5.5% | 2.34–0.47 | 2-0 |
-| 2026-06-24 | B | Canada v Switzerland | **40.3%** | 29.2% | 30.5% | 1.27–1.07 | 1-1 |
-| 2026-06-25 | D | United States v Turkey | **50.9%** | 26.4% | 22.7% | 1.59–0.98 | 1-1 |
-| 2026-06-25 | D | Paraguay v Australia | 35.7% | 28.6% | **35.7%** | 1.23–1.23 | 1-1 |
-| 2026-06-25 | E | Curaçao v Ivory Coast | 16.3% | 24.9% | **58.8%** | 0.78–1.70 | 0-1 |
-| 2026-06-25 | E | Ecuador v Germany | 25.5% | 28.9% | **45.6%** | 0.95–1.36 | 1-1 |
-| 2026-06-25 | F | Japan v Sweden | **68.5%** | 18.7% | 12.7% | 2.33–0.91 | 2-0 |
-| 2026-06-25 | F | Tunisia v Netherlands | 11.3% | 20.5% | **68.2%** | 0.70–2.04 | 0-2 |
+| 2026-06-22 | I | Norway v Senegal | **47.5%** | 26.7% | 25.7% | 1.55–1.07 | 1-1 |
+| 2026-06-22 | J | Jordan v Algeria | 26.3% | 26.8% | **46.8%** | 1.09–1.53 | 1-1 |
+| 2026-06-23 | K | Portugal v Uzbekistan | **61.5%** | 23.3% | 15.2% | 1.85–0.80 | 1-0 |
+| 2026-06-23 | K | Colombia v DR Congo | **62.3%** | 23.1% | 14.6% | 1.86–0.78 | 1-0 |
+| 2026-06-23 | L | England v Ghana | **74.7%** | 17.8% | 7.5% | 2.18–0.55 | 2-0 |
+| 2026-06-23 | L | Panama v Croatia | 26.3% | 27.1% | **46.6%** | 1.07–1.50 | 1-1 |
+| 2026-06-24 | C | Morocco v Haiti | **71.3%** | 19.5% | 9.2% | 2.08–0.61 | 2-0 |
+| 2026-06-24 | B | Bosnia and Herzegovina v Qatar | **41.8%** | 28.8% | 29.4% | 1.32–1.07 | 1-1 |
+| 2026-06-24 | C | Scotland v Brazil | 17.5% | 24.9% | **57.6%** | 0.84–1.71 | 0-1 |
+| 2026-06-24 | A | South Africa v South Korea | 18.9% | 25.3% | **55.8%** | 0.88–1.68 | 0-1 |
+| 2026-06-24 | A | Mexico v Czech Republic | **77.5%** | 16.7% | 5.8% | 2.21–0.45 | 2-0 |
+| 2026-06-24 | B | Canada v Switzerland | **42.1%** | 28.3% | 29.5% | 1.36–1.10 | 1-1 |
+| 2026-06-25 | D | United States v Turkey | **51.8%** | 25.5% | 22.8% | 1.68–1.03 | 1-1 |
+| 2026-06-25 | D | Paraguay v Australia | **37.0%** | 29.1% | 33.8% | 1.23–1.16 | 1-1 |
+| 2026-06-25 | E | Curaçao v Ivory Coast | 16.2% | 24.9% | **58.9%** | 0.78–1.71 | 0-1 |
+| 2026-06-25 | E | Ecuador v Germany | 23.8% | 28.0% | **48.2%** | 0.93–1.44 | 1-1 |
+| 2026-06-25 | F | Japan v Sweden | **62.8%** | 21.8% | 15.4% | 2.01–0.89 | 2-0 |
+| 2026-06-25 | F | Tunisia v Netherlands | 11.1% | 20.2% | **68.8%** | 0.70–2.07 | 0-2 |
 
 ## Group projections
 
@@ -83,10 +82,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Mexico ✅ | 2 | 2-0-0 | 3-0 | **6** | 8.53 | 100.0% | 100.0% | 100.0% |
-| South Korea | 2 | 1-0-1 | 2-2 | **3** | 5.03 | 0.0% | 83.8% | 97.2% |
-| Czech Republic | 2 | 0-1-1 | 2-3 | **1** | 1.32 | 0.0% | 0.8% | 7.0% |
-| South Africa | 2 | 0-1-1 | 1-3 | **1** | 1.73 | 0.0% | 15.4% | 16.5% |
+| Mexico ✅ | 2 | 2-0-0 | 3-0 | **6** | 8.49 | 100.0% | 100.0% | 100.0% |
+| South Korea | 2 | 1-0-1 | 2-2 | **3** | 4.92 | 0.0% | 80.8% | 96.1% |
+| Czech Republic | 2 | 0-1-1 | 2-3 | **1** | 1.34 | 0.0% | 1.0% | 7.5% |
+| South Africa | 2 | 0-1-1 | 1-3 | **1** | 1.83 | 0.0% | 18.2% | 19.5% |
 
 ### Group B
 
@@ -94,10 +93,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Canada ✅ | 2 | 1-1-0 | 7-1 | **4** | 5.51 | 69.7% | 100.0% | 100.0% |
-| Switzerland ✅ | 2 | 1-1-0 | 5-2 | **4** | 5.20 | 30.3% | 100.0% | 100.0% |
-| Bosnia and Herzegovina | 2 | 0-1-1 | 2-5 | **1** | 2.69 | 0.0% | 0.0% | 47.3% |
-| Qatar | 2 | 0-1-1 | 1-7 | **1** | 2.04 | 0.0% | 0.0% | 25.4% |
+| Canada ✅ | 2 | 1-1-0 | 7-1 | **4** | 5.55 | 70.6% | 100.0% | 100.0% |
+| Switzerland ✅ | 2 | 1-1-0 | 5-2 | **4** | 5.16 | 29.4% | 100.0% | 100.0% |
+| Bosnia and Herzegovina | 2 | 0-1-1 | 2-5 | **1** | 2.55 | 0.0% | 0.0% | 42.2% |
+| Qatar | 2 | 0-1-1 | 1-7 | **1** | 2.16 | 0.0% | 0.0% | 29.2% |
 
 ### Group C
 
@@ -105,9 +104,9 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Brazil ✅ | 2 | 1-1-0 | 4-1 | **4** | 6.03 | 62.6% | 85.0% | 100.0% |
-| Morocco ✅ | 2 | 1-1-0 | 2-1 | **4** | 6.34 | 32.7% | 98.5% | 100.0% |
-| Scotland | 2 | 1-0-1 | 1-1 | **3** | 3.73 | 4.7% | 16.5% | 89.1% |
+| Brazil ✅ | 2 | 1-1-0 | 4-1 | **4** | 5.97 | 60.0% | 84.0% | 100.0% |
+| Morocco ✅ | 2 | 1-1-0 | 2-1 | **4** | 6.34 | 35.0% | 98.4% | 100.0% |
+| Scotland | 2 | 1-0-1 | 1-1 | **3** | 3.78 | 5.0% | 17.6% | 89.5% |
 | Haiti | 2 | 0-0-2 | 0-4 | **0** | 0.47 | 0.0% | 0.0% | 0.0% |
 
 ### Group D
@@ -116,10 +115,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| United States ✅ | 2 | 2-0-0 | 6-1 | **6** | 7.79 | 100.0% | 100.0% | 100.0% |
-| Australia | 2 | 1-0-1 | 2-2 | **3** | 4.36 | 0.0% | 64.3% | 96.2% |
-| Paraguay | 2 | 1-0-1 | 2-4 | **3** | 4.36 | 0.0% | 35.7% | 87.6% |
-| Turkey | 2 | 0-0-2 | 0-3 | **0** | 0.95 | 0.0% | 0.0% | 0.0% |
+| United States ✅ | 2 | 2-0-0 | 6-1 | **6** | 7.81 | 100.0% | 100.0% | 100.0% |
+| Australia | 2 | 1-0-1 | 2-2 | **3** | 4.31 | 0.0% | 63.0% | 95.6% |
+| Paraguay | 2 | 1-0-1 | 2-4 | **3** | 4.40 | 0.0% | 37.0% | 87.7% |
+| Turkey | 2 | 0-0-2 | 0-3 | **0** | 0.93 | 0.0% | 0.0% | 0.0% |
 
 ### Group E
 
@@ -127,10 +126,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Germany ✅ | 2 | 2-0-0 | 9-2 | **6** | 7.65 | 100.0% | 100.0% | 100.0% |
-| Ivory Coast | 2 | 1-0-1 | 2-2 | **3** | 5.02 | 0.0% | 83.9% | 94.4% |
-| Ecuador | 2 | 0-1-1 | 0-1 | **1** | 2.06 | 0.0% | 4.2% | 27.9% |
-| Curaçao | 2 | 0-1-1 | 1-7 | **1** | 1.73 | 0.0% | 11.9% | 16.1% |
+| Germany ✅ | 2 | 2-0-0 | 9-2 | **6** | 7.72 | 100.0% | 100.0% | 100.0% |
+| Ivory Coast | 2 | 1-0-1 | 2-2 | **3** | 5.02 | 0.0% | 84.0% | 94.6% |
+| Ecuador | 2 | 0-1-1 | 0-1 | **1** | 1.99 | 0.0% | 3.8% | 25.9% |
+| Curaçao | 2 | 0-1-1 | 1-7 | **1** | 1.73 | 0.0% | 12.2% | 16.0% |
 
 ### Group F
 
@@ -138,10 +137,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Netherlands ✅ | 2 | 1-1-0 | 7-3 | **4** | 6.25 | 52.1% | 99.6% | 100.0% |
-| Japan ✅ | 2 | 1-1-0 | 6-2 | **4** | 6.24 | 43.9% | 87.5% | 100.0% |
-| Sweden | 2 | 1-0-1 | 6-6 | **3** | 3.57 | 4.0% | 12.9% | 90.7% |
-| Tunisia | 2 | 0-0-2 | 1-9 | **0** | 0.55 | 0.0% | 0.0% | 0.0% |
+| Netherlands ✅ | 2 | 1-1-0 | 7-3 | **4** | 6.27 | 57.0% | 99.6% | 100.0% |
+| Japan ✅ | 2 | 1-1-0 | 6-2 | **4** | 6.10 | 38.1% | 84.9% | 100.0% |
+| Sweden | 2 | 1-0-1 | 6-6 | **3** | 3.68 | 4.9% | 15.5% | 92.5% |
+| Tunisia | 2 | 0-0-2 | 1-9 | **0** | 0.53 | 0.0% | 0.0% | 0.0% |
 
 ### Group G
 
@@ -149,10 +148,10 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Egypt ✅ | 2 | 1-1-0 | 4-2 | **4** | 5.29 | 57.0% | 78.2% | 100.0% |
-| Iran | 2 | 0-2-0 | 2-2 | **2** | 3.42 | 25.7% | 41.8% | 71.8% |
-| Belgium | 2 | 0-2-0 | 1-1 | **2** | 3.99 | 17.3% | 68.9% | 82.8% |
-| New Zealand | 2 | 0-1-1 | 3-5 | **1** | 1.77 | 0.0% | 11.2% | 18.1% |
+| Egypt ✅ | 2 | 1-1-0 | 4-2 | **4** | 5.29 | 57.6% | 78.6% | 100.0% |
+| Iran | 2 | 0-2-0 | 2-2 | **2** | 3.40 | 25.0% | 40.9% | 71.5% |
+| Belgium | 2 | 0-2-0 | 1-1 | **2** | 3.98 | 17.4% | 68.9% | 82.4% |
+| New Zealand | 2 | 0-1-1 | 3-5 | **1** | 1.78 | 0.0% | 11.5% | 18.4% |
 
 ### Group H
 
@@ -160,19 +159,21 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Spain ✅ | 2 | 1-1-0 | 4-0 | **4** | 6.16 | 86.6% | 96.0% | 100.0% |
-| Uruguay | 2 | 0-2-0 | 3-3 | **2** | 2.62 | 11.9% | 19.1% | 42.4% |
-| Cape Verde | 2 | 0-2-0 | 2-2 | **2** | 3.20 | 1.5% | 49.3% | 60.6% |
-| Saudi Arabia | 2 | 0-1-1 | 1-5 | **1** | 2.51 | 0.0% | 35.6% | 40.9% |
+| Spain ✅ | 2 | 1-1-0 | 4-0 | **4** | 6.03 | 83.7% | 95.3% | 100.0% |
+| Uruguay | 2 | 0-2-0 | 3-3 | **2** | 2.73 | 14.7% | 22.6% | 47.7% |
+| Cape Verde | 2 | 0-2-0 | 2-2 | **2** | 3.16 | 1.6% | 46.4% | 58.7% |
+| Saudi Arabia | 2 | 0-1-1 | 1-5 | **1** | 2.56 | 0.0% | 35.6% | 42.5% |
 
 ### Group I
 
+**✅ Into the knockouts:** France
+
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Norway | 1 | 1-0-0 | 4-1 | **3** | 5.66 | 28.6% | 82.0% | 98.9% |
-| France | 1 | 1-0-0 | 3-1 | **3** | 7.36 | 69.4% | 97.3% | 99.4% |
-| Senegal | 1 | 0-0-1 | 1-3 | **0** | 2.99 | 1.7% | 18.8% | 62.5% |
-| Iraq | 1 | 0-0-1 | 1-4 | **0** | 1.09 | 0.4% | 1.9% | 12.5% |
+| France ✅ | 2 | 2-0-0 | 6-1 | **6** | 7.96 | 79.2% | 99.8% | 100.0% |
+| Norway | 1 | 1-0-0 | 4-1 | **3** | 5.49 | 20.5% | 79.2% | 99.3% |
+| Senegal | 1 | 0-0-1 | 1-3 | **0** | 3.12 | 0.3% | 21.0% | 64.9% |
+| Iraq | 2 | 0-0-2 | 1-7 | **0** | 0.69 | 0.0% | 0.0% | 6.5% |
 
 ### Group J
 
@@ -180,28 +181,28 @@ The model's single most likely knockout bracket — all 32 projected round-of-32
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Argentina ✅ | 2 | 2-0-0 | 5-0 | **6** | 8.66 | 99.5% | 99.9% | 100.0% |
-| Austria | 2 | 1-0-1 | 3-3 | **3** | 4.64 | 0.0% | 73.5% | 96.1% |
-| Jordan | 1 | 0-0-1 | 1-3 | **0** | 1.15 | 0.5% | 2.0% | 15.5% |
-| Algeria | 1 | 0-0-1 | 0-3 | **0** | 2.91 | 0.0% | 24.5% | 55.7% |
+| Argentina ✅ | 2 | 2-0-0 | 5-0 | **6** | 8.64 | 99.4% | 100.0% | 100.0% |
+| Austria | 2 | 1-0-1 | 3-3 | **3** | 4.63 | 0.0% | 74.4% | 95.6% |
+| Jordan | 1 | 0-0-1 | 1-3 | **0** | 1.29 | 0.6% | 2.3% | 18.1% |
+| Algeria | 1 | 0-0-1 | 0-3 | **0** | 2.77 | 0.0% | 23.3% | 51.3% |
 
 ### Group K
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| Colombia | 1 | 1-0-0 | 3-1 | **3** | 6.65 | 69.1% | 89.7% | 99.0% |
-| DR Congo | 1 | 0-1-0 | 1-1 | **1** | 3.04 | 6.9% | 29.5% | 54.3% |
-| Portugal | 1 | 0-1-0 | 1-1 | **1** | 4.27 | 22.8% | 65.7% | 82.0% |
-| Uzbekistan | 1 | 0-0-1 | 1-3 | **0** | 2.00 | 1.2% | 15.2% | 34.8% |
+| Colombia | 1 | 1-0-0 | 3-1 | **3** | 6.57 | 67.4% | 89.0% | 99.0% |
+| DR Congo | 1 | 0-1-0 | 1-1 | **1** | 3.07 | 7.0% | 29.7% | 54.7% |
+| Portugal | 1 | 0-1-0 | 1-1 | **1** | 4.33 | 24.4% | 66.6% | 82.7% |
+| Uzbekistan | 1 | 0-0-1 | 1-3 | **0** | 1.99 | 1.2% | 14.7% | 34.3% |
 
 ### Group L
 
 | Team | P | W-D-L | GF-GA | Pts | xPts | Win grp | Top 2 | Advance* |
 |------|--:|:----:|:----:|----:|-----:|--------:|------:|--------:|
-| England | 1 | 1-0-0 | 4-2 | **3** | 7.54 | 86.4% | 97.7% | 99.3% |
-| Ghana | 1 | 1-0-0 | 1-0 | **3** | 4.10 | 7.3% | 37.0% | 77.3% |
-| Panama | 1 | 0-0-1 | 0-1 | **0** | 1.64 | 2.8% | 10.1% | 26.5% |
-| Croatia | 1 | 0-0-1 | 2-4 | **0** | 3.82 | 3.5% | 55.3% | 74.4% |
+| England | 1 | 1-0-0 | 4-2 | **3** | 7.58 | 87.2% | 97.9% | 99.4% |
+| Ghana | 1 | 1-0-0 | 1-0 | **3** | 4.01 | 6.5% | 34.7% | 74.9% |
+| Panama | 1 | 0-0-1 | 0-1 | **0** | 1.68 | 3.0% | 11.1% | 27.3% |
+| Croatia | 1 | 0-0-1 | 2-4 | **0** | 3.84 | 3.2% | 56.3% | 74.4% |
 
 *\*Advance = top two or one of the eight best third-placed teams.*
 
@@ -215,59 +216,59 @@ Each tie shows the most probable pairing given projected group finishes, the cha
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 73 | 2026-06-28 | SoFi Stadium, Los Angeles | South Korea v Switzerland | **Switzerland** | 62.0% | 58.4% |
-| 74 | 2026-06-29 | Gillette Stadium, Boston | Germany v Sweden | **Germany** | 78.5% | 13.5% |
-| 75 | 2026-06-29 | Estadio BBVA, Monterrey | Netherlands v Morocco | **Netherlands** | 63.3% | 34.4% |
-| 76 | 2026-06-29 | NRG Stadium, Houston | Brazil v Japan | **Brazil** | 54.9% | 27.4% |
-| 77 | 2026-06-30 | MetLife Stadium, New York/New Jersey | France v Paraguay | **France** | 75.2% | 20.7% |
-| 78 | 2026-06-30 | AT&T Stadium, Dallas | Ivory Coast v Norway | **Norway** | 68.2% | 44.9% |
-| 79 | 2026-06-30 | Estadio Azteca, Mexico City | Mexico v Scotland | **Mexico** | 81.6% | 41.1% |
-| 80 | 2026-07-01 | Mercedes-Benz Stadium, Atlanta | England v Senegal | **England** | 73.6% | 4.8% |
-| 81 | 2026-07-01 | Levi's Stadium, San Francisco Bay Area | United States v Bosnia and Herzegovina | **United States** | 89.4% | 32.1% |
-| 82 | 2026-07-01 | Lumen Field, Seattle | Egypt v Algeria | **Egypt** | 50.0% | 7.5% |
-| 83 | 2026-07-02 | BMO Field, Toronto | Portugal v Croatia | **Portugal** | 60.5% | 22.3% |
-| 84 | 2026-07-02 | SoFi Stadium, Los Angeles | Spain v Austria | **Spain** | 78.8% | 63.8% |
-| 85 | 2026-07-02 | BC Place, Vancouver | Canada v Iran | **Canada** | 63.8% | 17.5% |
-| 86 | 2026-07-03 | Hard Rock Stadium, Miami | Argentina v Cape Verde | **Argentina** | 92.7% | 47.6% |
-| 87 | 2026-07-03 | Arrowhead Stadium, Kansas City | Colombia v Ghana | **Colombia** | 85.4% | 28.3% |
-| 88 | 2026-07-03 | AT&T Stadium, Dallas | Australia v Belgium | **Belgium** | 55.8% | 33.4% |
+| 73 | 2026-06-28 | SoFi Stadium, Los Angeles | South Korea v Switzerland | **Switzerland** | 61.4% | 57.2% |
+| 74 | 2026-06-29 | Gillette Stadium, Boston | Germany v Sweden | **Germany** | 77.1% | 15.6% |
+| 75 | 2026-06-29 | Estadio BBVA, Monterrey | Netherlands v Morocco | **Netherlands** | 63.2% | 36.2% |
+| 76 | 2026-06-29 | NRG Stadium, Houston | Brazil v Japan | **Brazil** | 54.6% | 28.1% |
+| 77 | 2026-06-30 | MetLife Stadium, New York/New Jersey | France v Paraguay | **France** | 77.9% | 23.1% |
+| 78 | 2026-06-30 | AT&T Stadium, Dallas | Ivory Coast v Norway | **Norway** | 68.5% | 49.3% |
+| 79 | 2026-06-30 | Estadio Azteca, Mexico City | Mexico v Scotland | **Mexico** | 82.8% | 41.1% |
+| 80 | 2026-07-01 | Mercedes-Benz Stadium, Atlanta | England v Senegal | **England** | 74.7% | 4.8% |
+| 81 | 2026-07-01 | Levi's Stadium, San Francisco Bay Area | United States v Bosnia and Herzegovina | **United States** | 90.1% | 30.2% |
+| 82 | 2026-07-01 | Lumen Field, Seattle | Egypt v Algeria | **Egypt** | 51.1% | 6.5% |
+| 83 | 2026-07-02 | BMO Field, Toronto | Portugal v Croatia | **Portugal** | 63.2% | 22.4% |
+| 84 | 2026-07-02 | SoFi Stadium, Los Angeles | Spain v Austria | **Spain** | 78.8% | 62.3% |
+| 85 | 2026-07-02 | BC Place, Vancouver | Canada v Iran | **Canada** | 61.8% | 18.0% |
+| 86 | 2026-07-03 | Hard Rock Stadium, Miami | Argentina v Cape Verde | **Argentina** | 91.1% | 44.5% |
+| 87 | 2026-07-03 | Arrowhead Stadium, Kansas City | Colombia v Ghana | **Colombia** | 85.7% | 27.5% |
+| 88 | 2026-07-03 | AT&T Stadium, Dallas | Australia v Belgium | **Belgium** | 53.7% | 32.6% |
 
 ### Round of 16
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 89 | 2026-07-04 | Lincoln Financial Field, Philadelphia | Germany v France | **France** | 68.0% | 34.7% |
-| 90 | 2026-07-04 | NRG Stadium, Houston | Switzerland v Netherlands | **Netherlands** | 65.3% | 14.4% |
-| 91 | 2026-07-05 | MetLife Stadium, New York/New Jersey | Brazil v Norway | **Brazil** | 52.3% | 13.1% |
-| 92 | 2026-07-05 | Estadio Azteca, Mexico City | Mexico v England | **Mexico** | 53.8% | 49.8% |
-| 93 | 2026-07-06 | AT&T Stadium, Dallas | Portugal v Spain | **Spain** | 70.2% | 19.7% |
-| 94 | 2026-07-06 | Lumen Field, Seattle | United States v Egypt | **United States** | 70.0% | 24.2% |
-| 95 | 2026-07-07 | Mercedes-Benz Stadium, Atlanta | Argentina v Belgium | **Argentina** | 72.6% | 24.6% |
-| 96 | 2026-07-07 | BC Place, Vancouver | Canada v Colombia | **Colombia** | 56.4% | 25.6% |
+| 89 | 2026-07-04 | Lincoln Financial Field, Philadelphia | Germany v France | **France** | 66.7% | 39.6% |
+| 90 | 2026-07-04 | NRG Stadium, Houston | Switzerland v Netherlands | **Netherlands** | 64.9% | 15.2% |
+| 91 | 2026-07-05 | MetLife Stadium, New York/New Jersey | Brazil v Norway | **Brazil** | 56.8% | 13.9% |
+| 92 | 2026-07-05 | Estadio Azteca, Mexico City | Mexico v England | **Mexico** | 52.0% | 50.2% |
+| 93 | 2026-07-06 | AT&T Stadium, Dallas | Portugal v Spain | **Spain** | 70.2% | 19.1% |
+| 94 | 2026-07-06 | Lumen Field, Seattle | United States v Egypt | **United States** | 68.2% | 23.9% |
+| 95 | 2026-07-07 | Mercedes-Benz Stadium, Atlanta | Argentina v Belgium | **Argentina** | 70.6% | 23.7% |
+| 96 | 2026-07-07 | BC Place, Vancouver | Canada v Colombia | **Colombia** | 54.5% | 24.8% |
 
 ### Quarter-finals
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 97 | 2026-07-09 | Gillette Stadium, Boston | France v Netherlands | **France** | 54.7% | 7.5% |
-| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v United States | **Spain** | 71.3% | 28.9% |
-| 99 | 2026-07-11 | Hard Rock Stadium, Miami | Brazil v Mexico | **Brazil** | 58.5% | 9.7% |
-| 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | Argentina v Colombia | **Argentina** | 67.4% | 22.9% |
+| 97 | 2026-07-09 | Gillette Stadium, Boston | France v Netherlands | **France** | 54.5% | 9.3% |
+| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v United States | **Spain** | 73.9% | 27.3% |
+| 99 | 2026-07-11 | Hard Rock Stadium, Miami | Brazil v Mexico | **Brazil** | 62.4% | 9.3% |
+| 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | Argentina v Colombia | **Argentina** | 63.1% | 21.2% |
 
 ### Semi-finals
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 61.0% | 9.2% |
-| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | Brazil v Argentina | **Argentina** | 68.8% | 5.7% |
+| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 64.3% | 10.6% |
+| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | Brazil v Argentina | **Argentina** | 72.5% | 5.6% |
 
 ### Final
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Spain** | 55.2% | 10.2% |
+| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Spain** | 51.8% | 10.4% |
 
-**Projected champion: Spain** (overall title probability 18.3%; the single most likely path above is itself only one of many ways the tournament can unfold).
+**Projected champion: Spain** (overall title probability 19.8%; the single most likely path above is itself only one of many ways the tournament can unfold).
 
 ## How to read this
 
@@ -278,7 +279,7 @@ Each tie shows the most probable pairing given projected group finishes, the cha
 
 ## Model scorecard
 
-**23 of 41 match outcomes called correctly** (the model's own probabilities expected ≈24.0 of 41) · exact scoreline predicted 3/41 · average probability placed on what actually happened: **43.4%** (33.3% = guessing).
+**24 of 42 match outcomes called correctly** (the model's own probabilities expected ≈24.7 of 42) · exact scoreline predicted 3/42 · average probability placed on what actually happened: **44.2%** (33.3% = guessing).
 
 | Match | Model said | Likely score | Actual | Outcome | Score |
 |-------|-----------|:---:|:---:|:---:|:---:|
@@ -314,14 +315,15 @@ Each tie shows the most probable pairing given projected group finishes, the cha
 | Turkey v Paraguay | Paraguay win (38.4%) | 1-1 | 0-1 | ✅ | — |
 | Scotland v Morocco | Morocco win (49.3%) | 1-1 | 0-1 | ✅ | — |
 | Brazil v Haiti | Brazil win (81.3%) | 2-0 | 3-0 | ✅ | — |
+| Ecuador v Curaçao | Ecuador win (81.9%) | 2-0 | 0-0 | ❌ | — |
+| Germany v Ivory Coast | Germany win (50.9%) | 1-1 | 2-1 | ✅ | — |
 | Netherlands v Sweden | Netherlands win (52.8%) | 1-1 | 5-1 | ✅ | — |
 | Tunisia v Japan | Japan win (63.1%) | 0-2 | 0-4 | ✅ | — |
-| Germany v Ivory Coast | Germany win (50.9%) | 1-1 | 2-1 | ✅ | — |
-| Ecuador v Curaçao | Ecuador win (81.9%) | 2-0 | 0-0 | ❌ | — |
 | Spain v Saudi Arabia | Spain win (78.3%) | 2-0 | 4-0 | ✅ | — |
-| Uruguay v Cape Verde | Uruguay win (72.7%) | 2-0 | 2-2 | ❌ | — |
 | Belgium v Iran | Belgium win (46.7%) | 1-1 | 0-0 | ❌ | — |
 | New Zealand v Egypt | Egypt win (38.7%) | 1-1 | 1-3 | ✅ | — |
+| Uruguay v Cape Verde | Uruguay win (72.7%) | 2-0 | 2-2 | ❌ | — |
+| France v Iraq | France win (76.5%) | 2-0 | 3-0 | ✅ | — |
 | Argentina v Austria | Argentina win (66.2%) | 2-0 | 2-0 | ✅ | ✅ |
 
 **Calibration vs benchmarks** (the 9 graded games with bookmaker prices on file) — log-loss, lower is better. This is the honest test: is the model bad, or were the games hard for everyone?
