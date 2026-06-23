@@ -1,73 +1,73 @@
 date,group,home,away,status,score,p_home_win,p_draw,p_away_win,xg_home,xg_away,most_likely_score
-2026-06-11,A,Mexico,South Africa,played,2-0,0.8145,0.143,0.0425,2.37,0.39,2-0
-2026-06-11,A,South Korea,Czech Republic,played,2-1,0.5174,0.2528,0.2298,1.70,1.06,1-1
-2026-06-12,B,Canada,Bosnia and Herzegovina,played,1-1,0.7265,0.1818,0.0918,2.23,0.67,2-0
-2026-06-12,D,United States,Paraguay,played,4-1,0.52,0.2509,0.2291,1.71,1.06,1-1
-2026-06-13,B,Qatar,Switzerland,played,1-1,0.072,0.1513,0.7767,0.66,2.54,0-2
-2026-06-13,C,Brazil,Morocco,played,1-1,0.4823,0.2755,0.2422,1.48,0.97,1-1
-2026-06-13,C,Haiti,Scotland,played,0-1,0.2083,0.2582,0.5335,0.94,1.64,1-1
-2026-06-13,D,Australia,Turkey,played,2-0,0.4179,0.2915,0.2906,1.30,1.04,1-1
-2026-06-14,F,Sweden,Tunisia,played,5-1,0.5516,0.252,0.1965,1.70,0.92,1-1
-2026-06-14,F,Netherlands,Japan,played,2-2,0.4265,0.2718,0.3017,1.46,1.19,1-1
-2026-06-14,E,Germany,Curaçao,played,7-1,0.9038,0.0719,0.0242,3.52,0.53,3-0
-2026-06-14,E,Ivory Coast,Ecuador,played,1-0,0.265,0.2909,0.4441,0.97,1.34,1-1
-2026-06-15,G,Belgium,Egypt,played,1-1,0.4889,0.2628,0.2483,1.59,1.07,1-1
-2026-06-15,G,Iran,New Zealand,played,2-2,0.5265,0.2581,0.2153,1.64,0.97,1-1
-2026-06-15,H,Spain,Cape Verde,played,0-0,0.797,0.1536,0.0494,2.30,0.42,2-0
-2026-06-15,H,Saudi Arabia,Uruguay,played,1-1,0.1876,0.2613,0.5511,0.83,1.61,0-1
-2026-06-16,J,Austria,Jordan,played,3-1,0.5948,0.2339,0.1713,1.86,0.90,1-0
-2026-06-16,J,Argentina,Algeria,played,3-0,0.6844,0.2071,0.1085,2.01,0.67,2-0
-2026-06-16,I,France,Senegal,played,3-1,0.6546,0.2129,0.1325,2.02,0.79,2-0
-2026-06-16,I,Iraq,Norway,played,1-4,0.0987,0.1815,0.7198,0.73,2.28,0-2
-2026-06-17,K,Portugal,DR Congo,played,1-1,0.6154,0.2346,0.1501,1.82,0.78,1-0
-2026-06-17,K,Uzbekistan,Colombia,played,1-3,0.1537,0.2452,0.6011,0.75,1.73,0-1
-2026-06-17,L,England,Croatia,played,4-2,0.5725,0.2418,0.1857,1.79,0.92,1-1
-2026-06-17,L,Ghana,Panama,played,1-0,0.2419,0.2723,0.4858,0.99,1.51,1-1
-2026-06-18,A,Czech Republic,South Africa,played,1-1,0.5287,0.2652,0.2061,1.58,0.89,1-0
-2026-06-18,A,Mexico,South Korea,played,1-0,0.6407,0.2373,0.122,1.75,0.62,1-0
-2026-06-18,B,Switzerland,Bosnia and Herzegovina,played,4-1,0.7375,0.1773,0.0852,2.26,0.64,2-0
-2026-06-18,B,Canada,Qatar,played,6-0,0.8869,0.0863,0.0268,3.16,0.46,3-0
-2026-06-19,D,Turkey,Paraguay,played,0-1,0.3129,0.2916,0.3955,1.10,1.27,1-1
-2026-06-19,C,Scotland,Morocco,played,0-1,0.206,0.2612,0.5328,0.91,1.62,1-1
-2026-06-19,C,Brazil,Haiti,played,3-0,0.7956,0.1453,0.0591,2.51,0.56,2-0
-2026-06-19,D,United States,Australia,played,2-0,0.5068,0.2631,0.23,1.60,1.00,1-1
-2026-06-20,F,Netherlands,Sweden,played,5-1,0.6226,0.209,0.1684,2.15,1.04,2-1
-2026-06-20,F,Tunisia,Japan,played,0-4,0.1205,0.204,0.6755,0.76,2.08,0-2
-2026-06-20,E,Germany,Ivory Coast,played,2-1,0.5601,0.2514,0.1885,1.70,0.89,1-0
-2026-06-20,E,Ecuador,Curaçao,played,0-0,0.7489,0.1718,0.0793,2.29,0.62,2-0
-2026-06-21,G,Belgium,Iran,played,0-0,0.474,0.2732,0.2529,1.49,1.02,1-1
-2026-06-21,G,New Zealand,Egypt,played,1-3,0.2399,0.2542,0.5059,1.09,1.68,1-1
-2026-06-21,H,Spain,Saudi Arabia,played,4-0,0.8409,0.1264,0.0326,2.49,0.34,2-0
-2026-06-21,H,Uruguay,Cape Verde,played,2-2,0.669,0.2124,0.1186,1.98,0.71,2-0
-2026-06-22,I,France,Iraq,played,3-0,0.8121,0.1372,0.0507,2.55,0.51,2-0
-2026-06-22,I,Norway,Senegal,upcoming,,0.4755,0.2671,0.2574,1.55,1.07,1-1
-2026-06-22,J,Argentina,Austria,played,2-0,0.6213,0.2198,0.1588,2.00,0.91,2-0
-2026-06-22,J,Jordan,Algeria,upcoming,,0.2634,0.2683,0.4683,1.09,1.53,1-1
-2026-06-23,K,Portugal,Uzbekistan,upcoming,,0.615,0.2327,0.1523,1.85,0.80,1-0
-2026-06-23,K,Colombia,DR Congo,upcoming,,0.623,0.2305,0.1465,1.86,0.78,1-0
-2026-06-23,L,England,Ghana,upcoming,,0.7468,0.1783,0.0749,2.18,0.55,2-0
-2026-06-23,L,Panama,Croatia,upcoming,,0.2626,0.2712,0.4663,1.07,1.50,1-1
-2026-06-24,C,Morocco,Haiti,upcoming,,0.713,0.1948,0.0923,2.08,0.61,2-0
-2026-06-24,B,Bosnia and Herzegovina,Qatar,upcoming,,0.418,0.2884,0.2937,1.32,1.07,1-1
-2026-06-24,C,Scotland,Brazil,upcoming,,0.1752,0.2489,0.5759,0.84,1.71,0-1
-2026-06-24,A,South Africa,South Korea,upcoming,,0.1888,0.2532,0.5579,0.88,1.68,0-1
-2026-06-24,A,Mexico,Czech Republic,upcoming,,0.775,0.1668,0.0582,2.21,0.45,2-0
-2026-06-24,B,Canada,Switzerland,upcoming,,0.4215,0.2835,0.295,1.36,1.10,1-1
-2026-06-25,D,United States,Turkey,upcoming,,0.5176,0.2548,0.2276,1.68,1.03,1-1
-2026-06-25,D,Paraguay,Australia,upcoming,,0.3705,0.2911,0.3384,1.23,1.16,1-1
-2026-06-25,E,Curaçao,Ivory Coast,upcoming,,0.1622,0.2485,0.5893,0.78,1.71,0-1
-2026-06-25,E,Ecuador,Germany,upcoming,,0.2378,0.2804,0.4818,0.93,1.44,1-1
-2026-06-25,F,Japan,Sweden,upcoming,,0.6279,0.2182,0.1539,2.01,0.89,2-0
-2026-06-25,F,Tunisia,Netherlands,upcoming,,0.1105,0.202,0.6875,0.70,2.07,0-2
-2026-06-26,I,Senegal,Iraq,upcoming,,0.6142,0.2358,0.1501,1.81,0.78,1-0
-2026-06-26,I,Norway,France,upcoming,,0.1914,0.2352,0.5734,0.99,1.87,1-1
-2026-06-26,H,Uruguay,Spain,upcoming,,0.1612,0.2441,0.5947,0.79,1.75,0-1
-2026-06-26,G,New Zealand,Belgium,upcoming,,0.1815,0.2373,0.5812,0.93,1.84,1-1
-2026-06-26,G,Egypt,Iran,upcoming,,0.3265,0.305,0.3685,1.06,1.14,1-1
-2026-06-26,H,Cape Verde,Saudi Arabia,upcoming,,0.2898,0.2858,0.4244,1.07,1.35,1-1
-2026-06-27,L,Panama,England,upcoming,,0.1304,0.2187,0.6509,0.75,1.95,0-2
-2026-06-27,J,Algeria,Austria,upcoming,,0.2737,0.2746,0.4518,1.08,1.46,1-1
-2026-06-27,J,Jordan,Argentina,upcoming,,0.0361,0.1273,0.8366,0.38,2.52,0-2
-2026-06-27,K,Colombia,Portugal,upcoming,,0.3986,0.2784,0.323,1.36,1.20,1-1
-2026-06-27,K,DR Congo,Uzbekistan,upcoming,,0.3637,0.2988,0.3375,1.17,1.12,1-1
-2026-06-27,L,Croatia,Ghana,upcoming,,0.6451,0.2296,0.1253,1.82,0.67,1-0
+2026-06-11,A,Mexico,South Africa,played,2-0,0.7824,0.1659,0.0517,2.17,0.40,2-0
+2026-06-11,A,South Korea,Czech Republic,played,2-1,0.506,0.2602,0.2339,1.62,1.03,1-1
+2026-06-12,B,Canada,Bosnia and Herzegovina,played,1-1,0.7379,0.1802,0.082,2.20,0.60,2-0
+2026-06-12,D,United States,Paraguay,played,4-1,0.5002,0.2543,0.2456,1.68,1.11,1-1
+2026-06-13,B,Qatar,Switzerland,played,1-1,0.0679,0.1528,0.7793,0.61,2.48,0-2
+2026-06-13,C,Brazil,Morocco,played,1-1,0.4864,0.2733,0.2403,1.50,0.98,1-1
+2026-06-13,C,Haiti,Scotland,played,0-1,0.2344,0.262,0.5037,1.02,1.60,1-1
+2026-06-13,D,Australia,Turkey,played,2-0,0.4044,0.2941,0.3015,1.26,1.06,1-1
+2026-06-14,F,Sweden,Tunisia,played,5-1,0.5452,0.253,0.2018,1.69,0.94,1-1
+2026-06-14,F,Netherlands,Japan,played,2-2,0.3711,0.2806,0.3484,1.30,1.25,1-1
+2026-06-14,E,Germany,Curaçao,played,7-1,0.8906,0.0829,0.0264,3.25,0.48,3-0
+2026-06-14,E,Ivory Coast,Ecuador,played,1-0,0.2768,0.2905,0.4326,1.01,1.33,1-1
+2026-06-15,G,Belgium,Egypt,played,1-1,0.476,0.2642,0.2598,1.57,1.10,1-1
+2026-06-15,G,Iran,New Zealand,played,2-2,0.5492,0.2533,0.1976,1.69,0.92,1-1
+2026-06-15,H,Spain,Cape Verde,played,0-0,0.8352,0.1244,0.0405,2.63,0.45,2-0
+2026-06-15,H,Saudi Arabia,Uruguay,played,1-1,0.1974,0.2695,0.5331,0.84,1.54,0-1
+2026-06-16,J,Austria,Jordan,played,3-1,0.6199,0.2217,0.1585,1.97,0.90,2-0
+2026-06-16,J,Argentina,Algeria,played,3-0,0.7304,0.1857,0.0839,2.14,0.59,2-0
+2026-06-16,I,France,Senegal,played,3-1,0.6189,0.2181,0.163,2.02,0.94,2-0
+2026-06-16,I,Iraq,Norway,played,1-4,0.1153,0.2062,0.6785,0.71,2.04,0-2
+2026-06-17,K,Portugal,DR Congo,played,1-1,0.6153,0.2415,0.1432,1.74,0.71,1-0
+2026-06-17,K,Uzbekistan,Colombia,played,1-3,0.16,0.2371,0.603,0.82,1.81,0-1
+2026-06-17,L,England,Croatia,played,4-2,0.6547,0.2087,0.1366,2.07,0.84,2-0
+2026-06-17,L,Ghana,Panama,played,1-0,0.2626,0.2723,0.4651,1.06,1.49,1-1
+2026-06-18,A,Czech Republic,South Africa,played,1-1,0.5122,0.272,0.2158,1.52,0.90,1-0
+2026-06-18,A,Mexico,South Korea,played,1-0,0.6584,0.2301,0.1115,1.79,0.59,1-0
+2026-06-18,B,Switzerland,Bosnia and Herzegovina,played,4-1,0.7714,0.1528,0.0758,2.55,0.69,2-0
+2026-06-18,B,Canada,Qatar,played,6-0,0.9014,0.0772,0.0214,3.25,0.41,3-0
+2026-06-19,D,Turkey,Paraguay,played,0-1,0.3006,0.2721,0.4273,1.18,1.45,1-1
+2026-06-19,C,Scotland,Morocco,played,0-1,0.2423,0.2659,0.4918,1.03,1.56,1-1
+2026-06-19,C,Brazil,Haiti,played,3-0,0.8081,0.1371,0.0548,2.60,0.56,2-0
+2026-06-19,D,United States,Australia,played,2-0,0.504,0.265,0.231,1.58,0.99,1-1
+2026-06-20,F,Netherlands,Sweden,played,5-1,0.6109,0.2094,0.1798,2.17,1.11,2-1
+2026-06-20,F,Tunisia,Japan,played,0-4,0.1074,0.179,0.7136,0.81,2.35,0-2
+2026-06-20,E,Germany,Ivory Coast,played,2-1,0.5548,0.2445,0.2007,1.77,0.98,1-1
+2026-06-20,E,Ecuador,Curaçao,played,0-0,0.7465,0.1748,0.0787,2.25,0.60,2-0
+2026-06-21,G,Belgium,Iran,played,0-0,0.4846,0.2729,0.2425,1.50,0.99,1-1
+2026-06-21,G,New Zealand,Egypt,played,1-3,0.242,0.2578,0.5002,1.07,1.64,1-1
+2026-06-21,H,Spain,Saudi Arabia,played,4-0,0.8613,0.1113,0.0274,2.65,0.33,2-0
+2026-06-21,H,Uruguay,Cape Verde,played,2-2,0.6652,0.2175,0.1174,1.92,0.67,1-0
+2026-06-22,I,France,Iraq,played,3-0,0.8148,0.1353,0.0499,2.57,0.51,2-0
+2026-06-22,I,Norway,Senegal,played,3-2,0.5466,0.2428,0.2106,1.80,1.03,1-1
+2026-06-22,J,Argentina,Austria,played,2-0,0.6553,0.2112,0.1335,2.04,0.81,2-0
+2026-06-22,J,Jordan,Algeria,upcoming,,0.2298,0.2506,0.5197,1.07,1.72,1-1
+2026-06-23,K,Portugal,Uzbekistan,upcoming,,0.6469,0.2245,0.1286,1.88,0.71,1-0
+2026-06-23,K,Colombia,DR Congo,upcoming,,0.6411,0.2197,0.1392,1.96,0.80,2-0
+2026-06-23,L,England,Ghana,upcoming,,0.7315,0.1869,0.0817,2.12,0.56,2-0
+2026-06-23,L,Panama,Croatia,upcoming,,0.2712,0.2648,0.4641,1.13,1.56,1-1
+2026-06-24,C,Morocco,Haiti,upcoming,,0.7154,0.1929,0.0917,2.10,0.61,2-0
+2026-06-24,B,Bosnia and Herzegovina,Qatar,upcoming,,0.4563,0.2805,0.2633,1.42,1.02,1-1
+2026-06-24,C,Scotland,Brazil,upcoming,,0.1658,0.2304,0.6038,0.89,1.89,0-1
+2026-06-24,A,South Africa,South Korea,upcoming,,0.1903,0.2634,0.5463,0.84,1.59,0-1
+2026-06-24,A,Mexico,Czech Republic,upcoming,,0.7765,0.1616,0.0619,2.30,0.51,2-0
+2026-06-24,B,Canada,Switzerland,upcoming,,0.4103,0.285,0.3048,1.33,1.11,1-1
+2026-06-25,D,United States,Turkey,upcoming,,0.5147,0.2519,0.2334,1.70,1.08,1-1
+2026-06-25,D,Paraguay,Australia,upcoming,,0.3453,0.2941,0.3606,1.16,1.19,1-1
+2026-06-25,E,Curaçao,Ivory Coast,upcoming,,0.1601,0.2375,0.6024,0.82,1.81,0-1
+2026-06-25,E,Ecuador,Germany,upcoming,,0.2565,0.2881,0.4554,0.96,1.36,1-1
+2026-06-25,F,Japan,Sweden,upcoming,,0.6061,0.214,0.1799,2.11,1.07,2-1
+2026-06-25,F,Tunisia,Netherlands,upcoming,,0.1148,0.1953,0.6899,0.77,2.17,0-2
+2026-06-26,I,Senegal,Iraq,upcoming,,0.622,0.226,0.152,1.91,0.84,2-0
+2026-06-26,I,Norway,France,upcoming,,0.1639,0.2122,0.6239,0.99,2.10,0-2
+2026-06-26,H,Uruguay,Spain,upcoming,,0.1375,0.2179,0.6446,0.79,1.97,0-2
+2026-06-26,G,New Zealand,Belgium,upcoming,,0.202,0.2499,0.5481,0.95,1.72,1-1
+2026-06-26,G,Egypt,Iran,upcoming,,0.3261,0.299,0.3749,1.09,1.19,1-1
+2026-06-26,H,Cape Verde,Saudi Arabia,upcoming,,0.3247,0.2951,0.3802,1.11,1.22,1-1
+2026-06-27,L,Panama,England,upcoming,,0.1274,0.2149,0.6577,0.75,1.98,0-2
+2026-06-27,J,Algeria,Austria,upcoming,,0.2799,0.2704,0.4497,1.13,1.49,1-1
+2026-06-27,J,Jordan,Argentina,upcoming,,0.0384,0.1215,0.84,0.44,2.65,0-2
+2026-06-27,K,Colombia,Portugal,upcoming,,0.4307,0.2805,0.2888,1.39,1.10,1-1
+2026-06-27,K,DR Congo,Uzbekistan,upcoming,,0.3745,0.3088,0.3167,1.13,1.02,1-1
+2026-06-27,L,Croatia,Ghana,upcoming,,0.6401,0.2263,0.1336,1.87,0.73,1-0
