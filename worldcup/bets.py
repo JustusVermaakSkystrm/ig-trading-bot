@@ -189,6 +189,40 @@ def criticality(watch: list[dict], stats: dict, base: dict) -> list[dict]:
     return out
 
 
+def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
+    """Structured re-pricing of every tracked bet plus the conditional-swing
+    ranking of upcoming games. Shared by the text report and the web page."""
+    bets = load_bets()
+    sim, fixtures, pred = _build_sim(seed)
+    played = int(fixtures["home_score"].notna().sum())
+    watch = watch_fixtures(bets, fixtures)
+    stats = simulate_reached_stats(sim, bets, n_sims, watch=watch)
+    n = stats["n"]
+    base = {b["id"]: stats["joint"][b["id"]] / n for b in bets}
+
+    out_bets = []
+    for b in bets:
+        p = base[b["id"]]
+        dec = b["returns"] / b["stake"]
+        order = sorted(range(len(b["legs"])),
+                       key=lambda i: stats["leg"][b["id"]][i] / n)
+        legs = []
+        for rank, i in enumerate(order):
+            lg = b["legs"][i]
+            ph = stats["leg"][b["id"]][i] / n
+            legs.append({"team": _disp(lg["team"]), "stage": STAGE_LABEL[lg["stage"]],
+                         "prob": ph, "weakest": rank == 0,
+                         "status": "✅" if ph >= 0.99995 else ("❌" if ph <= 0.00005 else "")})
+        out_bets.append({
+            "id": b["id"], "name": b["name"], "stake": b["stake"],
+            "returns": b["returns"], "dec": dec, "prob": p,
+            "implied": 1.0 / dec, "ev": p * dec - 1.0,
+            "exp_return": b["stake"] * p * dec, "legs": legs})
+
+    crit = criticality(watch, stats, base)
+    return {"played": played, "n_sims": n, "bets": out_bets, "criticality": crit}
+
+
 def report(n_sims: int = 50_000, seed: int = 19) -> str:
     bets = load_bets()
     sim, fixtures, pred = _build_sim(seed)

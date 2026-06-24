@@ -63,6 +63,17 @@ jobs:
           python -m worldcup.run train --skip-validation
           python -m worldcup.run simulate --sims 50000
 
+      - name: Refresh private bet page (only if passphrase secret is set)
+        if: steps.upd.outputs.sim_changed == 'true'
+        env:
+          BET_PAGE_PASSPHRASE: ${{ secrets.BET_PAGE_PASSPHRASE }}
+        run: |
+          if [ -n "$BET_PAGE_PASSPHRASE" ]; then
+            python -m worldcup.betpage --sims 50000
+          else
+            echo "BET_PAGE_PASSPHRASE not set — leaving existing encrypted page in place."
+          fi
+
       - name: Rebuild site (heartbeat timestamp)
         run: python -m worldcup.site
 
