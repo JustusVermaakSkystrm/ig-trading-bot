@@ -1,0 +1,51 @@
+{
+  "_comment": "Personal Sky Bet World Cup 2026 accumulators tracked for live re-pricing. Each leg is the DEEPEST stage a team must reach (nested rungs collapse to this). Stages: R32, R16, QF, SF, F.",
+  "bets": [
+    {
+      "id": "bet1",
+      "name": "Original 14-fold",
+      "stake": 50.0,
+      "returns": 11905.36,
+      "placed": "2026-06-24",
+      "legs": [
+        {"team": "Argentina", "stage": "SF"},
+        {"team": "Spain", "stage": "SF"},
+        {"team": "France", "stage": "QF"},
+        {"team": "Brazil", "stage": "QF"},
+        {"team": "Netherlands", "stage": "R16"},
+        {"team": "United States", "stage": "R16"},
+        {"team": "Mexico", "stage": "R16"},
+        {"team": "Colombia", "stage": "R16"}
+      ]
+    },
+    {
+      "id": "bet2",
+      "name": "Safer 6-leg",
+      "stake": 10.0,
+      "returns": 149.88,
+      "placed": "2026-06-24",
+      "legs": [
+        {"team": "Argentina", "stage": "SF"},
+        {"team": "France", "stage": "QF"},
+        {"team": "Colombia", "stage": "R16"},
+        {"team": "Mexico", "stage": "R16"},
+        {"team": "England", "stage": "R16"},
+        {"team": "United States", "stage": "R16"}
+      ]
+    },
+    {
+      "id": "bet3",
+      "name": "Value 5-leg",
+      "stake": 10.0,
+      "returns": 443.54,
+      "placed": "2026-06-24",
+      "legs": [
+        {"team": "Argentina", "stage": "F"},
+        {"team": "Colombia", "stage": "QF"},
+        {"team": "France", "stage": "QF"},
+        {"team": "Mexico", "stage": "R16"},
+        {"team": "United States", "stage": "R16"}
+      ]
+    }
+  ]
+}
