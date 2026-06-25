@@ -46,6 +46,20 @@
         {"team": "Mexico", "stage": "R16"},
         {"team": "United States", "stage": "R16"}
       ]
+    },
+    {
+      "id": "bet4",
+      "name": "Spain-anchor diversifier",
+      "stake": 20.0,
+      "returns": 210.52,
+      "placed": "2026-06-25",
+      "legs": [
+        {"team": "Spain", "stage": "SF"},
+        {"team": "Argentina", "stage": "QF"},
+        {"team": "France", "stage": "QF"},
+        {"team": "Germany", "stage": "R16"},
+        {"team": "Colombia", "stage": "R16"}
+      ]
     }
   ]
 }
