@@ -60,6 +60,23 @@
         {"team": "Germany", "stage": "R16"},
         {"team": "Colombia", "stage": "R16"}
       ]
+    },
+    {
+      "id": "bet5",
+      "name": "8-fold R16 BuildABet",
+      "stake": 20.0,
+      "returns": 726.01,
+      "placed": "2026-06-26",
+      "legs": [
+        {"team": "France", "stage": "R16"},
+        {"team": "Netherlands", "stage": "R16"},
+        {"team": "Spain", "stage": "R16"},
+        {"team": "Belgium", "stage": "R16"},
+        {"team": "Brazil", "stage": "R16"},
+        {"team": "Mexico", "stage": "R16"},
+        {"team": "Argentina", "stage": "R16"},
+        {"team": "Portugal", "stage": "R16"}
+      ]
     }
   ]
 }
