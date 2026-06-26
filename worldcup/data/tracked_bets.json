@@ -109,6 +109,24 @@
         {"team": "Australia", "stage": "R16", "type": "out"},
         {"team": "Canada", "stage": "R16", "type": "out"}
       ]
+    },
+    {
+      "id": "bet8",
+      "name": "8-fold R16 (FREE BET)",
+      "stake": 20.0,
+      "returns": 721.85,
+      "free_bet": true,
+      "placed": "2026-06-26",
+      "legs": [
+        {"team": "France", "stage": "R16"},
+        {"team": "Netherlands", "stage": "R16"},
+        {"team": "Belgium", "stage": "R16"},
+        {"team": "Spain", "stage": "R16"},
+        {"team": "Brazil", "stage": "R16"},
+        {"team": "England", "stage": "R16"},
+        {"team": "Argentina", "stage": "R16"},
+        {"team": "Colombia", "stage": "R16"}
+      ]
     }
   ]
 }

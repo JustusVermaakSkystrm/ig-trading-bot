@@ -218,7 +218,13 @@ def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
     out_bets = []
     for b in bets:
         p = base[b["id"]]
+        free = b.get("free_bet", False)
+        # returns = winnings only for a free bet (stake not returned), else
+        # total returns incl. stake. Implied prob is the same parlay price either way.
         dec = b["returns"] / b["stake"]
+        implied = b["stake"] / (b["returns"] + b["stake"]) if free else 1.0 / dec
+        ev = None if free else p * dec - 1.0
+        exp_return = p * b["returns"] if free else b["stake"] * p * dec
         order = sorted(range(len(b["legs"])),
                        key=lambda i: stats["leg"][b["id"]][i] / n)
         legs = []
@@ -231,9 +237,9 @@ def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
                          "status": "✅" if ph >= 0.99995 else ("❌" if ph <= 0.00005 else "")})
         out_bets.append({
             "id": b["id"], "name": b["name"], "stake": b["stake"],
-            "returns": b["returns"], "dec": dec, "prob": p,
-            "implied": 1.0 / dec, "ev": p * dec - 1.0,
-            "exp_return": b["stake"] * p * dec, "legs": legs})
+            "returns": b["returns"], "dec": dec, "prob": p, "free_bet": free,
+            "implied": implied, "ev": ev,
+            "exp_return": exp_return, "legs": legs})
 
     crit = criticality(watch, stats, base)
     return {"played": played, "n_sims": n, "bets": out_bets, "criticality": crit}
@@ -251,15 +257,20 @@ def report(n_sims: int = 50_000, seed: int = 19) -> str:
     lines = [f"BET TRACKER  ({played}/72 group games in, {n_sims:,} sims)\n"]
     for b in bets:
         p = base[b["id"]]
+        free = b.get("free_bet", False)
         dec = b["returns"] / b["stake"]
-        implied = 1.0 / dec
-        ev = p * dec - 1.0
         odds = f"1 in {1/p:,.0f}" if p > 0 else "—"
         lines.append(f"### {b['name']}  (£{b['stake']:.0f} -> £{b['returns']:,.2f}, {dec:.0f}x)")
-        lines.append(f"   Model now: {100*p:.2f}%  ({odds})   "
-                     f"Bookie implied: {100*implied:.2f}%   "
-                     f"EV: {ev*100:+.0f}%   "
-                     f"E[return]: £{b['stake']*p*dec:,.2f}")
+        if free:
+            lines.append(f"   Model now: {100*p:.2f}%  ({odds})   "
+                         f"FREE BET (£0 at risk)   "
+                         f"E[winnings]: £{p * b['returns']:,.2f}")
+        else:
+            implied = 1.0 / dec
+            lines.append(f"   Model now: {100*p:.2f}%  ({odds})   "
+                         f"Bookie implied: {100*implied:.2f}%   "
+                         f"EV: {(p*dec-1)*100:+.0f}%   "
+                         f"E[return]: £{b['stake']*p*dec:,.2f}")
         legs = sorted(range(len(b["legs"])),
                       key=lambda i: stats["leg"][b["id"]][i] / n)
         for i in legs:

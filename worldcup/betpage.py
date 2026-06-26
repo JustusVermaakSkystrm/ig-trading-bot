@@ -29,7 +29,9 @@ PAGE_NAME = "picks.html"
 PBKDF2_ITERS = 200_000
 
 
-def _ev_badge(ev: float) -> str:
+def _ev_badge(ev) -> str:
+    if ev is None:
+        return '<span class="ev good">FREE BET</span>'
     if ev >= 0.05:
         return f'<span class="ev good">+{ev*100:.0f}% EV</span>'
     if ev <= -0.05:
@@ -48,11 +50,13 @@ def render_fragment(data: dict) -> str:
         p.append(f'<div class="cardhead"><h3>{escape(b["name"])}</h3>{_ev_badge(b["ev"])}</div>')
         p.append(f'<p class="stake">£{b["stake"]:.0f} → £{b["returns"]:,.2f} '
                  f'<span class="mult">({b["dec"]:.0f}×)</span></p>')
+        ret_label = "Expected winnings" if b.get("free_bet") else "Expected return"
+        ret_note = "£0 at risk" if b.get("free_bet") else f'on £{b["stake"]:.0f}'
         p.append('<div class="nums">'
                  f'<div><span>Model</span><b>{100*b["prob"]:.2f}%</b><i>{odds}</i></div>'
                  f'<div><span>Bookie implied</span><b>{100*b["implied"]:.2f}%</b></div>'
-                 f'<div><span>Expected return</span><b>£{b["exp_return"]:,.2f}</b>'
-                 f'<i>on £{b["stake"]:.0f}</i></div></div>')
+                 f'<div><span>{ret_label}</span><b>£{b["exp_return"]:,.2f}</b>'
+                 f'<i>{ret_note}</i></div></div>')
         p.append('<table class="legs"><tbody>')
         for lg in b["legs"]:
             cls = "weak" if lg["weakest"] else ""
