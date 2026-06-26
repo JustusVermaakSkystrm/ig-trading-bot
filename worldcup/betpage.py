@@ -59,7 +59,7 @@ def render_fragment(data: dict) -> str:
             tag = ' <span class="wk">weakest link</span>' if lg["weakest"] else ""
             st = f' {lg["status"]}' if lg["status"] else ""
             p.append(f'<tr class="{cls}"><td>{escape(lg["team"])}{st}</td>'
-                     f'<td>reach {escape(lg["stage"])}</td>'
+                     f'<td>{escape(lg["desc"])}</td>'
                      f'<td class="pct">{100*lg["prob"]:.0f}%{tag}</td></tr>')
         p.append('</tbody></table></div>')
 

@@ -94,6 +94,21 @@
         {"team": "Argentina", "stage": "R16"},
         {"team": "Colombia", "stage": "R16"}
       ]
+    },
+    {
+      "id": "bet7",
+      "name": "6-fold elimination (out in R16)",
+      "stake": 10.0,
+      "returns": 9779.26,
+      "placed": "2026-06-26",
+      "legs": [
+        {"team": "Germany", "stage": "R16", "type": "out"},
+        {"team": "Switzerland", "stage": "R16", "type": "out"},
+        {"team": "Portugal", "stage": "R16", "type": "out"},
+        {"team": "Norway", "stage": "R16", "type": "out"},
+        {"team": "Australia", "stage": "R16", "type": "out"},
+        {"team": "Canada", "stage": "R16", "type": "out"}
+      ]
     }
   ]
 }

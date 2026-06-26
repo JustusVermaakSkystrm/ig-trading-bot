@@ -43,6 +43,21 @@ def _disp(team: str) -> str:
     return DISPLAY.get(team, team)
 
 
+def _leg_ok(reached_val: int, lg: dict) -> bool:
+    """A leg lands when a team reaches a stage ("reach", default) or is
+    eliminated exactly at it ("out" — reached that round but no further)."""
+    r = RANK[lg["stage"]]
+    if lg.get("type") == "out":
+        return reached_val == r
+    return reached_val >= r
+
+
+def _leg_desc(lg: dict) -> str:
+    if lg.get("type") == "out":
+        return f"out in {STAGE_LABEL[lg['stage']]}"
+    return f"reach {STAGE_LABEL[lg['stage']]}"
+
+
 def load_bets() -> list[dict]:
     return json.loads(BETS_PATH.read_text())["bets"]
 
@@ -113,7 +128,7 @@ def simulate_reached_stats(sim, bets: list[dict], n_sims: int,
         for b in bets:
             ok = True
             for i, lg in enumerate(b["legs"]):
-                if reached.get(lg["team"], 0) >= RANK[lg["stage"]]:
+                if _leg_ok(reached.get(lg["team"], 0), lg):
                     leg[b["id"]][i] += 1
                 else:
                     ok = False
@@ -210,7 +225,8 @@ def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
         for rank, i in enumerate(order):
             lg = b["legs"][i]
             ph = stats["leg"][b["id"]][i] / n
-            legs.append({"team": _disp(lg["team"]), "stage": STAGE_LABEL[lg["stage"]],
+            legs.append({"team": _disp(lg["team"]), "desc": _leg_desc(lg),
+                         "stage": STAGE_LABEL[lg["stage"]],
                          "prob": ph, "weakest": rank == 0,
                          "status": "✅" if ph >= 0.99995 else ("❌" if ph <= 0.00005 else "")})
         out_bets.append({
@@ -250,7 +266,7 @@ def report(n_sims: int = 50_000, seed: int = 19) -> str:
             lg = b["legs"][i]
             ph = stats["leg"][b["id"]][i] / n
             mark = "  <- weakest link" if i == legs[0] else ""
-            lines.append(f"      {_disp(lg['team']):<14} reach {STAGE_LABEL[lg['stage']]:<13} "
+            lines.append(f"      {_disp(lg['team']):<14} {_leg_desc(lg):<20} "
                          f"{100*ph:5.1f}%{mark}")
         lines.append("")
 
