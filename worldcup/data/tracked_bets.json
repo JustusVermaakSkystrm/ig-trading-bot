@@ -127,6 +127,41 @@
         {"team": "Argentina", "stage": "R16"},
         {"team": "Colombia", "stage": "R16"}
       ]
+    },
+    {
+      "id": "bet9",
+      "name": "8-fold R16 (£10 real + £10 free)",
+      "note": "£20 slip: £10 cash at risk + £10 free bet; real risk £10 at effective 63.5/1",
+      "stake": 10.0,
+      "returns": 635.28,
+      "placed": "2026-06-26",
+      "legs": [
+        {"team": "France", "stage": "R16"},
+        {"team": "Netherlands", "stage": "R16"},
+        {"team": "Spain", "stage": "R16"},
+        {"team": "Belgium", "stage": "R16"},
+        {"team": "Brazil", "stage": "R16"},
+        {"team": "England", "stage": "R16"},
+        {"team": "Colombia", "stage": "R16"},
+        {"team": "Argentina", "stage": "R16"}
+      ]
+    },
+    {
+      "id": "bet10",
+      "name": "8-fold R16 (Belgium/Mexico)",
+      "stake": 10.0,
+      "returns": 462.97,
+      "placed": "2026-06-26",
+      "legs": [
+        {"team": "France", "stage": "R16"},
+        {"team": "Netherlands", "stage": "R16"},
+        {"team": "Spain", "stage": "R16"},
+        {"team": "Belgium", "stage": "R16"},
+        {"team": "Brazil", "stage": "R16"},
+        {"team": "Mexico", "stage": "R16"},
+        {"team": "Argentina", "stage": "R16"},
+        {"team": "Colombia", "stage": "R16"}
+      ]
     }
   ]
 }
