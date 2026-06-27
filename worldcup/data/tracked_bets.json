@@ -162,6 +162,19 @@
         {"team": "Argentina", "stage": "R16"},
         {"team": "Colombia", "stage": "R16"}
       ]
+    },
+    {
+      "id": "bet11",
+      "name": "QF value 4-fold",
+      "stake": 10.0,
+      "returns": 258.10,
+      "placed": "2026-06-27",
+      "legs": [
+        {"team": "Argentina", "stage": "QF"},
+        {"team": "France", "stage": "QF"},
+        {"team": "Colombia", "stage": "QF"},
+        {"team": "Mexico", "stage": "QF"}
+      ]
     }
   ]
 }
