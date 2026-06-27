@@ -1,9 +1,9 @@
 date,group,home,away,status,score,p_home_win,p_draw,p_away_win,xg_home,xg_away,most_likely_score
 2026-06-11,A,Mexico,South Africa,played,2-0,0.7641,0.1751,0.0608,2.13,0.45,2-0
 2026-06-11,A,South Korea,Czech Republic,played,2-1,0.4868,0.261,0.2522,1.61,1.09,1-1
-2026-06-12,B,Canada,Bosnia and Herzegovina,played,1-1,0.6955,0.1975,0.107,2.11,0.70,2-0
+2026-06-12,B,Canada,Bosnia and Herzegovina,played,1-1,0.7073,0.1917,0.101,2.16,0.69,2-0
 2026-06-12,D,United States,Paraguay,played,4-1,0.4856,0.2499,0.2645,1.72,1.21,1-1
-2026-06-13,B,Qatar,Switzerland,played,1-1,0.0175,0.071,0.9115,0.36,3.29,0-3
+2026-06-13,B,Qatar,Switzerland,played,1-1,0.0281,0.0834,0.8885,0.51,3.29,0-3
 2026-06-13,C,Brazil,Morocco,played,1-1,0.4551,0.2596,0.2853,1.60,1.22,1-1
 2026-06-13,C,Haiti,Scotland,played,0-1,0.2452,0.2621,0.4926,1.06,1.60,1-1
 2026-06-13,D,Australia,Turkey,played,2-0,0.3367,0.2985,0.3648,1.12,1.17,1-1
@@ -25,8 +25,8 @@ date,group,home,away,status,score,p_home_win,p_draw,p_away_win,xg_home,xg_away,m
 2026-06-17,L,Ghana,Panama,played,1-0,0.2512,0.2941,0.4547,0.91,1.33,1-1
 2026-06-18,A,Czech Republic,South Africa,played,1-1,0.4354,0.2846,0.2801,1.37,1.05,1-1
 2026-06-18,A,Mexico,South Korea,played,1-0,0.6642,0.2207,0.1152,1.89,0.65,1-0
-2026-06-18,B,Switzerland,Bosnia and Herzegovina,played,4-1,0.7347,0.1668,0.0985,2.49,0.82,2-0
-2026-06-18,B,Canada,Qatar,played,6-0,0.9047,0.0726,0.0227,3.44,0.48,3-0
+2026-06-18,B,Switzerland,Bosnia and Herzegovina,played,4-1,0.7359,0.1709,0.0932,2.39,0.74,2-0
+2026-06-18,B,Canada,Qatar,played,6-0,0.9158,0.0655,0.0186,3.51,0.44,3-0
 2026-06-19,D,Turkey,Paraguay,played,0-1,0.3068,0.286,0.4072,1.12,1.32,1-1
 2026-06-19,C,Scotland,Morocco,played,0-1,0.2223,0.27,0.5076,0.93,1.54,1-1
 2026-06-19,C,Brazil,Haiti,played,3-0,0.8195,0.1354,0.0451,2.51,0.45,2-0
@@ -52,7 +52,7 @@ date,group,home,away,status,score,p_home_win,p_draw,p_away_win,xg_home,xg_away,m
 2026-06-24,C,Scotland,Brazil,played,0-3,0.1311,0.2138,0.6552,0.78,2.00,0-2
 2026-06-24,A,South Africa,South Korea,played,1-0,0.2396,0.2874,0.473,0.91,1.39,1-1
 2026-06-24,A,Mexico,Czech Republic,played,3-0,0.7998,0.1405,0.0597,2.60,0.60,2-0
-2026-06-24,B,Canada,Switzerland,played,1-3,0.3066,0.277,0.4164,1.17,1.40,1-1
+2026-06-24,B,Canada,Switzerland,played,1-2,0.3189,0.2845,0.3967,1.16,1.32,1-1
 2026-06-25,D,United States,Turkey,played,2-3,0.4595,0.2557,0.2848,1.64,1.24,1-1
 2026-06-25,D,Paraguay,Australia,played,0-0,0.3503,0.3103,0.3394,1.08,1.06,1-1
 2026-06-25,E,Curaçao,Ivory Coast,played,0-2,0.1339,0.2299,0.6362,0.72,1.84,0-1
