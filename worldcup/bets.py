@@ -210,6 +210,67 @@ def criticality(watch: list[dict], stats: dict, base: dict) -> list[dict]:
     return out
 
 
+def resolve_knockout_round(sim) -> list[dict]:
+    """The Round-of-32 fixtures, resolved deterministically from the completed
+    group stage + official third-place override. Every bet leg requires the
+    team to reach at least the Round of 16, so an R32 defeat kills every leg
+    that team appears in — these are the live make-or-break games."""
+    bracket = sim.bracket
+    gf = sim.fixtures
+    if gf["home_score"].isna().any():
+        return []   # group stage not finished — R32 not yet fixed
+    slots: dict[str, str] = {}
+    thirds = []
+    for g, members in sim.groups.items():
+        rs = [(gf.iloc[i].home_team, gf.iloc[i].away_team,
+               int(gf.iloc[i].home_score), int(gf.iloc[i].away_score))
+              for i in sim._group_match_idx[g]]
+        order = fifa_group_rank(members, rs, sim.elo)
+        pts = _table(members, rs)
+        slots[f"W_{g}"], slots[f"RU_{g}"] = order[0], order[1]
+        thirds.append((g, order[2], pts[order[2]]))
+    if _third_override:
+        slots.update(_third_override)
+    else:
+        slots.update(allocate_thirds(rank_thirds(thirds, sim.elo)[:8],
+                                     bracket["third_place_slots"]))
+    out = []
+    for m in bracket["round_of_32"]:
+        out.append({"match": m["match"], "date": m["date"], "venue": m["venue"],
+                    "home": slots.get(m["home"]), "away": slots.get(m["away"])})
+    return out
+
+
+def must_watch(r32: list[dict], bets: list[dict], proj: pd.DataFrame) -> list[dict]:
+    """Upcoming knockout games that can settle bet legs, ranked by jeopardy:
+    how likely a bet team is to lose × how many bets ride on it."""
+    if not r32 or proj.empty:
+        return []
+    p_r16 = proj.set_index("team")["p_R16"].to_dict()
+    team_bets: dict[str, list[str]] = {}
+    for b in bets:
+        for lg in b["legs"]:
+            team_bets.setdefault(lg["team"], []).append(b["id"])
+    out = []
+    for m in r32:
+        involved = [t for t in (m["home"], m["away"]) if t in team_bets]
+        if not involved:
+            continue
+        rows = []
+        for t in involved:
+            wp = float(p_r16.get(t, 0.0))
+            rows.append({"team": _disp(t), "win_prob": wp,
+                         "bets": sorted(set(team_bets[t]))})
+        # jeopardy = chance the most-exposed involved team slips up
+        risk = max((1 - r["win_prob"]) * len(r["bets"]) for r in rows)
+        min_wp = min(r["win_prob"] for r in rows)
+        out.append({"match": m["match"], "date": m["date"], "venue": m["venue"],
+                    "home": _disp(m["home"]), "away": _disp(m["away"]),
+                    "rows": rows, "risk": risk, "min_win_prob": min_wp})
+    out.sort(key=lambda d: -d["risk"])
+    return out
+
+
 def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
     """Structured re-pricing of every tracked bet plus the conditional-swing
     ranking of upcoming games. Shared by the text report and the web page."""
@@ -248,7 +309,10 @@ def compute(n_sims: int = 50_000, seed: int = 19) -> dict:
             "exp_return": exp_return, "legs": legs})
 
     crit = criticality(watch, stats, base)
-    return {"played": played, "n_sims": n, "bets": out_bets, "criticality": crit}
+    r32 = resolve_knockout_round(sim)
+    mw = must_watch(r32, bets, _projections())
+    return {"played": played, "n_sims": n, "bets": out_bets,
+            "criticality": crit, "must_watch": mw}
 
 
 def report(n_sims: int = 50_000, seed: int = 19) -> str:
@@ -287,23 +351,30 @@ def report(n_sims: int = 50_000, seed: int = 19) -> str:
                          f"{100*ph:5.1f}%{mark}")
         lines.append("")
 
+    # ---- must-watch knockout games
+    r32 = resolve_knockout_round(sim)
+    mw = must_watch(r32, bets, _projections())
+    if mw:
+        lines.append("### Must-watch games (every leg needs the team to win)")
+        for c in mw:
+            tag = "🔴" if c["min_win_prob"] < 0.6 else ("🟠" if c["min_win_prob"] < 0.8 else "🟢")
+            lines.append(f"   {tag} {c['date']}  {c['home']} v {c['away']}")
+            for r in c["rows"]:
+                lines.append(
+                    f"        {r['team']} {100*r['win_prob']:.0f}% to win — "
+                    f"props up bets {', '.join(b[3:] for b in r['bets'])}")
+        lines.append("")
+
+    # ---- (legacy) group-game swing ranking, if any group games remain
     crit = criticality(watch, stats, base)
     if crit:
-        lines.append("### Upcoming games, ranked by how much they swing a bet")
+        lines.append("### Remaining group games, ranked by swing")
         for c in crit:
             who = " & ".join(_disp(t) for t in c["involved"])
             tag = "🔴" if c["max_swing"] >= 0.02 else ("🟠" if c["max_swing"] >= 0.005 else "⚪")
             lines.append(
                 f"   {tag} {c['date']}  {c['home']} v {c['away']}  "
                 f"({100*c['p_home']:.0f}/{100*c['p_draw']:.0f}/{100*c['p_away']:.0f})  — {who}")
-            for r in c["rows"]:
-                if abs(r["swing"]) < 0.002:
-                    continue
-                lines.append(
-                    f"        {r['bet']}: {100*r['base']:.2f}% now -> "
-                    f"{100*r['if_win']:.2f}% if {_disp(c['involved'][0])} win, "
-                    f"{100*r['if_not']:.2f}% if not "
-                    f"({r['swing']*100:+.2f} pts)")
     return "\n".join(lines)
 
 

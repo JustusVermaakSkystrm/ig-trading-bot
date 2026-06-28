@@ -67,29 +67,35 @@ def render_fragment(data: dict) -> str:
                      f'<td class="pct">{100*lg["prob"]:.0f}%{tag}</td></tr>')
         p.append('</tbody></table></div>')
 
-    crit = [c for c in data["criticality"] if c["max_swing"] >= 0.002]
+    mw = data.get("must_watch") or []
+    if mw:
+        p.append('<h2>⚽ Must-watch games</h2>')
+        p.append('<p class="meta">Every leg needs its team to keep winning, so '
+                 'each Round-of-32 tie below is make-or-break for the bets riding '
+                 'on it — ranked by jeopardy (chance of an upset × bets exposed). '
+                 'A defeat settles those legs as losers.</p>')
+        for c in mw:
+            dot = "🔴" if c["min_win_prob"] < 0.6 else ("🟠" if c["min_win_prob"] < 0.8 else "🟢")
+            p.append('<div class="game">')
+            p.append(f'<div class="gh">{dot} <b>{escape(c["date"])}</b> · '
+                     f'{escape(c["home"])} v {escape(c["away"])}</div>')
+            for r in c["rows"]:
+                blist = ", ".join("#" + b[3:] for b in r["bets"])
+                p.append(f'<div class="swing"><b>{escape(r["team"])}</b> '
+                         f'{100*r["win_prob"]:.0f}% to advance '
+                         f'<span class="d">— carries bets {blist}</span></div>')
+            p.append('</div>')
+
+    # legacy group-game swing ranking (only while group games remain)
+    crit = [c for c in data.get("criticality", []) if c["max_swing"] >= 0.002]
     if crit:
-        p.append('<h2>Games that move a bet</h2>')
-        p.append('<p class="meta">Ranked by how much the result swings a bet '
-                 '(all teams are already through the group, so these mostly affect '
-                 'the knockout draw).</p>')
+        p.append('<h2>Remaining group games</h2>')
         for c in crit[:8]:
             dot = "🔴" if c["max_swing"] >= 0.02 else ("🟠" if c["max_swing"] >= 0.005 else "⚪")
             who = " & ".join(escape(t) for t in c["involved"])
             p.append('<div class="game">')
             p.append(f'<div class="gh">{dot} <b>{escape(c["date"])}</b> · '
-                     f'{escape(c["home"])} v {escape(c["away"])} '
-                     f'<span class="odds">{100*c["p_home"]:.0f}/{100*c["p_draw"]:.0f}/'
-                     f'{100*c["p_away"]:.0f}</span> — {who}</div>')
-            for r in c["rows"]:
-                if abs(r["swing"]) < 0.002:
-                    continue
-                team = escape(c["involved"][0])
-                p.append(f'<div class="swing"><code>{escape(r["bet"])}</code> '
-                         f'{100*r["base"]:.2f}% → '
-                         f'<b>{100*r["if_win"]:.2f}%</b> if {team} win, '
-                         f'{100*r["if_not"]:.2f}% if not '
-                         f'<span class="d">({r["swing"]*100:+.2f} pts)</span></div>')
+                     f'{escape(c["home"])} v {escape(c["away"])} — {who}</div>')
             p.append('</div>')
     return "".join(p)
 
