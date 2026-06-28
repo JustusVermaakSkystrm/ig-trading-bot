@@ -26,9 +26,10 @@ from .dataset import build_training_table, load_teams, merged_results
 from .model import GoalModel, MODEL_PATH
 from .simulator import (STAGE_OF_ROUND, MatchPredictor, TournamentSimulator,
                         _table, allocate_thirds, fifa_group_rank,
-                        load_third_override, rank_thirds)
+                        load_knockout_results, load_third_override, rank_thirds)
 
 _third_override = load_third_override()
+_ko_results = load_knockout_results()
 from .run import world_cup_fixtures
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -123,12 +124,19 @@ def simulate_reached_stats(sim, bets: list[dict], n_sims: int,
                 away = slots.get(m["away"]) or advancers[m["away"]]
                 reached[home] = max(reached.get(home, 0), RANK[stage])
                 reached[away] = max(reached.get(away, 0), RANK[stage])
-                w, _ = sim._knockout_match(home, away, m.get("venue_country"))
+                forced = _ko_results.get(m["match"], {}).get("winner")
+                if forced in (home, away):
+                    w = forced
+                else:
+                    w, _ = sim._knockout_match(home, away, m.get("venue_country"))
                 advancers[f"W{m['match']}"] = w
         fm = bracket["final"]
         fh, fa = advancers[fm["home"]], advancers[fm["away"]]
         reached[fh] = max(reached.get(fh, 0), RANK["F"])
         reached[fa] = max(reached.get(fa, 0), RANK["F"])
+        forced = _ko_results.get(fm["match"], {}).get("winner")
+        if forced in (fh, fa):
+            reached[forced] = max(reached.get(forced, 0), RANK["F"])
 
         bet_ok = {}
         for b in bets:
@@ -253,6 +261,8 @@ def must_watch(r32: list[dict], bets: list[dict], proj: pd.DataFrame) -> list[di
             team_bets.setdefault(lg["team"], []).append(b["id"])
     out = []
     for m in r32:
+        if m["match"] in _ko_results:
+            continue   # already played
         involved = [t for t in (m["home"], m["away"]) if t in team_bets]
         if not involved:
             continue

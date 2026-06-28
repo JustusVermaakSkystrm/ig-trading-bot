@@ -44,6 +44,17 @@ def load_third_override() -> dict | None:
     return None
 
 
+def load_knockout_results() -> dict:
+    """Actual played knockout results keyed by bracket match number (as int).
+    The simulator forces the recorded winner for these ties instead of
+    simulating them, and propagates the winner downstream."""
+    p = DATA_DIR / "knockout_results.json"
+    if not p.exists():
+        return {}
+    raw = json.load(open(p)).get("results", {})
+    return {int(k): v for k, v in raw.items()}
+
+
 class MatchPredictor:
     """Caches Poisson rates per pairing.
 
@@ -268,6 +279,7 @@ class TournamentSimulator:
     def run(self, n_sims: int = 100_000) -> "SimResults":
         bracket = self.bracket
         third_override = load_third_override()
+        ko_results = load_knockout_results()
         res = SimResults(self.groups, n_sims)
         all_scores = self._sample_group_scores(n_sims)
 
@@ -303,13 +315,22 @@ class TournamentSimulator:
                 for m in matches:
                     home = slots.get(m["home"]) or advancers[m["home"]]
                     away = slots.get(m["away"]) or advancers[m["away"]]
-                    w, l = self._knockout_match(home, away, m.get("venue_country"))
+                    forced = ko_results.get(m["match"], {}).get("winner")
+                    if forced in (home, away):
+                        w = forced
+                    else:
+                        w, _ = self._knockout_match(home, away, m.get("venue_country"))
                     advancers[f"W{m['match']}"] = w
                     res.record_ko(stage, m["match"], home, away, w)
 
             fm = bracket["final"]
             fh, fa = advancers[fm["home"]], advancers[fm["away"]]
-            champion, runner_up = self._knockout_match(fh, fa, fm.get("venue_country"))
+            forced = ko_results.get(fm["match"], {}).get("winner")
+            if forced in (fh, fa):
+                champion = forced
+                runner_up = fa if champion == fh else fh
+            else:
+                champion, runner_up = self._knockout_match(fh, fa, fm.get("venue_country"))
             res.record_ko("F", fm["match"], fh, fa, champion)
             res.record_final(champion, runner_up)
         return res

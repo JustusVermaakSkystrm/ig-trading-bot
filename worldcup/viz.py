@@ -72,9 +72,11 @@ def _box(cx: float, y: int, tie: dict) -> str:
     p_home = tie["p_home_advance"]
     confirmed = tie.get("confirmed", False)
     underdog = tie.get("h2h_underdog", False)
+    played = tie.get("played", False)
     rows = [(home, p_home, winner == home), (away, 1 - p_home, winner == away)]
-    # Confirmed ties (same pairing in every simulation) get a gold border.
-    stroke, sw = ("#f5c542", 2.5) if confirmed else ("#26314f", 1)
+    # Played ties get a solid green border; confirmed-but-unplayed ties gold.
+    stroke, sw = (("#4cc38a", 2.5) if played
+                  else ("#f5c542", 2.5) if confirmed else ("#26314f", 1))
     parts = [
         f'<rect x="{x:.0f}" y="{y}" width="{BOX_W}" height="{BOX_H}" rx="6" '
         f'fill="#161e31" stroke="{stroke}" stroke-width="{sw}"/>'
@@ -90,7 +92,10 @@ def _box(cx: float, y: int, tie: dict) -> str:
         parts.append(
             f'<text x="{x + 8:.0f}" y="{ty}" font-size="10.5" font-weight="{weight}" '
             f'fill="{fill}">{escape(_short(team))}</text>')
-        pct = _pct(p) + ("†" if win and underdog else "")
+        if played:
+            pct = "✓" if win else ""
+        else:
+            pct = _pct(p) + ("†" if win and underdog else "")
         parts.append(
             f'<text x="{x + BOX_W - 8:.0f}" y="{ty}" font-size="9" '
             f'text-anchor="end" fill="{"#cfe8d8" if win else "#5d6880"}">'

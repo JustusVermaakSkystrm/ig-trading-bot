@@ -1,0 +1,6 @@
+{
+  "_comment": "Actual knockout-match results, entered as they are played. Keyed by bracket match number. The simulator forces the recorded winner (instead of simulating that tie) and propagates it; the report bracket shows it as played. Winner must be the home or away team of that tie.",
+  "results": {
+    "73": {"home": "South Africa", "away": "Canada", "home_score": 0, "away_score": 1, "winner": "Canada"}
+  }
+}

@@ -11,7 +11,7 @@ from .model import most_likely_score, outcome_probs
 from .ratings import expected_score
 from .simulator import (ET_RATE_FACTOR, PENALTY_ELO_EDGE, MatchPredictor,
                         SimResults, allocate_thirds, load_bracket,
-                        load_third_override)
+                        load_knockout_results, load_third_override)
 
 OUT_DIR = Path(__file__).parent / "outputs"
 
@@ -106,36 +106,45 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
     # almost every tie; the two differ only in a near-even tie between teams
     # whose paths have differed (e.g. a coin-flip final), which is flagged.
     champ_p = res.team_table().set_index("team")["p_champion"]
+    ko_results = load_knockout_results()
 
     def resolve(home, away, p_home):
         winner = home if champ_p.get(home, 0) >= champ_p.get(away, 0) else away
         h2h = p_home if winner == home else 1 - p_home
         return winner, h2h
 
+    def build_tie(m, home, away):
+        p_home = _advance_prob(pred, elo, home, away, m.get("venue_country"))
+        played = ko_results.get(m["match"])
+        if played and played["winner"] in (home, away):
+            winner = played["winner"]
+            advancers[f"W{m['match']}"] = winner
+            score = f"{played['home_score']}-{played['away_score']}"
+            return {"match": m["match"], "date": m["date"], "venue": m["venue"],
+                    "home": home, "away": away, "p_home_advance": p_home,
+                    "winner": winner, "win_prob": 1.0, "pairing_freq": 1.0,
+                    "confirmed": True, "h2h_underdog": False,
+                    "played": True, "score": score}
+        winner, h2h = resolve(home, away, p_home)
+        advancers[f"W{m['match']}"] = winner
+        pair_freq = res.match_pairings[m["match"]][(home, away)] / res.n
+        return {"match": m["match"], "date": m["date"], "venue": m["venue"],
+                "home": home, "away": away, "p_home_advance": p_home,
+                "winner": winner, "win_prob": h2h, "pairing_freq": pair_freq,
+                "confirmed": pair_freq > 0.9999, "h2h_underdog": h2h < 0.5,
+                "played": False, "score": None}
+
     for key, _title in ROUND_TITLES:
         ties = []
         for m in bracket[key]:
             home = slots.get(m["home"]) or advancers[m["home"]]
             away = slots.get(m["away"]) or advancers[m["away"]]
-            p_home = _advance_prob(pred, elo, home, away, m.get("venue_country"))
-            winner, h2h = resolve(home, away, p_home)
-            advancers[f"W{m['match']}"] = winner
-            pair_freq = res.match_pairings[m["match"]][(home, away)] / res.n
-            ties.append({"match": m["match"], "date": m["date"], "venue": m["venue"],
-                         "home": home, "away": away, "p_home_advance": p_home,
-                         "winner": winner, "win_prob": h2h, "pairing_freq": pair_freq,
-                         "confirmed": pair_freq > 0.9999, "h2h_underdog": h2h < 0.5})
+            ties.append(build_tie(m, home, away))
         path[key] = ties
 
     fm = bracket["final"]
     fh, fa = advancers[fm["home"]], advancers[fm["away"]]
-    p_home = _advance_prob(pred, elo, fh, fa, fm.get("venue_country"))
-    winner, h2h = resolve(fh, fa, p_home)
-    path["final"] = [{"match": fm["match"], "date": fm["date"], "venue": fm["venue"],
-                      "home": fh, "away": fa, "p_home_advance": p_home,
-                      "winner": winner, "win_prob": h2h,
-                      "pairing_freq": res.match_pairings[fm["match"]][(fh, fa)] / res.n,
-                      "confirmed": False, "h2h_underdog": h2h < 0.5}]
+    path["final"] = [build_tie(fm, fh, fa)]
     return path
 
 
@@ -346,10 +355,14 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         add("|:-----:|------|-------|-----|------------------|---------:|-------------:|")
         for t in bracket_path[key]:
             tie = f"{t['home']} v {t['away']}"
-            freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
-            if t["confirmed"]:
-                tie = f"🔒 {tie}"
-            wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
+            if t.get("played"):
+                wp, freq = f"{t['score']}", "✅ played"
+                tie = f"✅ {tie}"
+            else:
+                freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
+                if t["confirmed"]:
+                    tie = f"🔒 {tie}"
+                wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
             add(f"| {t['match']} | {t['date']} | {t['venue']} | "
                 f"{tie} | **{t['winner']}** | {wp} | {freq} |")
         add("")
