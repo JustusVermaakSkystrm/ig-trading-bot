@@ -290,49 +290,105 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
         add("\n*Δ values in probability points. Full run-by-run series in "
             "`outputs/history.csv`.*\n")
 
-    # ---- path to the final (SVG bracket)
+    # ============================================================
+    #  KNOCKOUT STAGE — the lead focus as the group stage closes
+    # ============================================================
     from .viz import bracket_svg
     champ = bracket_path["final"][0]["winner"]
     champ_prob = float(tt.set_index("team").loc[champ, "p_champion"])
-    add("## Path to the final\n")
     n_locked = sum(t["confirmed"] for t in bracket_path["round_of_32"])
-    add("The model's single most likely knockout bracket — all 32 projected "
-        "round-of-32 teams and every unplayed tie, each line carrying the "
-        "projected winner down to the next round until they converge on the "
-        "champion. Percentages are each side's chance of advancing from that "
-        "tie. **A gold-bordered box is a confirmed Round-of-32 tie** (the same "
+
+    # projected latter-stage line-up, straight from the single likeliest bracket
+    final_four = [t["winner"] for t in bracket_path["quarterfinals"]]
+    finalists = [t["winner"] for t in bracket_path["semifinals"]]
+    fin = bracket_path["final"][0]
+
+    add("## 🏆 Knockout stage — the road ahead\n")
+    add("The group stage is all but done, so the knockout bracket is the main "
+        "event now. Here is the model's projected path through the Round of 32, "
+        "Round of 16, quarters, semis and final. *(Full group-by-group detail "
+        "is further down the page.)*\n")
+    add(f"- **Projected final four:** {', '.join(final_four)}")
+    add(f"- **Projected final:** {finalists[0]} v {finalists[1]}")
+    add(f"- **Projected champion:** 🏆 **{champ}** — {_pct(champ_prob)} to lift it")
+    add(f"- **Round-of-32 ties mathematically locked:** {n_locked}/16\n")
+
+    # ---- path to the final (SVG bracket)
+    add("### Path to the final\n")
+    add("The single most likely knockout bracket — all 32 projected "
+        "round-of-32 teams and every tie, each line carrying the projected "
+        "winner down to the next round until they converge on the champion. "
+        "Percentages are each side's chance of advancing from that tie. "
+        "**A gold-bordered box is a confirmed Round-of-32 tie** (the same "
         f"pairing in every simulation — mathematically locked): {n_locked}/16 "
-        "locked so far, the rest finalise as the group stage ends on 27 June.\n")
+        "locked so far.\n")
     add('<div style="overflow-x:auto; margin:1rem 0;">')
     add(bracket_svg(bracket_path, champ, champ_prob))
     add('</div>\n')
 
-    # ---- upcoming matches
-    add("## Upcoming group matches — outcome probabilities\n")
-    matches = match_probability_table(pred, fixtures)
-    upcoming = matches[matches["status"] == "upcoming"]
-    horizon = upcoming["date"].sort_values().unique()[:4]
-    add("*(next match days; full list for all 72 group games in "
-        "`match_probabilities.csv`)*\n")
-    add("| Date | Grp | Match | Home win | Draw | Away win | xG | Likely score |")
-    add("|------|:---:|-------|---------:|-----:|---------:|----|:----:|")
-    for r in upcoming[upcoming["date"].isin(horizon)].itertuples(index=False):
-        probs = [r.p_home_win, r.p_draw, r.p_away_win]
-        cells = [_pct(p) for p in probs]
-        best = probs.index(max(probs))
-        cells[best] = f"**{cells[best]}**"   # highlight the likeliest outcome
-        add(f"| {r.date} | {r.group} | {r.home} v {r.away} | "
-            f"{cells[0]} | {cells[1]} | {cells[2]} | "
-            f"{r.xg_home}–{r.xg_away} | {r.most_likely_score} |")
-    add("")
+    # ---- predicted bracket, round by round
+    add("### Round-by-round projections\n")
+    add(f"Every tie with the projected pairing and the side that advances — "
+        "the team **more likely to win the tournament** of the two, so the "
+        "bracket crowns the overall favourite. 'Win prob' is that team's chance "
+        "in that single match (a **†** flags a near-even tie where the title "
+        "favourite is a slight underdog in the one-off game). **🔒 marks a "
+        "confirmed tie** — the same two teams in every simulation, "
+        f"mathematically locked. ({n_locked}/16 Round-of-32 ties locked so far.)\n")
+    for key, title in ROUND_TITLES + [("final", "Final")]:
+        add(f"#### {title}\n")
+        add("| Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |")
+        add("|:-----:|------|-------|-----|------------------|---------:|-------------:|")
+        for t in bracket_path[key]:
+            tie = f"{t['home']} v {t['away']}"
+            freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
+            if t["confirmed"]:
+                tie = f"🔒 {tie}"
+            wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
+            add(f"| {t['match']} | {t['date']} | {t['venue']} | "
+                f"{tie} | **{t['winner']}** | {wp} | {freq} |")
+        add("")
+    add(f"**Projected champion: {champ}** "
+        f"(overall title probability {_pct(champ_prob)}). "
+        "The bracket advances the team more likely to go all the way in each "
+        "tie, so the champion here matches the title favourite at the top of "
+        "the page.\n")
+    if any(t["h2h_underdog"] for k in (*[r[0] for r in ROUND_TITLES], "final")
+           for t in bracket_path[k]):
+        add("*† The title favourite reaches this tie via an easier path, so it "
+            "wins the tournament most often even though this specific one-off "
+            "match is a near coin-flip the other side shades.*\n")
 
-    # ---- groups
-    add("## Group projections\n")
+    # ============================================================
+    #  GROUP STAGE — results & projections (below the knockouts)
+    # ============================================================
+    add("## Group stage — results & projections\n")
     from .dataset import load_teams
     groups_cfg = load_teams()["groups"]
-    cur = current_group_tables(fixtures, groups_cfg)
     tt_idx = tt.set_index("team")
     QUALIFIED = 0.9999   # reaches the knockouts in (effectively) every simulation
+
+    # ---- any remaining group matches
+    matches = match_probability_table(pred, fixtures)
+    upcoming = matches[matches["status"] == "upcoming"]
+    if len(upcoming):
+        horizon = upcoming["date"].sort_values().unique()[:4]
+        add("### Remaining group matches — outcome probabilities\n")
+        add("| Date | Grp | Match | Home win | Draw | Away win | xG | Likely score |")
+        add("|------|:---:|-------|---------:|-----:|---------:|----|:----:|")
+        for r in upcoming[upcoming["date"].isin(horizon)].itertuples(index=False):
+            probs = [r.p_home_win, r.p_draw, r.p_away_win]
+            cells = [_pct(p) for p in probs]
+            best = probs.index(max(probs))
+            cells[best] = f"**{cells[best]}**"   # highlight the likeliest outcome
+            add(f"| {r.date} | {r.group} | {r.home} v {r.away} | "
+                f"{cells[0]} | {cells[1]} | {cells[2]} | "
+                f"{r.xg_home}–{r.xg_away} | {r.most_likely_score} |")
+        add("")
+
+    # ---- group tables
+    add("### Group tables & qualification\n")
+    cur = current_group_tables(fixtures, groups_cfg)
 
     def _label(team):
         return f"{team} ✅" if tt_idx.loc[team, "p_R32"] >= QUALIFIED else team
@@ -340,7 +396,7 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     any_qualified = (tt_idx["p_R32"] >= QUALIFIED).any()
     for g, members in groups_cfg.items():
         through = [t for t in members if tt_idx.loc[t, "p_R32"] >= QUALIFIED]
-        add(f"### Group {g}\n")
+        add(f"#### Group {g}\n")
         if through:
             add(f"**✅ Into the knockouts:** {', '.join(through)}\n")
         table = cur[g]
@@ -370,42 +426,6 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
                  "Round of 32 in every simulation. (Reaching later rounds still "
                  "requires winning knockout games, so those stay below 100%.)*")
     add(note + "\n")
-
-    # ---- predicted bracket
-    add("## Most likely knockout bracket\n")
-    n_locked = sum(t["confirmed"] for t in bracket_path["round_of_32"])
-    add(f"Each tie shows the projected pairing and the side that advances — "
-        "the team **more likely to win the tournament** of the two, so the "
-        "bracket crowns the overall favourite. 'Win prob' is that team's chance "
-        "in that single match (a **†** flags a near-even tie where the title "
-        "favourite is a slight underdog in the one-off game). **🔒 marks a "
-        "confirmed tie** — the same two teams in every simulation, "
-        f"mathematically locked. ({n_locked}/16 Round-of-32 ties locked so far; "
-        "the rest finalise as the group stage completes on 27 June.)\n")
-    for key, title in ROUND_TITLES + [("final", "Final")]:
-        add(f"### {title}\n")
-        add("| Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |")
-        add("|:-----:|------|-------|-----|------------------|---------:|-------------:|")
-        for t in bracket_path[key]:
-            tie = f"{t['home']} v {t['away']}"
-            freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
-            if t["confirmed"]:
-                tie = f"🔒 {tie}"
-            wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
-            add(f"| {t['match']} | {t['date']} | {t['venue']} | "
-                f"{tie} | **{t['winner']}** | {wp} | {freq} |")
-        add("")
-    champ = bracket_path["final"][0]["winner"]
-    add(f"**Projected champion: {champ}** "
-        f"(overall title probability {_pct(tt.set_index('team').loc[champ, 'p_champion'])}). "
-        "The bracket advances the team more likely to go all the way in each "
-        "tie, so the champion here matches the title favourite at the top of "
-        "the page.\n")
-    if any(t["h2h_underdog"] for k in (*[r[0] for r in ROUND_TITLES], "final")
-           for t in bracket_path[k]):
-        add("*† The title favourite reaches this tie via an easier path, so it "
-            "wins the tournament most often even though this specific one-off "
-            "match is a near coin-flip the other side shades.*\n")
 
     add("## How to read this\n")
     add("- All figures are probabilities, not certainties — a 65% favourite "
