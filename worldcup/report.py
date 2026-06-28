@@ -328,14 +328,19 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
     add(f"- **Round-of-32 ties mathematically locked:** {n_locked}/16\n")
 
     # ---- path to the final (SVG bracket)
+    n_ko_played = sum(t.get("played", False)
+                      for k in (*[r[0] for r in ROUND_TITLES], "final")
+                      for t in bracket_path[k])
     add("### Path to the final\n")
-    add("The single most likely knockout bracket — all 32 projected "
-        "round-of-32 teams and every tie, each line carrying the projected "
-        "winner down to the next round until they converge on the champion. "
-        "Percentages are each side's chance of advancing from that tie. "
-        "**A gold-bordered box is a confirmed Round-of-32 tie** (the same "
-        f"pairing in every simulation — mathematically locked): {n_locked}/16 "
-        "locked so far.\n")
+    add("The single most likely knockout bracket — each line carries the "
+        "projected winner down to the next round until they converge on the "
+        "champion. Percentages are each side's chance of advancing from that "
+        "tie. **A gold-bordered box is a confirmed (mathematically locked) "
+        "tie; a green-bordered box has been played.** As ties are played, the "
+        "eliminated side drops off the diagram and the winner carries forward "
+        "from the round it reaches — so the bracket shrinks toward the final. "
+        f"({n_ko_played} knockout tie(s) played so far; {n_locked}/16 "
+        "Round-of-32 ties locked.)\n")
     add('<div style="overflow-x:auto; margin:1rem 0;">')
     add(bracket_svg(bracket_path, champ, champ_prob))
     add('</div>\n')

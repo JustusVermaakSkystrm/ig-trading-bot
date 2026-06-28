@@ -121,28 +121,45 @@ def bracket_svg(bracket_path: dict, champion: str, champ_prob: float) -> str:
          f'xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'
          'BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">']
 
-    # connectors (under boxes): each level feeds the one below it
+    # A tie that has been played is dropped from the diagram: the eliminated
+    # side disappears and the winner first appears in the round it advances
+    # into. A whole round whose ties are all played is hidden entirely.
+    def is_played(mno):
+        return by_match[mno].get("played", False)
+    orders = {key: order for key, order, _ in LEVELS}
+    level_all_played = {key: all(is_played(m) for m in order)
+                        for key, order, _ in LEVELS}
+
+    # connectors (under boxes): drawn only when the feeding tie is still live
     keys = [k for k, _, _ in LEVELS]
     for li in range(len(keys) - 1):
         upper, lower = c[keys[li]], c[keys[li + 1]]
+        up_order = orders[keys[li]]
         y_from, y_to = _row_y(li) + BOX_H, _row_y(li + 1)
         for k in range(len(lower)):
             for j in (2 * k, 2 * k + 1):
+                if is_played(up_order[j]):
+                    continue
                 s.append(_conn(upper[j], y_from, lower[k], y_to))
-    # final -> champion
-    s.append(_conn(c["final"][0], _row_y(len(LEVELS) - 1) + BOX_H,
-                   c["final"][0], champ_y))
+    # final -> champion (only once the final itself is unplayed/live shows line)
+    if not is_played(orders["final"][0]):
+        s.append(_conn(c["final"][0], _row_y(len(LEVELS) - 1) + BOX_H,
+                       c["final"][0], champ_y))
 
-    # gutter labels
-    for li, (_, _, label) in enumerate(LEVELS):
+    # gutter labels (skip a fully-completed round)
+    for li, (key, _, label) in enumerate(LEVELS):
+        if level_all_played[key]:
+            continue
         ly = _row_y(li) + BOX_H / 2
         s.append(f'<text x="11" y="{ly:.0f}" font-size="9" font-weight="700" '
                  f'fill="#5d6880" transform="rotate(-90 11 {ly:.0f})" '
                  f'text-anchor="middle">{label}</text>')
 
-    # boxes
+    # boxes (played ties are removed)
     for li, (key, order, _) in enumerate(LEVELS):
         for j, mno in enumerate(order):
+            if is_played(mno):
+                continue
             s.append(_box(c[key][j], _row_y(li), by_match[mno]))
 
     # champion node
