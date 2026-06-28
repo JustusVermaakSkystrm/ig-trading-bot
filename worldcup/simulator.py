@@ -34,6 +34,16 @@ def load_bracket() -> dict:
         return json.load(f)
 
 
+def load_third_override() -> dict | None:
+    """Official third-place slot allocation, fixed once the group stage ends.
+    When present it replaces the Annex C approximation so the simulated R32
+    matches the real bracket exactly."""
+    p = DATA_DIR / "third_place_actual.json"
+    if p.exists():
+        return json.load(open(p)).get("slots")
+    return None
+
+
 class MatchPredictor:
     """Caches Poisson rates per pairing.
 
@@ -257,6 +267,7 @@ class TournamentSimulator:
 
     def run(self, n_sims: int = 100_000) -> "SimResults":
         bracket = self.bracket
+        third_override = load_third_override()
         res = SimResults(self.groups, n_sims)
         all_scores = self._sample_group_scores(n_sims)
 
@@ -282,7 +293,10 @@ class TournamentSimulator:
 
             qualified = rank_thirds(thirds, self.elo)[:8]
             res.record_thirds(qualified)
-            slots.update(allocate_thirds(qualified, bracket["third_place_slots"]))
+            if third_override:
+                slots.update(third_override)
+            else:
+                slots.update(allocate_thirds(qualified, bracket["third_place_slots"]))
 
             advancers: dict[str, str] = {}
             for stage, matches in ko_rounds:

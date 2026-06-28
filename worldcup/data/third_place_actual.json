@@ -1,0 +1,13 @@
+{
+  "_comment": "Official 2026 World Cup Round-of-32 third-place slot allocation, fixed once the group stage completed (overrides the Annex C approximation in allocate_thirds). Source: official bracket via Wikipedia/FIFA, 27 June 2026.",
+  "slots": {
+    "T74": "Paraguay",
+    "T77": "Sweden",
+    "T79": "Ecuador",
+    "T80": "DR Congo",
+    "T81": "Bosnia and Herzegovina",
+    "T82": "Senegal",
+    "T85": "Algeria",
+    "T87": "Ghana"
+  }
+}

@@ -10,7 +10,8 @@ import pandas as pd
 from .model import most_likely_score, outcome_probs
 from .ratings import expected_score
 from .simulator import (ET_RATE_FACTOR, PENALTY_ELO_EDGE, MatchPredictor,
-                        SimResults, allocate_thirds, load_bracket)
+                        SimResults, allocate_thirds, load_bracket,
+                        load_third_override)
 
 OUT_DIR = Path(__file__).parent / "outputs"
 
@@ -90,8 +91,12 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
     thirds_sorted = sorted(modal_thirds,
                            key=lambda r: tt.loc[r[1], "p_third_advance"],
                            reverse=True)[:8]
-    slots.update(allocate_thirds([(g, t) for g, t, _ in thirds_sorted],
-                                 bracket["third_place_slots"]))
+    override = load_third_override()
+    if override:
+        slots.update(override)
+    else:
+        slots.update(allocate_thirds([(g, t) for g, t, _ in thirds_sorted],
+                                     bracket["third_place_slots"]))
 
     path = {}
     advancers: dict[str, str] = {}

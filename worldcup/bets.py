@@ -25,7 +25,10 @@ import pandas as pd
 from .dataset import build_training_table, load_teams, merged_results
 from .model import GoalModel, MODEL_PATH
 from .simulator import (STAGE_OF_ROUND, MatchPredictor, TournamentSimulator,
-                        _table, allocate_thirds, fifa_group_rank, rank_thirds)
+                        _table, allocate_thirds, fifa_group_rank,
+                        load_third_override, rank_thirds)
+
+_third_override = load_third_override()
 from .run import world_cup_fixtures
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -107,7 +110,10 @@ def simulate_reached_stats(sim, bets: list[dict], n_sims: int,
             slots[f"W_{g}"], slots[f"RU_{g}"] = order[0], order[1]
             thirds.append((g, order[2], pts[order[2]]))
         qualified = rank_thirds(thirds, sim.elo)[:8]
-        slots.update(allocate_thirds(qualified, bracket["third_place_slots"]))
+        if _third_override:
+            slots.update(_third_override)
+        else:
+            slots.update(allocate_thirds(qualified, bracket["third_place_slots"]))
 
         reached: dict[str, int] = {}
         advancers: dict[str, str] = {}
