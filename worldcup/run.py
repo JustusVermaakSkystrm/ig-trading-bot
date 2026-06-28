@@ -148,8 +148,21 @@ def world_cup_fixtures(results: pd.DataFrame, validated_only: bool = True
     wc = results[(results["tournament"] == "FIFA World Cup")
                  & (results["date"] >= "2026-06-01")
                  & (results["date"] <= "2026-06-30")].copy()
-    wc = wc[wc["home_team"].isin(group_of)]
+    # A group fixture has BOTH teams in the same group. This excludes knockout
+    # ties (which pair teams from different groups) once the upstream feed adds
+    # them, and drops any team-name variant the feed uses that isn't ours.
     wc["group"] = wc["home_team"].map(group_of)
+    wc = wc[wc["group"].notna()
+            & (wc["group"] == wc["away_team"].map(group_of))].copy()
+    # The feed and our manual entries can list the same tie with flipped
+    # home/away or a slightly different date; collapse to one row per pairing,
+    # preferring a row that already carries a score.
+    wc["_pair"] = wc.apply(
+        lambda r: frozenset((r["home_team"], r["away_team"])), axis=1)
+    wc["_played"] = wc["home_score"].notna()
+    wc = (wc.sort_values("_played", ascending=False, kind="stable")
+            .drop_duplicates("_pair", keep="first")
+            .drop(columns=["_pair", "_played"]))
     if len(wc) != 72:
         raise RuntimeError(f"Expected 72 group fixtures, found {len(wc)}")
     wc = wc.sort_values("date").reset_index(drop=True)
