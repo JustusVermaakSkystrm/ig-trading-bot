@@ -100,18 +100,17 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
 
     path = {}
     advancers: dict[str, str] = {}
-    # Advance the side more likely to win the tournament (its title
-    # probability), so the projected bracket is consistent with the headline
-    # "most likely champion". This matches the single-match favourite in
-    # almost every tie; the two differ only in a near-even tie between teams
-    # whose paths have differed (e.g. a coin-flip final), which is flagged.
-    champ_p = res.team_table().set_index("team")["p_champion"]
+    # Advance the single-match favourite in each tie — the side more likely to
+    # win THAT game. This keeps every tie self-consistent (the team shown going
+    # through is always the one favoured to win it). The overall title-odds
+    # table integrates every possible path, so its favourite can still differ
+    # from this single match-by-match bracket; that distinction is explained in
+    # the text rather than papered over by advancing on title probability.
     ko_results = load_knockout_results()
 
     def resolve(home, away, p_home):
-        winner = home if champ_p.get(home, 0) >= champ_p.get(away, 0) else away
-        h2h = p_home if winner == home else 1 - p_home
-        return winner, h2h
+        winner = home if p_home >= 0.5 else away
+        return winner, max(p_home, 1 - p_home)
 
     def build_tie(m, home, away):
         p_home = _advance_prob(pred, elo, home, away, m.get("venue_country"))
@@ -347,13 +346,15 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
 
     # ---- predicted bracket, round by round
     add("### Round-by-round projections\n")
-    add(f"Every tie with the projected pairing and the side that advances — "
-        "the team **more likely to win the tournament** of the two, so the "
-        "bracket crowns the overall favourite. 'Win prob' is that team's chance "
-        "in that single match (a **†** flags a near-even tie where the title "
-        "favourite is a slight underdog in the one-off game). **🔒 marks a "
-        "confirmed tie** — the same two teams in every simulation, "
-        f"mathematically locked. ({n_locked}/16 Round-of-32 ties locked so far.)\n")
+    add("Every tie shows the projected pairing and **the side favoured to win "
+        "that single match** (it always advances — 'Win prob' is its chance in "
+        "that one game). **🔒 marks a confirmed tie** (the same two teams in "
+        "every simulation), **✅ a played tie**. Note: this is the single most "
+        "likely match-by-match path, so the team that emerges as champion here "
+        "is the one that wins each projected game — which is usually, but not "
+        "always, the same as the favourite in the title-odds table at the top "
+        "of the page (that table averages over every possible draw). "
+        f"({n_locked}/16 Round-of-32 ties locked so far.)\n")
     for key, title in ROUND_TITLES + [("final", "Final")]:
         add(f"#### {title}\n")
         add("| Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |")
@@ -367,20 +368,19 @@ def _render_markdown(pred, res: SimResults, fixtures, tt, bracket_path, elo,
                 freq = "🔒 locked" if t["confirmed"] else _pct(t["pairing_freq"])
                 if t["confirmed"]:
                     tie = f"🔒 {tie}"
-                wp = _pct(t["win_prob"]) + ("†" if t["h2h_underdog"] else "")
+                wp = _pct(t["win_prob"])
             add(f"| {t['match']} | {t['date']} | {t['venue']} | "
                 f"{tie} | **{t['winner']}** | {wp} | {freq} |")
         add("")
-    add(f"**Projected champion: {champ}** "
-        f"(overall title probability {_pct(champ_prob)}). "
-        "The bracket advances the team more likely to go all the way in each "
-        "tie, so the champion here matches the title favourite at the top of "
-        "the page.\n")
-    if any(t["h2h_underdog"] for k in (*[r[0] for r in ROUND_TITLES], "final")
-           for t in bracket_path[k]):
-        add("*† The title favourite reaches this tie via an easier path, so it "
-            "wins the tournament most often even though this specific one-off "
-            "match is a near coin-flip the other side shades.*\n")
+    headline = tt.iloc[0]["team"]
+    add(f"**Projected champion (this bracket): {champ}** — the team that wins "
+        "each projected match through to the final. "
+        + (f"This matches the title-odds favourite (**{headline}**) at the top "
+           "of the page.\n" if champ == headline else
+           f"The title-odds table above makes **{headline}** the overall "
+           "favourite; it can differ from this bracket because a team can have "
+           "the best title odds across all possible draws while still being an "
+           "underdog in one specific projected tie here.\n"))
 
     # ============================================================
     #  GROUP STAGE — results & projections (below the knockouts)
