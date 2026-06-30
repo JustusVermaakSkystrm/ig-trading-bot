@@ -119,6 +119,8 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
             winner = played["winner"]
             advancers[f"W{m['match']}"] = winner
             score = f"{played['home_score']}-{played['away_score']}"
+            if played.get("pens"):
+                score += f" ({played['pens']}p)"
             return {"match": m["match"], "date": m["date"], "venue": m["venue"],
                     "home": home, "away": away, "p_home_advance": p_home,
                     "winner": winner, "win_prob": 1.0, "pairing_freq": 1.0,
