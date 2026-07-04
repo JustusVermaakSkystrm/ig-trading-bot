@@ -122,6 +122,8 @@ def predicted_bracket(pred: MatchPredictor, res: SimResults, elo: dict) -> dict:
             if played.get("pens"):
                 pv = str(played["pens"])
                 score += f" ({pv} pens)" if any(ch.isdigit() for ch in pv) else " (pens)"
+            elif played.get("aet"):
+                score += " (aet)"
             return {"match": m["match"], "date": m["date"], "venue": m["venue"],
                     "home": home, "away": away, "p_home_advance": p_home,
                     "winner": winner, "win_prob": 1.0, "pairing_freq": 1.0,

@@ -13,6 +13,9 @@
     "82": {"home": "Belgium", "away": "Senegal", "home_score": 3, "away_score": 2, "winner": "Belgium"},
     "83": {"home": "Portugal", "away": "Croatia", "home_score": 2, "away_score": 1, "winner": "Portugal"},
     "84": {"home": "Spain", "away": "Austria", "home_score": 3, "away_score": 0, "winner": "Spain"},
-    "85": {"home": "Switzerland", "away": "Algeria", "home_score": 2, "away_score": 0, "winner": "Switzerland"}
+    "85": {"home": "Switzerland", "away": "Algeria", "home_score": 2, "away_score": 0, "winner": "Switzerland"},
+    "86": {"home": "Argentina", "away": "Cape Verde", "home_score": 3, "away_score": 2, "winner": "Argentina", "aet": true},
+    "87": {"home": "Colombia", "away": "Ghana", "home_score": 1, "away_score": 0, "winner": "Colombia"},
+    "88": {"home": "Australia", "away": "Egypt", "home_score": 1, "away_score": 1, "winner": "Egypt", "pens": "4-2"}
   }
 }
