@@ -18,6 +18,7 @@
     "87": {"home": "Colombia", "away": "Ghana", "home_score": 1, "away_score": 0, "winner": "Colombia"},
     "88": {"home": "Australia", "away": "Egypt", "home_score": 1, "away_score": 1, "winner": "Egypt", "pens": "4-2"},
     "89": {"home": "Paraguay", "away": "France", "home_score": 0, "away_score": 1, "winner": "France"},
-    "90": {"home": "Canada", "away": "Morocco", "home_score": 0, "away_score": 3, "winner": "Morocco"}
+    "90": {"home": "Canada", "away": "Morocco", "home_score": 0, "away_score": 3, "winner": "Morocco"},
+    "91": {"home": "Brazil", "away": "Norway", "home_score": 1, "away_score": 2, "winner": "Norway"}
   }
 }
