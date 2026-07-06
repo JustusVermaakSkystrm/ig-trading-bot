@@ -10,34 +10,34 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | # | Team | Group | Champion | Δ vs 2026-07-05 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Argentina ✅ | J | **22.7%** | -0.4 | 37.0% | 56.4% | 85.8% | 100.0% |
-| 2 | France ✅ | I | **18.8%** | +1.7 | 36.1% | 63.4% | 100.0% | 100.0% |
-| 3 | England ✅ | L | **18.7%** | +0.8 | 35.4% | 72.1% | 100.0% | 100.0% |
-| 4 | Spain ✅ | H | **15.3%** | -0.5 | 27.4% | 48.1% | 65.3% | 100.0% |
-| 5 | Morocco ✅ | C | **5.9%** | – | 16.1% | 36.6% | 100.0% | 100.0% |
-| 6 | Colombia ✅ | K | **5.9%** | -0.1 | 12.6% | 26.7% | 63.4% | 100.0% |
-| 7 | Portugal ✅ | K | **3.7%** | -0.1 | 9.2% | 20.9% | 34.7% | 100.0% |
-| 8 | Norway ✅ | I | **3.5%** | -1.1 | 8.0% | 27.9% | 100.0% | 100.0% |
-| 9 | Switzerland ✅ | B | **2.4%** | -0.1 | 5.9% | 12.1% | 36.6% | 100.0% |
-| 10 | Belgium ✅ | G | **2.1%** | -0.1 | 8.1% | 19.6% | 54.6% | 100.0% |
-| 11 | United States ✅ | D | **0.8%** | -0.1 | 3.2% | 11.3% | 45.4% | 100.0% |
-| 12 | Egypt ✅ | G | **0.3%** | – | 1.1% | 4.7% | 14.2% | 100.0% |
-| 13 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
-| 14 | South Korea | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 15 | South Africa ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 1 | Spain ✅ | H | **23.3%** | +8.0 | 41.9% | 73.6% | 100.0% | 100.0% |
+| 2 | Argentina ✅ | J | **22.1%** | -0.6 | 37.2% | 56.6% | 85.7% | 100.0% |
+| 3 | England ✅ | L | **17.7%** | -1.0 | 35.4% | 72.2% | 100.0% | 100.0% |
+| 4 | France ✅ | I | **17.6%** | -1.2 | 33.7% | 63.6% | 100.0% | 100.0% |
+| 5 | Morocco ✅ | C | **5.6%** | -0.3 | 14.8% | 36.4% | 100.0% | 100.0% |
+| 6 | Colombia ✅ | K | **5.5%** | -0.4 | 12.4% | 26.6% | 63.3% | 100.0% |
+| 7 | Norway ✅ | I | **3.4%** | -0.1 | 8.1% | 27.8% | 100.0% | 100.0% |
+| 8 | Switzerland ✅ | B | **2.1%** | -0.3 | 5.8% | 12.2% | 36.7% | 100.0% |
+| 9 | Belgium ✅ | G | **1.8%** | -0.3 | 6.9% | 16.8% | 54.6% | 100.0% |
+| 10 | United States ✅ | D | **0.8%** | -0.1 | 2.6% | 9.6% | 45.4% | 100.0% |
+| 11 | Egypt ✅ | G | **0.2%** | – | 1.2% | 4.7% | 14.3% | 100.0% |
+| 12 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
+| 13 | South Korea | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 14 | South Africa ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 15 | Czech Republic | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
 
 ## Biggest movers since last run (data through 2026-07-05)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| France | +1.7 | – | 18.8% |
-| England | +0.8 | – | 18.7% |
-| United States | -0.1 | – | 0.8% |
-| Switzerland | -0.1 | – | 2.4% |
-| Portugal | -0.1 | – | 3.7% |
-| Argentina | -0.4 | – | 22.7% |
-| Spain | -0.5 | – | 15.3% |
-| Norway | -1.1 | – | 3.5% |
+| Spain | +8.0 | – | 23.3% |
+| Belgium | -0.3 | – | 1.8% |
+| Morocco | -0.3 | – | 5.6% |
+| Colombia | -0.4 | – | 5.5% |
+| Argentina | -0.6 | – | 22.1% |
+| England | -1.0 | – | 17.7% |
+| France | -1.2 | – | 17.6% |
+| Portugal | -3.7 | – | 0.0% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -47,15 +47,15 @@ The group stage is all but done, so the knockout bracket is the main event now. 
 
 - **Projected final four:** France, Spain, England, Argentina
 - **Projected final:** Spain v Argentina
-- **Projected champion:** 🏆 **Argentina** — 22.7% to lift it
+- **Projected champion:** 🏆 **Argentina** — 22.1% to lift it
 - **Round-of-32 ties mathematically locked:** 16/16
 
 ### Path to the final
 
-The single most likely knockout bracket — each line carries the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed (mathematically locked) tie; a green-bordered box has been played.** As ties are played, the eliminated side drops off the diagram and the winner carries forward from the round it reaches — so the bracket shrinks toward the final. (20 knockout tie(s) played so far; 16/16 Round-of-32 ties locked.)
+The single most likely knockout bracket — each line carries the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed (mathematically locked) tie; a green-bordered box has been played.** As ties are played, the eliminated side drops off the diagram and the winner carries forward from the round it reaches — so the bracket shrinks toward the final. (21 knockout tie(s) played so far; 16/16 Round-of-32 ties locked.)
 
 <div style="overflow-x:auto; margin:1rem 0;">
-<svg viewBox="0 0 1964 662" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M622,214 C622,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M862,214 C862,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1582,214 C1582,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1822,214 C1822,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M262,330 C262,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M742,330 C742,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1222,330 C1222,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1702,330 C1702,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M502,446 C502,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1462,446 C1462,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M982,562 C982,580 982,580 982,598" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="192" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 192)" text-anchor="middle">ROUND OF 16</text><text x="11" y="308" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 308)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="424" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 424)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="540" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 540)" text-anchor="middle">FINAL</text><rect x="566" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="574" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Portugal</text><text x="670" y="187" font-size="9" text-anchor="end" fill="#5d6880">35%</text><rect x="566" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="574" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="670" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">65%</text><rect x="806" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="814" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">USA</text><text x="910" y="187" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="806" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="814" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Belgium</text><text x="910" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><rect x="1526" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="1526" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1534" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1630" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">86%</text><text x="1534" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Egypt</text><text x="1630" y="207" font-size="9" text-anchor="end" fill="#5d6880">14%</text><rect x="1766" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="1774" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Switzerland</text><text x="1870" y="187" font-size="9" text-anchor="end" fill="#5d6880">36%</text><rect x="1766" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1774" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1870" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">64%</text><rect x="206" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="206" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="214" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="310" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="214" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Morocco</text><text x="310" y="323" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="686" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="686" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="694" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="790" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">69%</text><text x="694" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Belgium</text><text x="790" y="323" font-size="9" text-anchor="end" fill="#5d6880">31%</text><rect x="1166" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="1174" y="303" font-size="10.5" font-weight="400" fill="#7c89a3">Norway</text><text x="1270" y="303" font-size="9" text-anchor="end" fill="#5d6880">28%</text><rect x="1166" y="309" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1174" y="323" font-size="10.5" font-weight="700" fill="#7ef0b6">England</text><text x="1270" y="323" font-size="9" text-anchor="end" fill="#cfe8d8">72%</text><rect x="1646" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1646" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1654" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1750" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">62%</text><text x="1654" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Colombia</text><text x="1750" y="323" font-size="9" text-anchor="end" fill="#5d6880">38%</text><rect x="446" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="454" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">France</text><text x="550" y="419" font-size="9" text-anchor="end" fill="#5d6880">47%</text><rect x="446" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="454" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="550" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">53%</text><rect x="1406" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1414" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">England</text><text x="1510" y="419" font-size="9" text-anchor="end" fill="#5d6880">39%</text><rect x="1406" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1414" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1510" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">61%</text><rect x="926" y="518" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="934" y="535" font-size="10.5" font-weight="400" fill="#7c89a3">Spain</text><text x="1030" y="535" font-size="9" text-anchor="end" fill="#5d6880">46%</text><rect x="926" y="541" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="934" y="555" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1030" y="555" font-size="9" text-anchor="end" fill="#cfe8d8">54%</text><rect x="888" y="598" width="188" height="46" rx="10" fill="#f5c542"/><text x="982" y="619" font-size="13" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="982" y="635" font-size="10" fill="#5a4a00" text-anchor="middle">projected champion · 23% to win</text></svg>
+<svg viewBox="0 0 1964 662" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M862,214 C862,250 742,250 742,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1582,214 C1582,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1822,214 C1822,250 1702,250 1702,286" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M262,330 C262,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M742,330 C742,366 502,366 502,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1222,330 C1222,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1702,330 C1702,366 1462,366 1462,402" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M502,446 C502,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M1462,446 C1462,482 982,482 982,518" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M982,562 C982,580 982,580 982,598" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="192" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 192)" text-anchor="middle">ROUND OF 16</text><text x="11" y="308" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 308)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="424" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 424)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="540" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 540)" text-anchor="middle">FINAL</text><rect x="806" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="814" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">USA</text><text x="910" y="187" font-size="9" text-anchor="end" fill="#5d6880">45%</text><rect x="806" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="814" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Belgium</text><text x="910" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">55%</text><rect x="1526" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="1526" y="172" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1534" y="187" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1630" y="187" font-size="9" text-anchor="end" fill="#cfe8d8">86%</text><text x="1534" y="207" font-size="10.5" font-weight="400" fill="#7c89a3">Egypt</text><text x="1630" y="207" font-size="9" text-anchor="end" fill="#5d6880">14%</text><rect x="1766" y="170" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="1774" y="187" font-size="10.5" font-weight="400" fill="#7c89a3">Switzerland</text><text x="1870" y="187" font-size="9" text-anchor="end" fill="#5d6880">36%</text><rect x="1766" y="193" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1774" y="207" font-size="10.5" font-weight="700" fill="#7ef0b6">Colombia</text><text x="1870" y="207" font-size="9" text-anchor="end" fill="#cfe8d8">64%</text><rect x="206" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="206" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="214" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">France</text><text x="310" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">63%</text><text x="214" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Morocco</text><text x="310" y="323" font-size="9" text-anchor="end" fill="#5d6880">37%</text><rect x="686" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="686" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="694" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="790" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">69%</text><text x="694" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Belgium</text><text x="790" y="323" font-size="9" text-anchor="end" fill="#5d6880">31%</text><rect x="1166" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="1174" y="303" font-size="10.5" font-weight="400" fill="#7c89a3">Norway</text><text x="1270" y="303" font-size="9" text-anchor="end" fill="#5d6880">28%</text><rect x="1166" y="309" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1174" y="323" font-size="10.5" font-weight="700" fill="#7ef0b6">England</text><text x="1270" y="323" font-size="9" text-anchor="end" fill="#cfe8d8">72%</text><rect x="1646" y="286" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><rect x="1646" y="288" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1654" y="303" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1750" y="303" font-size="9" text-anchor="end" fill="#cfe8d8">62%</text><text x="1654" y="323" font-size="10.5" font-weight="400" fill="#7c89a3">Colombia</text><text x="1750" y="323" font-size="9" text-anchor="end" fill="#5d6880">38%</text><rect x="446" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="454" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">France</text><text x="550" y="419" font-size="9" text-anchor="end" fill="#5d6880">47%</text><rect x="446" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="454" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Spain</text><text x="550" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">53%</text><rect x="1406" y="402" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="1414" y="419" font-size="10.5" font-weight="400" fill="#7c89a3">England</text><text x="1510" y="419" font-size="9" text-anchor="end" fill="#5d6880">39%</text><rect x="1406" y="425" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="1414" y="439" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1510" y="439" font-size="9" text-anchor="end" fill="#cfe8d8">61%</text><rect x="926" y="518" width="112" height="44" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="934" y="535" font-size="10.5" font-weight="400" fill="#7c89a3">Spain</text><text x="1030" y="535" font-size="9" text-anchor="end" fill="#5d6880">46%</text><rect x="926" y="541" width="112" height="20" rx="4" fill="#4cc38a" opacity="0.16"/><text x="934" y="555" font-size="10.5" font-weight="700" fill="#7ef0b6">Argentina</text><text x="1030" y="555" font-size="9" text-anchor="end" fill="#cfe8d8">54%</text><rect x="888" y="598" width="188" height="46" rx="10" fill="#f5c542"/><text x="982" y="619" font-size="13" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="982" y="635" font-size="10" fill="#5a4a00" text-anchor="middle">projected champion · 22% to win</text></svg>
 </div>
 
 ### Round-by-round projections
@@ -91,7 +91,7 @@ Every tie shows the projected pairing and **the side favoured to win that single
 | 90 | 2026-07-04 | NRG Stadium, Houston | ✅ Canada v Morocco | **Morocco** | 0-3 | ✅ played |
 | 91 | 2026-07-05 | MetLife Stadium, New York/New Jersey | ✅ Brazil v Norway | **Norway** | 1-2 | ✅ played |
 | 92 | 2026-07-05 | Estadio Azteca, Mexico City | ✅ Mexico v England | **England** | 2-3 | ✅ played |
-| 93 | 2026-07-06 | AT&T Stadium, Dallas | 🔒 Portugal v Spain | **Spain** | 65.3% | 🔒 locked |
+| 93 | 2026-07-06 | AT&T Stadium, Dallas | ✅ Portugal v Spain | **Spain** | 0-1 | ✅ played |
 | 94 | 2026-07-06 | Lumen Field, Seattle | 🔒 United States v Belgium | **Belgium** | 54.8% | 🔒 locked |
 | 95 | 2026-07-07 | Mercedes-Benz Stadium, Atlanta | 🔒 Argentina v Egypt | **Argentina** | 85.6% | 🔒 locked |
 | 96 | 2026-07-07 | BC Place, Vancouver | 🔒 Switzerland v Colombia | **Colombia** | 63.5% | 🔒 locked |
@@ -101,7 +101,7 @@ Every tie shows the projected pairing and **the side favoured to win that single
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
 | 97 | 2026-07-09 | Gillette Stadium, Boston | 🔒 France v Morocco | **France** | 63.5% | 🔒 locked |
-| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v Belgium | **Spain** | 69.3% | 35.6% |
+| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | Spain v Belgium | **Spain** | 69.3% | 54.6% |
 | 99 | 2026-07-11 | Hard Rock Stadium, Miami | 🔒 Norway v England | **England** | 72.0% | 🔒 locked |
 | 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | Argentina v Colombia | **Argentina** | 62.5% | 54.2% |
 
@@ -109,16 +109,16 @@ Every tie shows the projected pairing and **the side favoured to win that single
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 53.0% | 30.4% |
-| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | England v Argentina | **Argentina** | 60.8% | 40.6% |
+| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 53.0% | 46.9% |
+| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | England v Argentina | **Argentina** | 60.8% | 41.0% |
 
 #### Final
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Argentina** | 54.4% | 10.2% |
+| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Argentina** | 54.4% | 15.7% |
 
-**Projected champion (this bracket): Argentina** — the team that wins each projected match through to the final. This matches the title-odds favourite (**Argentina**) at the top of the page.
+**Projected champion (this bracket): Argentina** — the team that wins each projected match through to the final. The title-odds table above makes **Spain** the overall favourite; it can differ from this bracket because a team can have the best title odds across all possible draws while still being an underdog in one specific projected tie here.
 
 ## Group stage — results & projections
 
