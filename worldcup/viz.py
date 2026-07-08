@@ -103,10 +103,16 @@ def bracket_svg(bracket_path: dict, champion: str, champ_prob: float) -> str:
     def is_played(m):
         return by_match[m].get("played", False)
 
-    # Root at the round with the most still-live ties (earliest on a tie), so a
-    # late-stage bracket is a compact tree rather than a mostly-empty grid.
-    vis = [sum(not is_played(m) for m in order) for _, order, _ in LEVELS]
-    root = max(range(len(LEVELS)), key=lambda i: (vis[i], -i))
+    # Root at the first round that still has an unplayed tie. Only *fully
+    # completed* leading rounds are dropped — a round is never removed while it
+    # still has a game left to play, so unplayed ties always stay on the chart.
+    root = 0
+    for li, (_, order, _) in enumerate(LEVELS):
+        if all(is_played(m) for m in order):
+            root = li + 1
+        else:
+            break
+    root = min(root, len(LEVELS) - 1)
     live = LEVELS[root:]
     top_n = len(live[0][1])
 

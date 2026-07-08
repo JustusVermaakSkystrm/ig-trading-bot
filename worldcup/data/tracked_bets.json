@@ -15,34 +15,6 @@
         {"team": "England", "stage": "R16"},
         {"team": "United States", "stage": "R16"}
       ]
-    },
-    {
-      "id": "bet3",
-      "name": "Value 5-leg",
-      "stake": 10.0,
-      "returns": 443.54,
-      "placed": "2026-06-24",
-      "legs": [
-        {"team": "Argentina", "stage": "F"},
-        {"team": "Colombia", "stage": "QF"},
-        {"team": "France", "stage": "QF"},
-        {"team": "Mexico", "stage": "R16"},
-        {"team": "United States", "stage": "R16"}
-      ]
-    },
-    {
-      "id": "bet12",
-      "name": "Outrights 5-fold",
-      "stake": 50.0,
-      "returns": 1202.19,
-      "placed": "2026-07-06",
-      "legs": [
-        {"team": "Argentina", "stage": "F"},
-        {"team": "Spain", "stage": "F"},
-        {"team": "France", "stage": "SF"},
-        {"team": "England", "stage": "SF"},
-        {"team": "Colombia", "stage": "QF"}
-      ]
     }
   ]
 }
