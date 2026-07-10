@@ -8,36 +8,36 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 ## Title favourites
 
-| # | Team | Group | Champion | Δ vs 2026-07-07 | Final | Semi-final | Quarter-final | Rd of 16 |
+| # | Team | Group | Champion | Δ vs 2026-07-09 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | France ✅ | I | **26.6%** | +6.4 | 53.2% | 100.0% | 100.0% | 100.0% |
-| 2 | Argentina ✅ | J | **26.0%** | -2.7 | 44.7% | 66.6% | 100.0% | 100.0% |
-| 3 | Spain ✅ | H | **20.3%** | -1.5 | 36.5% | 71.9% | 100.0% | 100.0% |
-| 4 | England ✅ | L | **17.0%** | +1.6 | 34.4% | 74.6% | 100.0% | 100.0% |
-| 5 | Switzerland ✅ | B | **4.5%** | -1.4 | 14.6% | 33.4% | 100.0% | 100.0% |
-| 6 | Belgium ✅ | G | **3.3%** | -1.7 | 10.3% | 28.1% | 100.0% | 100.0% |
-| 7 | Norway ✅ | I | **2.2%** | -0.8 | 6.2% | 25.4% | 100.0% | 100.0% |
-| 8 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
-| 9 | South Korea | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 10 | South Africa ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 11 | Czech Republic | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 12 | Canada ✅ | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
-| 13 | Qatar | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 14 | Bosnia and Herzegovina ✅ | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
-| 15 | Brazil ✅ | C | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
+| 1 | Spain ✅ | H | **28.2%** | +7.9 | 51.1% | 100.0% | 100.0% | 100.0% |
+| 2 | Argentina ✅ | J | **25.0%** | -1.0 | 44.5% | 66.0% | 100.0% | 100.0% |
+| 3 | France ✅ | I | **24.3%** | -2.3 | 48.9% | 100.0% | 100.0% | 100.0% |
+| 4 | England ✅ | L | **16.1%** | -1.0 | 34.1% | 74.2% | 100.0% | 100.0% |
+| 5 | Switzerland ✅ | B | **4.3%** | -0.1 | 15.0% | 34.0% | 100.0% | 100.0% |
+| 6 | Norway ✅ | I | **2.1%** | -0.2 | 6.4% | 25.8% | 100.0% | 100.0% |
+| 7 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
+| 8 | South Korea | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 9 | South Africa ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 10 | Czech Republic | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 11 | Canada ✅ | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
+| 12 | Qatar | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 13 | Bosnia and Herzegovina ✅ | B | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
+| 14 | Brazil ✅ | C | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
+| 15 | Morocco ✅ | C | **0.0%** | – | 0.0% | 0.0% | 100.0% | 100.0% |
 
-## Biggest movers since last run (data through 2026-07-07)
+## Biggest movers since last run (data through 2026-07-09)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| France | +6.4 | – | 26.6% |
-| England | +1.6 | – | 17.0% |
+| Spain | +7.9 | – | 28.2% |
 | Mexico | – | – | 0.0% |
-| Norway | -0.8 | – | 2.2% |
-| Switzerland | -1.4 | – | 4.5% |
-| Spain | -1.5 | – | 20.3% |
-| Belgium | -1.7 | – | 3.3% |
-| Argentina | -2.7 | – | 26.0% |
+| Switzerland | -0.1 | – | 4.3% |
+| Norway | -0.2 | – | 2.1% |
+| Argentina | -1.0 | – | 25.0% |
+| England | -1.0 | – | 16.1% |
+| France | -2.3 | – | 24.3% |
+| Belgium | -3.3 | – | 0.0% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -47,15 +47,15 @@ The group stage is all but done, so the knockout bracket is the main event now. 
 
 - **Projected final four:** France, Spain, England, Argentina
 - **Projected final:** Spain v Argentina
-- **Projected champion:** 🏆 **Argentina** — 26.0% to lift it
+- **Projected champion:** 🏆 **Argentina** — 25.0% to lift it
 - **Round-of-32 ties mathematically locked:** 16/16
 
 ### Path to the final
 
-The single most likely knockout bracket — each line carries the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed (mathematically locked) tie; a green-bordered box has been played.** As ties are played, the eliminated side drops off the diagram and the winner carries forward from the round it reaches — so the bracket shrinks toward the final. (25 knockout tie(s) played so far; 16/16 Round-of-32 ties locked.)
+The single most likely knockout bracket — each line carries the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed (mathematically locked) tie; a green-bordered box has been played.** As ties are played, the eliminated side drops off the diagram and the winner carries forward from the round it reaches — so the bracket shrinks toward the final. (26 knockout tie(s) played so far; 16/16 Round-of-32 ties locked.)
 
 <div style="overflow-x:auto; margin:1rem 0;">
-<svg viewBox="0 0 857 465" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M326.0,92.0 C326.0,131.0 223.5,131.0 223.5,170.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M531.0,92.0 C531.0,131.0 633.5,131.0 633.5,170.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M736.0,92.0 C736.0,131.0 633.5,131.0 633.5,170.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M223.5,222.0 C223.5,261.0 428.5,261.0 428.5,300.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M633.5,222.0 C633.5,261.0 428.5,261.0 428.5,300.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M428.5,352.0 C428.5,371.5 428.5,371.5 428.5,391.0" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="66" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 66)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="196" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 196)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="326" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 326)" text-anchor="middle">FINAL</text><rect x="231.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="231.0" y="42.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="239.0" y="57.9" font-size="14" font-weight="700" fill="#7ef0b6">Spain</text><text x="413.0" y="57.9" font-size="11" text-anchor="end" fill="#cfe8d8">72%</text><text x="239.0" y="83.9" font-size="14" font-weight="400" fill="#7c89a3">Belgium</text><text x="413.0" y="83.9" font-size="11" text-anchor="end" fill="#5d6880">28%</text><rect x="436.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="444.0" y="57.9" font-size="14" font-weight="400" fill="#7c89a3">Norway</text><text x="618.0" y="57.9" font-size="11" text-anchor="end" fill="#5d6880">26%</text><rect x="436.0" y="68.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="444.0" y="83.9" font-size="14" font-weight="700" fill="#7ef0b6">England</text><text x="618.0" y="83.9" font-size="11" text-anchor="end" fill="#cfe8d8">74%</text><rect x="641.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="641.0" y="42.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="649.0" y="57.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="823.0" y="57.9" font-size="11" text-anchor="end" fill="#cfe8d8">66%</text><text x="649.0" y="83.9" font-size="14" font-weight="400" fill="#7c89a3">Switzerland</text><text x="823.0" y="83.9" font-size="11" text-anchor="end" fill="#5d6880">34%</text><rect x="128.5" y="170.0" width="190" height="52" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="136.5" y="187.9" font-size="14" font-weight="400" fill="#7c89a3">France</text><text x="310.5" y="187.9" font-size="11" text-anchor="end" fill="#5d6880">49%</text><rect x="128.5" y="198.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="136.5" y="213.9" font-size="14" font-weight="700" fill="#7ef0b6">Spain</text><text x="310.5" y="213.9" font-size="11" text-anchor="end" fill="#cfe8d8">51%</text><rect x="538.5" y="170.0" width="190" height="52" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="546.5" y="187.9" font-size="14" font-weight="400" fill="#7c89a3">England</text><text x="720.5" y="187.9" font-size="11" text-anchor="end" fill="#5d6880">38%</text><rect x="538.5" y="198.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="546.5" y="213.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="720.5" y="213.9" font-size="11" text-anchor="end" fill="#cfe8d8">62%</text><rect x="333.5" y="300.0" width="190" height="52" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="341.5" y="317.9" font-size="14" font-weight="400" fill="#7c89a3">Spain</text><text x="515.5" y="317.9" font-size="11" text-anchor="end" fill="#5d6880">47%</text><rect x="333.5" y="328.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="341.5" y="343.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="515.5" y="343.9" font-size="11" text-anchor="end" fill="#cfe8d8">53%</text><rect x="314" y="391" width="230" height="52" rx="10" fill="#f5c542"/><text x="428" y="415" font-size="15" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="428" y="430" font-size="11" fill="#5a4a00" text-anchor="middle">projected champion · 26% to win</text></svg>
+<svg viewBox="0 0 857 465" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M531.0,92.0 C531.0,131.0 633.5,131.0 633.5,170.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M736.0,92.0 C736.0,131.0 633.5,131.0 633.5,170.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M223.5,222.0 C223.5,261.0 428.5,261.0 428.5,300.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M633.5,222.0 C633.5,261.0 428.5,261.0 428.5,300.0" fill="none" stroke="#33436b" stroke-width="1.5"/><path d="M428.5,352.0 C428.5,371.5 428.5,371.5 428.5,391.0" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="66" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 66)" text-anchor="middle">QUARTER-FINALS</text><text x="11" y="196" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 196)" text-anchor="middle">SEMI-FINALS</text><text x="11" y="326" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 326)" text-anchor="middle">FINAL</text><rect x="436.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="444.0" y="57.9" font-size="14" font-weight="400" fill="#7c89a3">Norway</text><text x="618.0" y="57.9" font-size="11" text-anchor="end" fill="#5d6880">26%</text><rect x="436.0" y="68.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="444.0" y="83.9" font-size="14" font-weight="700" fill="#7ef0b6">England</text><text x="618.0" y="83.9" font-size="11" text-anchor="end" fill="#cfe8d8">74%</text><rect x="641.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><rect x="641.0" y="42.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="649.0" y="57.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="823.0" y="57.9" font-size="11" text-anchor="end" fill="#cfe8d8">66%</text><text x="649.0" y="83.9" font-size="14" font-weight="400" fill="#7c89a3">Switzerland</text><text x="823.0" y="83.9" font-size="11" text-anchor="end" fill="#5d6880">34%</text><rect x="128.5" y="170.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="136.5" y="187.9" font-size="14" font-weight="400" fill="#7c89a3">France</text><text x="310.5" y="187.9" font-size="11" text-anchor="end" fill="#5d6880">49%</text><rect x="128.5" y="198.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="136.5" y="213.9" font-size="14" font-weight="700" fill="#7ef0b6">Spain</text><text x="310.5" y="213.9" font-size="11" text-anchor="end" fill="#cfe8d8">51%</text><rect x="538.5" y="170.0" width="190" height="52" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="546.5" y="187.9" font-size="14" font-weight="400" fill="#7c89a3">England</text><text x="720.5" y="187.9" font-size="11" text-anchor="end" fill="#5d6880">38%</text><rect x="538.5" y="198.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="546.5" y="213.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="720.5" y="213.9" font-size="11" text-anchor="end" fill="#cfe8d8">62%</text><rect x="333.5" y="300.0" width="190" height="52" rx="6" fill="#161e31" stroke="#26314f" stroke-width="1"/><text x="341.5" y="317.9" font-size="14" font-weight="400" fill="#7c89a3">Spain</text><text x="515.5" y="317.9" font-size="11" text-anchor="end" fill="#5d6880">47%</text><rect x="333.5" y="328.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="341.5" y="343.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="515.5" y="343.9" font-size="11" text-anchor="end" fill="#cfe8d8">53%</text><rect x="314" y="391" width="230" height="52" rx="10" fill="#f5c542"/><text x="428" y="415" font-size="15" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="428" y="430" font-size="11" fill="#5a4a00" text-anchor="middle">projected champion · 25% to win</text></svg>
 </div>
 
 ### Round-by-round projections
@@ -101,7 +101,7 @@ Every tie shows the projected pairing and **the side favoured to win that single
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
 | 97 | 2026-07-09 | Gillette Stadium, Boston | ✅ France v Morocco | **France** | 2-0 | ✅ played |
-| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | 🔒 Spain v Belgium | **Spain** | 72.0% | 🔒 locked |
+| 98 | 2026-07-10 | SoFi Stadium, Los Angeles | ✅ Spain v Belgium | **Spain** | 2-1 | ✅ played |
 | 99 | 2026-07-11 | Hard Rock Stadium, Miami | 🔒 Norway v England | **England** | 74.3% | 🔒 locked |
 | 100 | 2026-07-11 | Arrowhead Stadium, Kansas City | 🔒 Argentina v Switzerland | **Argentina** | 66.4% | 🔒 locked |
 
@@ -109,16 +109,16 @@ Every tie shows the projected pairing and **the side favoured to win that single
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 101 | 2026-07-14 | AT&T Stadium, Dallas | France v Spain | **Spain** | 51.1% | 71.9% |
-| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | England v Argentina | **Argentina** | 62.2% | 49.7% |
+| 101 | 2026-07-14 | AT&T Stadium, Dallas | 🔒 France v Spain | **Spain** | 51.1% | 🔒 locked |
+| 102 | 2026-07-15 | Mercedes-Benz Stadium, Atlanta | England v Argentina | **Argentina** | 62.2% | 49.0% |
 
 #### Final
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Argentina** | 53.2% | 16.4% |
+| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | Spain v Argentina | **Argentina** | 53.2% | 22.8% |
 
-**Projected champion (this bracket): Argentina** — the team that wins each projected match through to the final. The title-odds table above makes **France** the overall favourite; it can differ from this bracket because a team can have the best title odds across all possible draws while still being an underdog in one specific projected tie here.
+**Projected champion (this bracket): Argentina** — the team that wins each projected match through to the final. The title-odds table above makes **Spain** the overall favourite; it can differ from this bracket because a team can have the best title odds across all possible draws while still being an underdog in one specific projected tie here.
 
 ## Group stage — results & projections
 
