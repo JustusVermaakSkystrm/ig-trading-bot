@@ -28,6 +28,8 @@
     "97": {"home": "France", "away": "Morocco", "home_score": 2, "away_score": 0, "winner": "France"},
     "98": {"home": "Spain", "away": "Belgium", "home_score": 2, "away_score": 1, "winner": "Spain"},
     "99": {"home": "Norway", "away": "England", "home_score": 1, "away_score": 2, "winner": "England", "aet": true},
-    "100": {"home": "Argentina", "away": "Switzerland", "home_score": 3, "away_score": 1, "winner": "Argentina"}
+    "100": {"home": "Argentina", "away": "Switzerland", "home_score": 3, "away_score": 1, "winner": "Argentina"},
+    "101": {"home": "France", "away": "Spain", "home_score": 0, "away_score": 2, "winner": "Spain"},
+    "102": {"home": "England", "away": "Argentina", "home_score": 1, "away_score": 2, "winner": "Argentina"}
   }
 }
