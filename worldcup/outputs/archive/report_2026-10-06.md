@@ -1,6 +1,6 @@
 # FIFA World Cup 2026 — ML Prediction Report
 
-*Generated 2026-10-07 · data through **2026-10-06** · 50,000 Monte Carlo simulations · 72/72 group matches played*
+*Generated 2026-10-10 · data through **2026-10-06** · 50,000 Monte Carlo simulations · 72/72 group matches played*
 
 Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 31,301 internationals, simulated through the official 2026 bracket and tiebreaker rules.
 
@@ -8,10 +8,10 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 ## Title favourites
 
-| # | Team | Group | Champion | Δ vs 2026-08-26 | Final | Semi-final | Quarter-final | Rd of 16 |
+| # | Team | Group | Champion | Δ vs 2026-10-06 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Argentina ✅ | J | **50.6%** | +10.6 | 100.0% | 100.0% | 100.0% | 100.0% |
-| 2 | Spain ✅ | H | **49.4%** | -10.6 | 100.0% | 100.0% | 100.0% | 100.0% |
+| 1 | Argentina ✅ | J | **50.6%** | – | 100.0% | 100.0% | 100.0% | 100.0% |
+| 2 | Spain ✅ | H | **49.4%** | – | 100.0% | 100.0% | 100.0% | 100.0% |
 | 3 | France ✅ | I | **0.0%** | – | 0.0% | 100.0% | 100.0% | 100.0% |
 | 4 | England ✅ | L | **0.0%** | – | 0.0% | 100.0% | 100.0% | 100.0% |
 | 5 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
@@ -26,18 +26,18 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 | 14 | Morocco ✅ | C | **0.0%** | – | 0.0% | 0.0% | 100.0% | 100.0% |
 | 15 | Haiti | C | **0.0%** | – | 0.0% | 0.0% | 0.0% | 0.0% |
 
-## Biggest movers since last run (data through 2026-08-26)
+## Biggest movers since last run (data through 2026-10-06)
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| Argentina | +10.6 | – | 50.6% |
+| Argentina | – | – | 50.6% |
 | France | – | – | 0.0% |
 | England | – | – | 0.0% |
 | Mexico | – | – | 0.0% |
 | South Korea | – | – | 0.0% |
 | South Africa | – | – | 0.0% |
 | Czech Republic | – | – | 0.0% |
-| Spain | -10.6 | – | 49.4% |
+| Spain | – | – | 49.4% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
