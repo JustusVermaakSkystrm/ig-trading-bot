@@ -1,6 +1,6 @@
 # FIFA World Cup 2026 — ML Prediction Report
 
-*Generated 2026-10-10 · data through **2026-10-06** · 50,000 Monte Carlo simulations · 72/72 group matches played*
+*Generated 2026-10-31 · data through **2026-10-06** · 50,000 Monte Carlo simulations · 72/72 group matches played*
 
 Probabilities come from a gradient-boosted Poisson goal model (Elo strength + rolling form + venue/importance features) trained on 31,301 internationals, simulated through the official 2026 bracket and tiebreaker rules.
 
@@ -10,8 +10,8 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | # | Team | Group | Champion | Δ vs 2026-10-06 | Final | Semi-final | Quarter-final | Rd of 16 |
 |---|------|:-----:|---------:|-------:|------:|-----------:|--------------:|---------:|
-| 1 | Argentina ✅ | J | **50.6%** | – | 100.0% | 100.0% | 100.0% | 100.0% |
-| 2 | Spain ✅ | H | **49.4%** | – | 100.0% | 100.0% | 100.0% | 100.0% |
+| 1 | Argentina ✅ | J | **55.0%** | +4.4 | 100.0% | 100.0% | 100.0% | 100.0% |
+| 2 | Spain ✅ | H | **45.0%** | -4.4 | 100.0% | 100.0% | 100.0% | 100.0% |
 | 3 | France ✅ | I | **0.0%** | – | 0.0% | 100.0% | 100.0% | 100.0% |
 | 4 | England ✅ | L | **0.0%** | – | 0.0% | 100.0% | 100.0% | 100.0% |
 | 5 | Mexico ✅ | A | **0.0%** | – | 0.0% | 0.0% | 0.0% | 100.0% |
@@ -30,14 +30,14 @@ Probabilities come from a gradient-boosted Poisson goal model (Elo strength + ro
 
 | Team | Δ Champion | Δ Rd of 16 | Champion now |
 |------|----------:|-----------:|-------------:|
-| Argentina | – | – | 50.6% |
+| Argentina | +4.4 | – | 55.0% |
 | France | – | – | 0.0% |
 | England | – | – | 0.0% |
 | Mexico | – | – | 0.0% |
 | South Korea | – | – | 0.0% |
 | South Africa | – | – | 0.0% |
 | Czech Republic | – | – | 0.0% |
-| Spain | – | – | 49.4% |
+| Spain | -4.4 | – | 45.0% |
 
 *Δ values in probability points. Full run-by-run series in `outputs/history.csv`.*
 
@@ -47,7 +47,7 @@ The group stage is all but done, so the knockout bracket is the main event now. 
 
 - **Projected final four:** France, Spain, England, Argentina
 - **Projected final:** Spain v Argentina
-- **Projected champion:** 🏆 **Argentina** — 50.6% to lift it
+- **Projected champion:** 🏆 **Argentina** — 55.0% to lift it
 - **Round-of-32 ties mathematically locked:** 16/16
 
 ### Path to the final
@@ -55,7 +55,7 @@ The group stage is all but done, so the knockout bracket is the main event now. 
 The single most likely knockout bracket — each line carries the projected winner down to the next round until they converge on the champion. Percentages are each side's chance of advancing from that tie. **A gold-bordered box is a confirmed (mathematically locked) tie; a green-bordered box has been played.** As ties are played, the eliminated side drops off the diagram and the winner carries forward from the round it reaches — so the bracket shrinks toward the final. (30 knockout tie(s) played so far; 16/16 Round-of-32 ties locked.)
 
 <div style="overflow-x:auto; margin:1rem 0;">
-<svg viewBox="0 0 242 205" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M121.0,92.0 C121.0,111.5 121.0,111.5 121.0,131.0" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="66" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 66)" text-anchor="middle">FINAL</text><rect x="26.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="34.0" y="57.9" font-size="14" font-weight="400" fill="#7c89a3">Spain</text><text x="208.0" y="57.9" font-size="11" text-anchor="end" fill="#5d6880">49%</text><rect x="26.0" y="68.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="34.0" y="83.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="208.0" y="83.9" font-size="11" text-anchor="end" fill="#cfe8d8">51%</text><rect x="6" y="131" width="230" height="52" rx="10" fill="#f5c542"/><text x="121" y="155" font-size="15" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="121" y="170" font-size="11" fill="#5a4a00" text-anchor="middle">projected champion · 51% to win</text></svg>
+<svg viewBox="0 0 242 205" width="100%" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><path d="M121.0,92.0 C121.0,111.5 121.0,111.5 121.0,131.0" fill="none" stroke="#33436b" stroke-width="1.5"/><text x="11" y="66" font-size="9" font-weight="700" fill="#5d6880" transform="rotate(-90 11 66)" text-anchor="middle">FINAL</text><rect x="26.0" y="40.0" width="190" height="52" rx="6" fill="#161e31" stroke="#f5c542" stroke-width="2.5"/><text x="34.0" y="57.9" font-size="14" font-weight="400" fill="#7c89a3">Spain</text><text x="208.0" y="57.9" font-size="11" text-anchor="end" fill="#5d6880">45%</text><rect x="26.0" y="68.0" width="190" height="23.0" rx="4" fill="#4cc38a" opacity="0.16"/><text x="34.0" y="83.9" font-size="14" font-weight="700" fill="#7ef0b6">Argentina</text><text x="208.0" y="83.9" font-size="11" text-anchor="end" fill="#cfe8d8">55%</text><rect x="6" y="131" width="230" height="52" rx="10" fill="#f5c542"/><text x="121" y="155" font-size="15" font-weight="800" fill="#1a1300" text-anchor="middle">🏆 Argentina</text><text x="121" y="170" font-size="11" fill="#5a4a00" text-anchor="middle">projected champion · 55% to win</text></svg>
 </div>
 
 ### Round-by-round projections
@@ -116,7 +116,7 @@ Every tie shows the projected pairing and **the side favoured to win that single
 
 | Match | Date | Venue | Tie | Projected winner | Win prob | Pairing freq |
 |:-----:|------|-------|-----|------------------|---------:|-------------:|
-| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | 🔒 Spain v Argentina | **Argentina** | 50.7% | 🔒 locked |
+| 104 | 2026-07-19 | MetLife Stadium, East Rutherford | 🔒 Spain v Argentina | **Argentina** | 55.2% | 🔒 locked |
 
 **Projected champion (this bracket): Argentina** — the team that wins each projected match through to the final. This matches the title-odds favourite (**Argentina**) at the top of the page.
 
